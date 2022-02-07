@@ -32,6 +32,7 @@ import {
   setExerciseModal,
 } from "./store/exerciseSlice";
 import { ExerciseDetails } from "./components/ExerciseDetails/ExerciseDetails";
+import { ColorModeContext } from "./components/Providers/Providers";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -132,6 +133,7 @@ const App = function ({
     saveRoutine();
     dispatch(setRoutine(undefined));
   };
+
 
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));
 
