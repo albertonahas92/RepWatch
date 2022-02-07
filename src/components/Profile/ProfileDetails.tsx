@@ -88,7 +88,7 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
 
   return props.editMode ? (
     <form onSubmit={formik.handleSubmit}>
-      <Card elevation={2} variant="elevation">
+      <Card elevation={0} variant="outlined">
         <CardContent>
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
@@ -279,7 +279,7 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
       </Snackbar>
     </form>
   ) : (
-    <Card elevation={2} variant="elevation">
+    <Card elevation={0} variant="outlined">
       <CardContent>
         <TableContainer component={Box}>
           <Table aria-label="exercise table" size="small">

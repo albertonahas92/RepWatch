@@ -15,14 +15,27 @@ import {
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import { Box } from "@mui/system";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
+import CrossFadeImage from "../../atoms/CrossFadeImage/CrossFadeImage";
 import { BackDiagram, backHighlights } from "../../icons/backDiagram";
 import { FrontDiagram, frontHighlights } from "../../icons/frontDiagram";
 import { RoutineExercise } from "../../types/exercise";
+import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 
 export const ExerciseDetails: FC<Props> = ({ exercise }) => {
   const ommitedProps = ["instructions", "name", "index", "active"];
   const theme = useTheme();
+
+  const [image, setImage] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImage((im) => 1 - im);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const diagramStyle = {
     maxWidth: 100,
@@ -73,8 +86,13 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
           {exercise.instructions}
         </Typography>
       </Box>
-      <Divider />
-
+      <Divider sx={{ mb: 2 }} />
+      <CrossFadeImage
+        src={`${PUBLIC_DOMAIN_URL}/${exercise?.name.replaceAll(
+          " ",
+          "_"
+        )}/images/${image}.jpg`}
+      />
       <TableContainer sx={{ my: 2 }} component={Paper}>
         <Table aria-label="exercise table" size="small">
           <TableBody>

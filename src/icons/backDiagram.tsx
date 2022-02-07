@@ -23,6 +23,7 @@ export const BackDiagram = (props: DiagramProps) => {
   return (
     <Diagram
       xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       style={props.style}
       viewBox="0 0 548.99 1055.91"
     >
