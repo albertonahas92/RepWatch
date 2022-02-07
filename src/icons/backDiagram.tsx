@@ -20,7 +20,7 @@ export const backHighlights = [
 ];
 
 export const BackDiagram = (props: DiagramProps) => {
-  return (
+  const Icon = createSvgIcon(
     <Diagram
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -196,6 +196,9 @@ export const BackDiagram = (props: DiagramProps) => {
       <path d="M195.92,756.46c-2.7,0-5.09-1.83-7.62-3.77a32.86,32.86,0,0,0-4.65-3.17l13.75-18.59,1.12,25A7.12,7.12,0,0,1,195.92,756.46Z" />
       <polygon points="271.69 157.67 277.35 153.79 277.35 161.95 271.69 157.67" />
       <polygon points="286.58 154.53 291.81 158.14 286.58 162.71 286.58 154.53" />
-    </Diagram>
+    </Diagram>,
+    "FrontDiagram"
   );
+
+  return <Icon viewBox="0 0 10 18" style={props.style} />;
 };

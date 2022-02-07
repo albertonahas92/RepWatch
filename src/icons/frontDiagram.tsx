@@ -23,7 +23,7 @@ export const frontHighlights = [
 ];
 
 export const FrontDiagram: React.FC<DiagramProps> = (props) => {
-  return (
+  const Icon = createSvgIcon(
     <Diagram
       style={props.style}
       xmlns="http://www.w3.org/2000/svg"
@@ -198,8 +198,11 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M232.71,766.15c-8-2.38-7-7-5.72-13.26.09-.47.19-.93.28-1.4C233.53,758.1,234.29,762,232.71,766.15Z" />
       <polygon points="225.59 291.5 236.8 292.83 232.61 300.96 225.59 291.5" />
       <path d="M341.92,758.9a7.69,7.69,0,0,1,1.37,2.2,8.63,8.63,0,0,1-2.8,1.18Z" />
-    </Diagram>
+    </Diagram>,
+    "FrontDiagram"
   );
+
+  return <Icon viewBox="0 0 10 18" style={props.style} />;
 };
 
 export interface DiagramProps {

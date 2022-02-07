@@ -38,6 +38,7 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
   }, []);
 
   const diagramStyle = {
+    fontSize: "11em",
     maxWidth: 100,
     color: theme.palette.text.secondary,
     fill: theme.palette.text.secondary,
@@ -107,7 +108,9 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
                     <TableCell component="th" scope="row">
                       {entry[0]}
                     </TableCell>
-                    <TableCell align="right">{entry[1]}</TableCell>
+                    <TableCell align="right">
+                      {!Array.isArray(entry[1]) ? entry[1] : entry[1].join()}
+                    </TableCell>
                   </TableRow>
                 )
             )}

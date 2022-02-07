@@ -120,7 +120,8 @@ export const AddRoutine = () => {
               // )}
               secondaryHighlights={[]}
               style={{
-                maxWidth: 100,
+                fontSize: "12em",
+                maxWidth: 120,
                 color: theme.palette.text.secondary,
                 fill: theme.palette.text.secondary,
               }}
@@ -134,7 +135,8 @@ export const AddRoutine = () => {
               // )}
               secondaryHighlights={[]}
               style={{
-                maxWidth: 100,
+                fontSize: "12em",
+                maxWidth: 120,
                 color: theme.palette.text.secondary,
                 fill: theme.palette.text.secondary,
               }}
