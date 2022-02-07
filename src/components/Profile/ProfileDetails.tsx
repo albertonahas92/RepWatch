@@ -9,16 +9,24 @@ import {
   Button,
   Card,
   CardContent,
+  CardHeader,
   Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
   Grid,
   IconButton,
+  InputAdornment,
+  Paper,
   Radio,
   RadioGroup,
   Snackbar,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   TextField,
   Tooltip,
   Typography,
@@ -29,8 +37,9 @@ import firebase from "../../config";
 import { SelectGender } from "../../atoms/SelectGender/SelectGender";
 import { User } from "../../types/user";
 import { useUser } from "../../hooks/useUser";
+import { converter, heightString, weightString } from "../../utils/utils";
 
-export var AccountProfileDetails: FC<Props> = function (props) {
+export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
   const [sucess, setSucess] = useState(false);
 
   const { updateUser } = useUser();
@@ -39,18 +48,30 @@ export var AccountProfileDetails: FC<Props> = function (props) {
 
   const formik = useFormik({
     initialValues: {
-      age: props.user?.age,
-      gender: props.user?.gender,
+      age: user?.age || 25,
+      gender: user?.gender || "male",
+      height: user?.height || 170,
+      heightIn: user?.heightIn || 0,
+      weight: user?.weight || 70,
+      unit: user?.unit || "metric",
     },
     validationSchema: Yup.object({
-      age: Yup.number().max(90).min(16).required("Age is required"),
+      age: Yup.number().max(90).min(8).required("Age is required"),
+      height: Yup.number().max(200).min(1).required("Height is required"),
+      heightIn: Yup.number().max(20),
+      weight: Yup.number().max(500).min(30).required("Weight is required"),
       gender: Yup.string().required("Gender is required"),
+      unit: Yup.string().required("Unit is required"),
     }),
     onSubmit: (values, { resetForm, setErrors, setSubmitting }) => {
       updateUser({
-        uid: props.user?.uid,
+        uid: user?.uid,
         age: values.age,
         gender: values.gender,
+        height: values.height,
+        heightIn: values.heightIn,
+        weight: values.weight,
+        unit: values.unit,
       }).then(() => {
         setSucess(true);
         props.setEditMode(false);
@@ -67,25 +88,10 @@ export var AccountProfileDetails: FC<Props> = function (props) {
 
   return props.editMode ? (
     <form onSubmit={formik.handleSubmit}>
-      <Card elevation={0}>
+      <Card elevation={2} variant="elevation">
         <CardContent>
           <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(formik.touched.age && formik.errors.age)}
-                helperText={formik.touched.age && formik.errors.age}
-                fullWidth
-                label="age"
-                margin="normal"
-                name="age"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.age}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={4} xs={12}>
               <FormControl component="fieldset">
                 <FormLabel component="legend">Gender</FormLabel>
                 <RadioGroup
@@ -107,6 +113,148 @@ export var AccountProfileDetails: FC<Props> = function (props) {
                   />
                 </RadioGroup>
               </FormControl>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                error={Boolean(formik.touched.age && formik.errors.age)}
+                helperText={formik.touched.age && formik.errors.age}
+                fullWidth
+                label="age"
+                margin="dense"
+                name="age"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.age}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Units</FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="unit"
+                  name="unit"
+                  value={formik.values.unit}
+                  onChange={(e: React.ChangeEvent<any>) => {
+                    if (e.target.value === "metric") {
+                      formik.setFieldValue(
+                        "height",
+                        converter.ftToCm(
+                          formik.values.height,
+                          formik.values.heightIn
+                        )
+                      );
+                      formik.setFieldValue(
+                        "weight",
+                        converter.lbsToKg(formik.values.weight)
+                      );
+                    } else {
+                      formik.setFieldValue(
+                        "height",
+                        converter.cmToFt(formik.values.height).ft
+                      );
+                      formik.setFieldValue(
+                        "heightIn",
+                        converter.cmToFt(formik.values.height).inches
+                      );
+                      formik.setFieldValue(
+                        "weight",
+                        converter.kgToLbs(formik.values.weight)
+                      );
+                    }
+                    formik.handleChange(e);
+                  }}
+                >
+                  <FormControlLabel
+                    value="metric"
+                    control={<Radio size="small" />}
+                    label="Metric"
+                  />
+                  <FormControlLabel
+                    value="imperial"
+                    control={<Radio size="small" />}
+                    label="Impreial"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                error={Boolean(formik.touched.weight && formik.errors.weight)}
+                helperText={formik.touched.weight && formik.errors.weight}
+                fullWidth
+                label="weight"
+                margin="dense"
+                name="weight"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.weight}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      {formik.values.unit === "imperial" ? "lb" : "kg"}
+                    </InputAdornment>
+                  ),
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <Stack
+                direction="row"
+                sx={{ alignItems: "baseline" }}
+                spacing={2}
+              >
+                <TextField
+                  error={Boolean(formik.touched.height && formik.errors.height)}
+                  helperText={formik.touched.height && formik.errors.height}
+                  fullWidth
+                  label="height"
+                  margin="dense"
+                  name="height"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="number"
+                  value={formik.values.height}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        {formik.values.unit === "imperial" ? "ft." : "cm"}
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                />
+                {formik.values.unit === "imperial" && (
+                  <TextField
+                    error={Boolean(
+                      formik.touched.heightIn && formik.errors.heightIn
+                    )}
+                    helperText={
+                      formik.touched.heightIn && formik.errors.heightIn
+                    }
+                    fullWidth
+                    label="in."
+                    margin="dense"
+                    name="heightIn"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    type="number"
+                    value={formik.values.heightIn}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {formik.values.unit === "imperial" ? "in." : "cm"}
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="outlined"
+                  />
+                )}
+              </Stack>
             </Grid>
           </Grid>
         </CardContent>
@@ -131,28 +279,63 @@ export var AccountProfileDetails: FC<Props> = function (props) {
       </Snackbar>
     </form>
   ) : (
-    <Card elevation={0}>
+    <Card elevation={2} variant="elevation">
       <CardContent>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: "center", alignItems: "center" }}
-          spacing={2}
-        >
-          <Box>
-            <Typography variant="h4" color={theme.palette.text.secondary}>
-              {props.user?.age} {props.user?.gender}
-            </Typography>
-            <Typography
-              variant="body2"
-              color={theme.palette.text.secondary}
-            ></Typography>
-          </Box>
-          <Tooltip title="Edit">
-            <IconButton onClick={() => props.setEditMode(true)}>
+        <TableContainer component={Box}>
+          <Table aria-label="exercise table" size="small">
+            <TableBody>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  Gender
+                </TableCell>
+                <TableCell align="right">{user?.gender}</TableCell>
+              </TableRow>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  Age
+                </TableCell>
+                <TableCell align="right">{user?.age}</TableCell>
+              </TableRow>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  Weight
+                </TableCell>
+                <TableCell align="right">
+                  {weightString(user || undefined)}
+                </TableCell>
+              </TableRow>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  Height
+                </TableCell>
+                <TableCell align="right">
+                  {heightString(user || undefined)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* <IconButton onClick={() => props.setEditMode(true)}>
               <EditIcon fontSize="medium" />
-            </IconButton>
-          </Tooltip>
-        </Stack>
+            </IconButton> */}
+        <Button
+          sx={{ mt: 2 }}
+          color="primary"
+          component="span"
+          size="large"
+          onClick={() => props.setEditMode(true)}
+          endIcon={<EditIcon />}
+        >
+          Edit Details
+        </Button>
       </CardContent>
     </Card>
   );

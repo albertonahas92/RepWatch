@@ -1,3 +1,5 @@
+import { User } from "../types/user"
+
 export const getMuscleGroupName = (muscle: string) => {
     switch (muscle) {
         case "hamstrings" || "quadriceps" || "calves" || "glutes" || "abductors" || "adductors": return "legs"
@@ -34,6 +36,28 @@ export const generateUUID = () => {
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
 };
+
+export const converter = {
+    ftToCm: (ft = 0, inches = 0) => Math.round(((ft * 12 + inches) * 2.54)),
+    cmToFt: (cm = 0) => {
+        const inchesTotal = cm / 12 / 2.54;
+        const ft = Math.floor(inchesTotal)
+        const inches = Math.round((inchesTotal - ft) * 12)
+        return {
+            ft,
+            inches
+        }
+    },
+    kgToLbs: (kg = 0) => Math.round(kg * 2.20462262),
+    lbsToKg: (lbs = 0) => Math.round(lbs / 2.20462262)
+};
+
+export const heightString = (user?: User) => {
+    return user?.unit === 'imperial' ? `${user.height} ft. ${user.heightIn} in.` : `${user?.height} cm`
+}
+export const weightString = (user?: User) => {
+    return user?.unit === 'imperial' ? `${user.weight} lbs` : `${user?.weight} kg`
+}
 
 export const getResizedName = (fileName: string, dimensions = '600x600') => {
     const extIndex = fileName.lastIndexOf('.');

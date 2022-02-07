@@ -7,11 +7,18 @@ export interface User {
     photoURL?: string
     email?: string
     gender?: string
-    lastVotedAt?: firebase.firestore.Timestamp
-    newVotes?: number
+    lastWorkoutAt?: firebase.firestore.Timestamp
     onBoarding?: boolean
-    points?: number
-    showGender?: string
+    streak?: number
     uid?: string
     messagingToken?: string
+
+    goal?: string
+    weightGoal?: number
+    experience?: number
+
+    weight?: number
+    height?: number
+    heightIn?: number
+    unit?: 'metric' | 'imperial'
 }

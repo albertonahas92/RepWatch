@@ -51,7 +51,7 @@ export var AppTabs = function () {
         position="fixed"
         elevation={0}
         component="footer"
-        sx={{ bottom: 0, top: "auto", height: 60 }}
+        sx={{ bottom: 0, top: "auto", height: 60, background: "bg.paper" }}
         color="default"
       >
         <BottomNavigation
