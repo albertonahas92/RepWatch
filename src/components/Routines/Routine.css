@@ -1,0 +1,24 @@
+.HomeWrapper {
+  width: 100%;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+.HomeWrapper > main {
+  height: 100%;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.RoutineDescription {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.RoutineAction {
+  position: absolute;
+  left:0
+}
