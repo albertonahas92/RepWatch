@@ -8,18 +8,34 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import store from "../../store/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
 export const Providers: FC = ({ children }) => {
-  const theme = createTheme({
-    palette: {
-      // mode: "dark",
-      primary: {
-        main: "#0098B3",
+  const [mode, setMode] = React.useState<"light" | "dark">("light");
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
-      secondary: {
-        main: grey[500],
-      },
-    },
-  });
+    }),
+    []
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+          primary: {
+            main: "#0098B3",
+          },
+          secondary: {
+            main: grey[500],
+          },
+        },
+      }),
+    [mode]
+  );
 
   const paypalClientId = {
     sandbox:
@@ -31,17 +47,19 @@ export const Providers: FC = ({ children }) => {
 
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <ConfirmProvider>
-          <PayPalScriptProvider
-            options={{ "client-id": paypalClientId.sandbox }}
-          >
-            <QueryClientProvider client={queryClient}>
-              <Provider store={store}>{children}</Provider>
-            </QueryClientProvider>
-          </PayPalScriptProvider>
-        </ConfirmProvider>
-      </ThemeProvider>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <ConfirmProvider>
+            <PayPalScriptProvider
+              options={{ "client-id": paypalClientId.sandbox }}
+            >
+              <QueryClientProvider client={queryClient}>
+                <Provider store={store}>{children}</Provider>
+              </QueryClientProvider>
+            </PayPalScriptProvider>
+          </ConfirmProvider>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </BrowserRouter>
   );
 };

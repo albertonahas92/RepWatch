@@ -5,6 +5,8 @@ import {
   Avatar,
   ListItemText,
   styled,
+  ListItemIcon,
+  Typography,
 } from "@mui/material";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
@@ -14,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useDispatch } from "react-redux";
 import { setExercise, setExerciseModal } from "../../../store/exerciseSlice";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 const StyledListItem = styled(ListItem, {
   shouldForwardProp: (prop) => prop !== "isDragging",
@@ -46,6 +49,7 @@ const DraggableListItem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           isDragging={snapshot.isDragging}
+          sx={{ pl: 0 }}
           secondaryAction={
             <>
               <IconButton
@@ -64,6 +68,9 @@ const DraggableListItem = ({
             </>
           }
         >
+          <ListItemIcon sx={{ minWidth: 30 }}>
+            <DragIndicatorIcon color="secondary" />
+          </ListItemIcon>
           <ListItemAvatar>
             <Avatar>
               <EquipmentIcon
@@ -73,8 +80,12 @@ const DraggableListItem = ({
             </Avatar>
           </ListItemAvatar>
           <ListItemText
-            sx={{ color: "text.primary" }}
-            primary={exercise.name}
+            sx={{ color: "text.primary", mr: 4 }}
+            primary={
+              <Typography variant="body2" component="div">
+                {exercise.name}
+              </Typography>
+            }
           />
         </StyledListItem>
       )}

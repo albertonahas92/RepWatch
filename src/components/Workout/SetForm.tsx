@@ -1,7 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
-import { Chip, Grid, IconButton, TextField, Typography } from "@mui/material";
+import React, { FC, MouseEvent, useEffect, useState } from "react";
+import {
+  Chip,
+  Grid,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { RoutineExercise, Set } from "../../types/exercise";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateExercises, updateSet } from "../../store/routineSlice";
 import ClearSharpIcon from "@mui/icons-material/ClearSharp";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
@@ -11,8 +19,19 @@ import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { Performer } from "./Performer";
 import { RestTimer } from "./RestTimer";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { userSelector } from "../../store/userSlice";
+import { StyledMenu } from "../TopBar/TopBar";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export const SetForm: FC<Props> = ({ index, exercise, removeSet }) => {
+export const SetForm: FC<Props> = ({
+  index,
+  exercise,
+  removeSet,
+  duplicateSet,
+}) => {
+  const user = useSelector(userSelector);
+
   const initialReps = exercise?.sets ? exercise.sets[index].reps : 12;
   const initialWeight = exercise?.sets ? exercise.sets[index].weight : 10;
   const initialElapsedTime = exercise?.sets
@@ -37,6 +56,8 @@ export const SetForm: FC<Props> = ({ index, exercise, removeSet }) => {
   );
   const [active, setActive] = useState(initialActive);
   const [elapsedTime, setElapsedTime] = useState(initialElapsedTime);
+
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const dispatch = useDispatch();
 
@@ -97,6 +118,15 @@ export const SetForm: FC<Props> = ({ index, exercise, removeSet }) => {
     }
   }, [elapsedTime]);
 
+  const open = Boolean(anchorEl);
+
+  const handleSetMenuClick = (event: MouseEvent) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleSetMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Grid columnSpacing={2} container>
       <Grid
@@ -154,6 +184,13 @@ export const SetForm: FC<Props> = ({ index, exercise, removeSet }) => {
           variant="outlined"
           size="small"
           sx={{ m: 0 }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <small>{user?.unit === "imperial" ? "lb" : "kg"}</small>
+              </InputAdornment>
+            ),
+          }}
         />
       </Grid>
       <Grid item md={1} xs={2}>
@@ -169,11 +206,39 @@ export const SetForm: FC<Props> = ({ index, exercise, removeSet }) => {
         <IconButton
           type="button"
           disabled={active}
-          onClick={() => removeSet(exercise, index)}
+          onClick={handleSetMenuClick}
         >
-          <ClearSharpIcon />
+          <MoreVertIcon />
         </IconButton>
       </Grid>
+      <StyledMenu
+        id="set-menu"
+        MenuListProps={{
+          "aria-labelledby": "set-button",
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleSetMenuClose}
+      >
+        <MenuItem
+          onClick={() => {
+            handleSetMenuClose();
+            duplicateSet?.(exercise, index);
+          }}
+        >
+          <ContentCopyIcon />
+          Duplicate Set
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleSetMenuClose();
+            removeSet(exercise, index);
+          }}
+        >
+          <ClearSharpIcon />
+          Delete Set
+        </MenuItem>
+      </StyledMenu>
       <ModalDialog
         closeButton={true}
         title={`${exercise.name} - Set ${index + 1}`}
@@ -203,4 +268,5 @@ interface Props {
   exercise: RoutineExercise;
   index: number;
   removeSet: (exercise: RoutineExercise, index: number) => void;
+  duplicateSet?: (exercise: RoutineExercise, index: number) => void;
 }

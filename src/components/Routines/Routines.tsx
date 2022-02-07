@@ -30,11 +30,12 @@ import { StyledMenu } from "../TopBar/TopBar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRoutines } from "../../hooks/useRoutines";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
   const currentRoutine = useSelector(routineSelector);
-  const { deleteRoutine } = useRoutines();
+  const { deleteRoutine, addRoutine } = useRoutines();
 
   const [routines, setRoutines] = useState<any[]>([]);
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -65,7 +66,14 @@ export const Routines = () => {
     deleteRoutine(routine.id);
   };
 
+  const onDuplicateRoutine = (routine: Routine) => {
+    addRoutine({ ...routine, id: undefined });
+  };
+
   const startWorkout = (routine: Routine) => {
+    if (routine?.exercises && routine?.exercises.length > 0) {
+      routine.exercises[0].active = true;
+    }
     dispatch(setRoutine({ ...routine, active: true }));
   };
 
@@ -127,6 +135,15 @@ export const Routines = () => {
             open={open}
             onClose={handleRoutineMenuClose}
           >
+            <MenuItem
+              onClick={() => {
+                handleRoutineMenuClose();
+                onDuplicateRoutine(routine);
+              }}
+            >
+              <ContentCopyIcon />
+              Duplicate
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleRoutineMenuClose();

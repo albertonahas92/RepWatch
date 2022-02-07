@@ -55,6 +55,17 @@ export const Workout: FC<Props> = ({ onFinish }) => {
     dispatch(updateExercises({ ...exercise, sets: newSets }));
   };
 
+  const duplicateSet = (exercise: RoutineExercise, index: number) => {
+    let sets = exercise.sets || [];
+    const duplicate: Set = {
+      ...sets[index],
+      elapsedTime: 0,
+      elapsedRestTime: 0,
+    };
+    sets = [...sets, duplicate];
+    dispatch(updateExercises({ ...exercise, sets }));
+  };
+
   const discardWorkout = () => {
     dispatch(setRoutine(undefined));
   };
@@ -81,6 +92,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
           return (
             <React.Fragment key={exercise.name}>
               <ListItem
+                sx={{ pl: { xs: 0 } }}
                 secondaryAction={
                   <IconButton
                     onClick={() => {
@@ -120,6 +132,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
                             <SetForm
                               index={index}
                               removeSet={removeSet}
+                              duplicateSet={duplicateSet}
                               exercise={exercise}
                             />
                           }

@@ -26,6 +26,9 @@ import { State } from "../../types/state";
 import { useNavigate, Link } from "react-router-dom";
 import DownloadIcon from "@mui/icons-material/Download";
 import { HideOnScroll } from "../AppTabs/HideOnScroll";
+import { ColorModeContext } from "../Providers/Providers";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 export const StyledMenu = styled((props: any) => (
   <Menu
@@ -79,6 +82,8 @@ export var TopBar: FC<Props> = function (props) {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
+
   const user = useSelector((state: State) => state.user.value);
   const navigate = useNavigate();
 
@@ -123,7 +128,21 @@ export var TopBar: FC<Props> = function (props) {
                 </Button>
               </Tooltip>
             )}
-            <Tooltip title="Notifications">
+
+            <Tooltip title={`${theme.palette.mode} mode}`}>
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="default"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
+              </IconButton>
+            </Tooltip>
+            {/* <Tooltip title="Notifications">
               <IconButton sx={{ ml: 1 }} onClick={handleNotificationsClick}>
                 <Badge
                   badgeContent={props.notification?.body ? 1 : 0}
@@ -133,7 +152,7 @@ export var TopBar: FC<Props> = function (props) {
                   <BellIcon fontSize="small" />
                 </Badge>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Avatar
               sx={{
                 height: 40,
@@ -154,17 +173,6 @@ export var TopBar: FC<Props> = function (props) {
               open={open}
               onClose={handleNotificationsClose}
             >
-              {/* {(user.newVotes || 0) > 0 && (
-                <MenuItem onClick={handleNotificationsClose}>
-                  <FavoriteBorderIcon
-                    style={{
-                      fill: theme.palette.error.main,
-                    }}
-                    color="error"
-                  />
-                  You have {user.newVotes} new votes
-                </MenuItem>
-              )} */}
               {props.notification?.body && (
                 <MenuItem onClick={handleNotificationsClose}>
                   <FavoriteBorderIcon
