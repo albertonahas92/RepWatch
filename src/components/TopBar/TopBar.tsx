@@ -85,7 +85,7 @@ export var TopBar: FC<Props> = function (props) {
   const open = Boolean(anchorEl);
 
   const handleNotificationsClick = (event: MouseEvent) => {
-    if ((user?.newVotes || 0) > 0 || props.notification?.body) {
+    if (props.notification?.body) {
       setAnchorEl(event.currentTarget);
     }
   };
@@ -126,9 +126,7 @@ export var TopBar: FC<Props> = function (props) {
             <Tooltip title="Notifications">
               <IconButton sx={{ ml: 1 }} onClick={handleNotificationsClick}>
                 <Badge
-                  badgeContent={
-                    user.newVotes || (props.notification?.body ? 1 : 0)
-                  }
+                  badgeContent={props.notification?.body ? 1 : 0}
                   color="primary"
                   variant="dot"
                 >
@@ -156,7 +154,7 @@ export var TopBar: FC<Props> = function (props) {
               open={open}
               onClose={handleNotificationsClose}
             >
-              {(user.newVotes || 0) > 0 && (
+              {/* {(user.newVotes || 0) > 0 && (
                 <MenuItem onClick={handleNotificationsClose}>
                   <FavoriteBorderIcon
                     style={{
@@ -166,7 +164,7 @@ export var TopBar: FC<Props> = function (props) {
                   />
                   You have {user.newVotes} new votes
                 </MenuItem>
-              )}
+              )} */}
               {props.notification?.body && (
                 <MenuItem onClick={handleNotificationsClose}>
                   <FavoriteBorderIcon

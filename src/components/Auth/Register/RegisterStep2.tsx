@@ -36,7 +36,6 @@ export var RegisterStep2: FC<Props> = function (props) {
                 uid: props.uid,
                 age: values.age,
                 gender: values.gender,
-                showGender: values.showGender,
                 complete: true
             });
         }
