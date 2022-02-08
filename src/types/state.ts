@@ -7,6 +7,7 @@ export interface State {
     exercises: ExercisesState
     routine: RoutineState
     exercise: ExerciseState
+    alert: AlertState
 }
 
 export interface UserState {
@@ -22,5 +23,10 @@ export interface RoutineState {
 }
 export interface ExerciseState {
     value?: RoutineExercise
+    open?: boolean
+}
+export interface AlertState {
+    title?: string
+    message?: string
     open?: boolean
 }

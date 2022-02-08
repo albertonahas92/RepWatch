@@ -3,13 +3,15 @@ import userReducer from './userSlice';
 import exercisesReducer from './exercisesSlice';
 import routineReducer from './routineSlice';
 import exerciseReducer from './exerciseSlice';
+import alertReducer from './alertSlice';
 
 export default configureStore({
     reducer: {
         user: userReducer,
         exercises: exercisesReducer,
         routine: routineReducer,
-        exercise: exerciseReducer
+        exercise: exerciseReducer,
+        alert: alertReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

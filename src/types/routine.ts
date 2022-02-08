@@ -5,6 +5,12 @@ export interface Routine {
     id?: string
     name?: string
     exercises?: RoutineExercise[]
-    active?: boolean
     createdAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue
+
+    active?: boolean
+    startedAt?: Date
+    duration?: number
+    finishedAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
+
+export interface RoutineHistory { id: string; routine: Routine }

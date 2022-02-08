@@ -33,6 +33,8 @@ import { routineSelector, setRoutine } from "../../store/routineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useExercises } from "../../hooks/useExercises";
 import { useTheme } from "@mui/system";
+import { AlertDialog } from "../../molecules/AlertDialog/AlertDialog";
+import { setAlert } from "../../store/alertSlice";
 
 export const AddRoutine = () => {
   const theme = useTheme();
@@ -60,15 +62,27 @@ export const AddRoutine = () => {
       name: Yup.string().required("Routine title is required"),
     }),
     onSubmit: (values, { resetForm, setErrors, setSubmitting }) => {
-      addRoutine({
-        ...routine,
-        name: values.name,
-        exercises,
-      }).then((doc) => {
-        setExercises([]);
-        resetForm();
-        navigate("/");
-      });
+      if (routine?.active) {
+        dispatch(
+          setAlert({
+            title: "Routine is in progress",
+            message:
+              "Please finish or discard your current workout before updating",
+            open: true,
+          })
+        );
+        formik.setSubmitting(false);
+      } else {
+        addRoutine({
+          ...routine,
+          name: values.name,
+          exercises,
+        }).then((doc) => {
+          setExercises([]);
+          resetForm();
+          navigate("/");
+        });
+      }
     },
   });
 

@@ -15,9 +15,18 @@ export const useRoutine = () => {
 
   const saveRoutine = () => {
     if (!routine) return;
+    const startDate = routine.startedAt || new Date();
+    const duration = new Date().getTime() - startDate.getTime();
     const _routine = {
-      ..._.omit(routine, ["exercises", "active"]),
-      date: firebase.firestore.FieldValue.serverTimestamp(),
+      ..._.omit(routine, [
+        "exercises",
+        "active",
+        "startedAt",
+        "createdAt",
+        "updatedAt",
+      ]),
+      finishedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      duration,
     };
 
     const exercises = routine.exercises

@@ -33,6 +33,8 @@ import {
 } from "./store/exerciseSlice";
 import { ExerciseDetails } from "./components/ExerciseDetails/ExerciseDetails";
 import { ColorModeContext } from "./components/Providers/Providers";
+import { alertSelector, setAlertOpen } from "./store/alertSlice";
+import { AlertDialog } from "./molecules/AlertDialog/AlertDialog";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -78,6 +80,7 @@ const App = function ({
   const [notification, setNotification] = useState({ title: "", body: "" });
   const openWorkoutModal = useSelector(routineModalSelector);
   const openExerciseModal = useSelector(exerciseModalSelector);
+  const alert = useSelector(alertSelector);
 
   const signInWithGoogle = () => {
     analytics.submitRecord("login with google attempt");
@@ -134,7 +137,6 @@ const App = function ({
     dispatch(setRoutine(undefined));
   };
 
-
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));
 
   return currentUser === undefined ? (
@@ -180,6 +182,12 @@ const App = function ({
       >
         <ExerciseDetails exercise={exercise} />
       </ModalDialog>
+      <AlertDialog
+        title={alert.title}
+        message={alert.message}
+        open={alert.open || false}
+        setOpen={(open: boolean) => dispatch(setAlertOpen(open))}
+      />
       {routine && routine.active && (
         <Zoom
           in={true}

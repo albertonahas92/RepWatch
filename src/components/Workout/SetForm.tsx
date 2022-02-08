@@ -52,7 +52,7 @@ export const SetForm: FC<Props> = ({
   const [weight, setWeight] = useState(initialWeight);
   const [resting, setResting] = useState(initialResting);
   const [elapsedRestTime, setRestElapsedTime] = useState(
-    initialElapsedRestTime
+    initialElapsedRestTime || 0
   );
   const [active, setActive] = useState(initialActive);
   const [elapsedTime, setElapsedTime] = useState(initialElapsedTime);

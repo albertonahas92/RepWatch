@@ -74,6 +74,7 @@ export const Routines = () => {
     if (routine?.exercises && routine?.exercises.length > 0) {
       routine.exercises[0].active = true;
     }
+    routine.startedAt = new Date(),
     dispatch(setRoutine({ ...routine, active: true }));
   };
 

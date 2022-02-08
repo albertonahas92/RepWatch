@@ -14,6 +14,7 @@ import { Profile } from "../Profile/Profile";
 import { ExercisesList } from "../ExercisesList/ExercisesList";
 import { AddRoutine } from "../AddRoutine/AddRoutine";
 import { Box } from "@mui/material";
+import { History } from "../History/History";
 
 const Wrapper = styled(Box)`
   text-align: center;
@@ -103,6 +104,7 @@ const Nav: FC<Props> = function ({
         <Route path="/profile" element={<Profile />} />
         <Route path="/exercises" element={<ExercisesList />} />
         <Route path="/routine" element={<AddRoutine />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </Wrapper>
   );
