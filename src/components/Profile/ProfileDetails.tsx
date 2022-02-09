@@ -38,6 +38,7 @@ import { SelectGender } from "../../atoms/SelectGender/SelectGender";
 import { User } from "../../types/user";
 import { useUser } from "../../hooks/useUser";
 import { converter, heightString, weightString } from "../../utils/utils";
+import HeightIcon from "@mui/icons-material/Height";
 
 export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
   const [sucess, setSucess] = useState(false);
@@ -197,7 +198,7 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
                     <InputAdornment position="start">
                       {formik.values.unit === "imperial" ? "lb" : "kg"}
                     </InputAdornment>
-                  ),
+                  )
                 }}
                 variant="outlined"
               />

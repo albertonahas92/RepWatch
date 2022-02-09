@@ -39,7 +39,7 @@ export const omitExerciseKeys = [
     , 'force'
     , 'level'
     , 'mechanic'
-    , 'equipment'
+    // , 'equipment'
     , 'primaryMuscles'
     , 'secondaryMuscles'
     , 'instructions'

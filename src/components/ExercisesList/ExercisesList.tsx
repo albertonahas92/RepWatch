@@ -12,6 +12,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   ListItemAvatar,
   ListItemIcon,
   TextField,
@@ -25,6 +26,7 @@ import { useExercises } from "../../hooks/useExercises";
 import { MultipleSelect } from "../../atoms/MultipleSelect/MultipleSelect";
 import { useDispatch } from "react-redux";
 import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
   const {
@@ -115,10 +117,17 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
             margin="normal"
             name="name"
             onChange={handleTermChange}
-            type="text"
+            type="search"
             value={term}
             variant="outlined"
             sx={{ m: 0 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item md={4} xs={6}>

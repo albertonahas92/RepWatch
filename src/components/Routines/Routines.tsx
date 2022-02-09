@@ -31,6 +31,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRoutines } from "../../hooks/useRoutines";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { WorkoutSummary } from "../Workout/WorkoutSummary";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
@@ -38,6 +39,7 @@ export const Routines = () => {
   const { deleteRoutine, addRoutine } = useRoutines();
 
   const [routines, setRoutines] = useState<any[]>([]);
+  const [routine, setCurrentRoutine] = useState<Routine>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const navigate = useNavigate();
@@ -46,36 +48,48 @@ export const Routines = () => {
 
   const open = Boolean(anchorEl);
 
-  const handleRoutineMenuClick = (event: MouseEvent) => {
+  const handleRoutineMenuClick = (event: MouseEvent, routine: Routine) => {
     setAnchorEl(event.currentTarget);
+    setCurrentRoutine(routine);
   };
   const handleRoutineMenuClose = () => {
     setAnchorEl(null);
+    setCurrentRoutine(undefined);
   };
 
   const createRoutine = () => {
     navigate("/routine");
   };
 
-  const onEditRoutine = (routine: Routine) => {
+  const onEditRoutine = () => {
+    if (!routine) {
+      return;
+    }
     dispatch(setRoutine(routine));
     navigate("/routine");
   };
 
-  const onDeleteRoutine = (routine: Routine) => {
+  const onDeleteRoutine = () => {
+    if (!routine) {
+      return;
+    }
     deleteRoutine(routine.id);
   };
 
-  const onDuplicateRoutine = (routine: Routine) => {
-    addRoutine({ ...routine, id: undefined });
+  const onDuplicateRoutine = () => {
+    if (!routine) {
+      return;
+    }
+    const duplicate = { ...routine };
+    delete duplicate.id;
+    addRoutine(duplicate);
   };
 
   const startWorkout = (routine: Routine) => {
     if (routine?.exercises && routine?.exercises.length > 0) {
       routine.exercises[0].active = true;
     }
-    routine.startedAt = new Date(),
-    dispatch(setRoutine({ ...routine, active: true }));
+    dispatch(setRoutine({ ...routine, active: true, startedAt: new Date() }));
   };
 
   const displayRoutines = () => {
@@ -103,7 +117,9 @@ export const Routines = () => {
               // subheader="Card sub heading"
               action={
                 <IconButton
-                  onClick={handleRoutineMenuClick}
+                  onClick={(event: MouseEvent) =>
+                    handleRoutineMenuClick(event, routine)
+                  }
                   aria-label="options"
                   size="small"
                   className="RoutineAction"
@@ -127,43 +143,6 @@ export const Routines = () => {
               </Button>
             </CardActions>
           </Card>
-          <StyledMenu
-            id="routine-menu"
-            MenuListProps={{
-              "aria-labelledby": "routine-button",
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleRoutineMenuClose}
-          >
-            <MenuItem
-              onClick={() => {
-                handleRoutineMenuClose();
-                onDuplicateRoutine(routine);
-              }}
-            >
-              <ContentCopyIcon />
-              Duplicate
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleRoutineMenuClose();
-                onEditRoutine(routine);
-              }}
-            >
-              <EditIcon />
-              Edit
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleRoutineMenuClose();
-                onDeleteRoutine(routine);
-              }}
-            >
-              <DeleteIcon />
-              Delete
-            </MenuItem>
-          </StyledMenu>
         </Grid>
       );
     });
@@ -197,13 +176,14 @@ export const Routines = () => {
         <Box
           sx={{
             bgcolor: "background.paper",
-            pt: 6,
+            pt: 3,
             pb: 6,
             height: "100%",
             flexGrow: 1,
           }}
         >
           <Container maxWidth="md">
+
             <Typography
               component="h4"
               variant="h4"
@@ -213,11 +193,19 @@ export const Routines = () => {
             >
               My Routines
             </Typography>
-            <Grid sx={{ pt: 4 }} spacing={2} justifyContent="center" container>
+            <Button
+              onClick={() => startWorkout({})}
+              variant="outlined"
+              sx={{ my: 1 }}
+              endIcon={<AddCircleSharpIcon />}
+            >
+              Start an empty workout
+            </Button>
+            <Grid sx={{ p: 2 }} spacing={2} justifyContent="center" container>
               {displayRoutines()}
             </Grid>
             <Stack
-              sx={{ pt: 4 }}
+              sx={{ pt: 2 }}
               direction="row"
               spacing={2}
               justifyContent="center"
@@ -227,10 +215,47 @@ export const Routines = () => {
                 variant="outlined"
                 endIcon={<AddCircleSharpIcon />}
               >
-                Create new
+                Create New Routine
               </Button>
             </Stack>
           </Container>
+          <StyledMenu
+            id="routine-menu"
+            MenuListProps={{
+              "aria-labelledby": "routine-button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleRoutineMenuClose}
+          >
+            <MenuItem
+              onClick={() => {
+                handleRoutineMenuClose();
+                onDuplicateRoutine();
+              }}
+            >
+              <ContentCopyIcon />
+              Duplicate
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleRoutineMenuClose();
+                onEditRoutine();
+              }}
+            >
+              <EditIcon />
+              Edit
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleRoutineMenuClose();
+                onDeleteRoutine();
+              }}
+            >
+              <DeleteIcon />
+              Delete
+            </MenuItem>
+          </StyledMenu>
         </Box>
       </main>
     </div>

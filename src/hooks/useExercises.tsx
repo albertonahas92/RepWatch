@@ -9,23 +9,6 @@ import { Exercise, RoutineExercise } from "../types/exercise";
 import { setExercise, setExerciseModal } from "../store/exerciseSlice";
 
 export const useExercises = () => {
-  // const { data, error, isError, isLoading } = useQuery(
-  //   "exercise",
-  //   fetchExercises
-  // );
-
-  // async function fetchExercises() {
-  //   const { data } = await axios.get(
-  //     "https://wger.de/api/v2/exercise/?limit=419&offset=0"
-  //   );
-  //   const arrayUniqueByKey = [
-  //     ...new Map(
-  //       data.results.map((item: any) => [item["name"], item])
-  //     ).values(),
-  //   ];
-  //   return arrayUniqueByKey;
-  // }
-
   const completeExercises = useSelector(exercisesSelector);
   const [exercises, setExercisesList] = useState(completeExercises);
   const [equipments, setEquipments] = useState<string[]>();
@@ -94,7 +77,8 @@ export const useExercises = () => {
   }, [term, musclesFilter, equipmentsFilter]);
 
   useEffect(() => {
-    dispatch(setExercises(data.exercises as any));
+    if (!completeExercises || !completeExercises.length)
+      dispatch(setExercises(data.exercises as any));
   }, [data]);
 
   return {

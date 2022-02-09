@@ -23,7 +23,7 @@ import { RoutineExercise } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 
 export const ExerciseDetails: FC<Props> = ({ exercise }) => {
-  const ommitedProps = ["instructions", "name", "index", "active"];
+  const ommitedProps = ["instructions", "name", "index", "active", "sets"];
   const theme = useTheme();
 
   const [image, setImage] = useState(0);

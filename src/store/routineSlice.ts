@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RoutineExercise, Set } from '../types/exercise'
-import { Routine } from '../types/routine'
+import { Routine, Workout } from '../types/routine'
 import { RoutineState, State } from '../types/state'
 
 const initialState = { value: undefined, open: false }
@@ -10,14 +10,19 @@ export const routineSlice = createSlice({
   name: 'routine',
   initialState,
   reducers: {
-    setRoutine: (state: RoutineState, action: PayloadAction<Routine | undefined>) => {
+    setRoutine: (state: RoutineState, action: PayloadAction<Workout | undefined>) => {
       state.value = action.payload
     },
-    updateExercises: (state: RoutineState, action: PayloadAction<RoutineExercise>) => {
+    updateExercise: (state: RoutineState, action: PayloadAction<RoutineExercise>) => {
       if (state.value) {
         state.value.exercises = state.value.exercises?.map((e) =>
           e.name === action.payload.name ? { ...e, ...action.payload } : e
         )
+      }
+    },
+    updateExercises: (state: RoutineState, action: PayloadAction<RoutineExercise[]>) => {
+      if (state.value) {
+        state.value.exercises = action.payload
       }
     },
     updateSet: (state: RoutineState, action: PayloadAction<{ index: number, set: Set, name: string }>) => {
@@ -47,6 +52,6 @@ export const routineSelector = (state: State) => state.routine.value
 export const routineModalSelector = (state: State) => state.routine.open
 
 // Action creators are generated for each case reducer function
-export const { setRoutine, updateExercises, updateSet, setRoutineModal } = routineSlice.actions
+export const { setRoutine, updateExercise, updateExercises, updateSet, setRoutineModal } = routineSlice.actions
 
 export default routineSlice.reducer

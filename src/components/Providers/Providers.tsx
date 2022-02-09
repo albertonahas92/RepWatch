@@ -8,6 +8,9 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import store from "../../store/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+export const useAppDispatch = () => store.dispatch
+
+
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 export const Providers: FC = ({ children }) => {

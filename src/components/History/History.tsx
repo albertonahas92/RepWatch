@@ -1,6 +1,9 @@
+import { Container } from "@mui/material";
 import React from "react";
 import { useHistory } from "../../hooks/useHistory";
 import { RoutineHistory } from "../../types/routine";
+import { HistoryList } from "./HistoryList";
+import { HistoryTimeline } from "./HistoryTimeline";
 
 export const History = () => {
   const { history } = useHistory();
@@ -12,9 +15,9 @@ export const History = () => {
   };
 
   return (
-    <div>
+    <Container>
       History
-      {/* {displayRoutines()} */}
-    </div>
+      <HistoryList history={history} />
+    </Container>
   );
 };

@@ -35,6 +35,7 @@ import { ExerciseDetails } from "./components/ExerciseDetails/ExerciseDetails";
 import { ColorModeContext } from "./components/Providers/Providers";
 import { alertSelector, setAlertOpen } from "./store/alertSlice";
 import { AlertDialog } from "./molecules/AlertDialog/AlertDialog";
+import moment from "moment";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -134,7 +135,7 @@ const App = function ({
 
   const onFinishWorkout = () => {
     saveRoutine();
-    dispatch(setRoutine(undefined));
+    dispatch(setRoutine({ ...routine, done: true }));
   };
 
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));
@@ -168,7 +169,10 @@ const App = function ({
         setOpen={(open) => {
           dispatch(setRoutineModal(open));
         }}
-        title={routine?.name}
+        title={
+          routine?.name ||
+          `${moment(routine?.startedAt).format("ddd Do")} Workout`
+        }
       >
         <Workout onFinish={onFinishWorkout} />
       </ModalDialog>

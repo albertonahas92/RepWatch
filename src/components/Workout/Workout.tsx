@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   routineSelector,
   setRoutine,
+  setRoutineModal,
+  updateExercise,
   updateExercises,
 } from "../../store/routineSlice";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
@@ -30,29 +32,33 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import shortid from "shortid";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { useExercises } from "../../hooks/useExercises";
+import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
+import { ExercisesList } from "../ExercisesList/ExercisesList";
+import { WorkoutSummary } from "./WorkoutSummary";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
+  const [openExerciseList, setOpenExerciseList] = useState(false);
+
   const routine = useSelector(routineSelector);
-  const { exercises } = useExercises();
   const dispatch = useDispatch();
   const screenSize = useWindowDimensions();
 
   const toggleActive = (exercise: RoutineExercise) => {
     const active = exercise.active ? false : true;
-    dispatch(updateExercises({ ...exercise, active }));
+    dispatch(updateExercise({ ...exercise, active }));
   };
 
   const addSet = (exercise: RoutineExercise) => {
     let sets = exercise.sets || [];
     const index = exercise.sets?.length || 0;
     sets = [...sets, { id: shortid.generate(), reps: 12, weight: 0, index }];
-    dispatch(updateExercises({ ...exercise, sets }));
+    dispatch(updateExercise({ ...exercise, sets }));
   };
 
   const removeSet = (exercise: RoutineExercise, index: number) => {
     const newSets = [...Array.from(exercise.sets || [])];
     newSets?.splice(index, 1);
-    dispatch(updateExercises({ ...exercise, sets: newSets }));
+    dispatch(updateExercise({ ...exercise, sets: newSets }));
   };
 
   const duplicateSet = (exercise: RoutineExercise, index: number) => {
@@ -63,24 +69,32 @@ export const Workout: FC<Props> = ({ onFinish }) => {
       elapsedRestTime: 0,
     };
     sets = [...sets, duplicate];
-    dispatch(updateExercises({ ...exercise, sets }));
+    dispatch(updateExercise({ ...exercise, sets }));
+  };
+
+  const onAddExercise = (exercise: Exercise) => {
+    if (routine?.exercises?.filter((e) => e.name === exercise.name).length)
+      return;
+
+    const routineExercise: RoutineExercise = {
+      ...exercise,
+      index: routine?.exercises?.length || 0,
+    };
+    dispatch(
+      updateExercises([
+        ...Array.from(routine?.exercises || []),
+        routineExercise,
+      ])
+    );
+    setOpenExerciseList(false);
   };
 
   const discardWorkout = () => {
     dispatch(setRoutine(undefined));
   };
 
-  return (
+  return routine && !routine?.done ? (
     <Container sx={{ p: 0 }} maxWidth="md">
-      {/* <Typography
-        component="h5"
-        variant="h5"
-        align="center"
-        color="text.primary"
-        gutterBottom
-      >
-        {routine?.name}
-      </Typography> */}
       <List dense={true}>
         {routine?.exercises?.map((exercise: RoutineExercise) => {
           // if (exercises) {
@@ -161,6 +175,19 @@ export const Workout: FC<Props> = ({ onFinish }) => {
         })}
       </List>
       {/* <Divider variant="fullWidth" sx={{ my: 3 }} /> */}
+      <Button
+        color="primary"
+        // disabled={formik.isSubmitting}
+        fullWidth
+        size="small"
+        type="button"
+        variant="text"
+        onClick={() => setOpenExerciseList(true)}
+        endIcon={<AddCircleSharpIcon />}
+        sx={{ my: 1 }}
+      >
+        Add New Exercise
+      </Button>
       <Grid columnSpacing={4} container>
         <Grid item md={6} xs={12}>
           <Button
@@ -189,7 +216,36 @@ export const Workout: FC<Props> = ({ onFinish }) => {
           </Button>
         </Grid>
       </Grid>
+      <ModalDialog
+        closeButton={true}
+        title={"Select Exercise"}
+        open={openExerciseList}
+        setOpen={setOpenExerciseList}
+      >
+        <ExercisesList onSelectExercise={onAddExercise} />
+      </ModalDialog>
     </Container>
+  ) : routine ? (
+    <Container>
+      <WorkoutSummary />
+      <Grid columnSpacing={4} container>
+        <Grid item md={12} xs={12}>
+          <Button
+            color="secondary"
+            fullWidth
+            size="medium"
+            type="button"
+            variant="outlined"
+            onClick={discardWorkout}
+            sx={{ my: 1 }}
+          >
+            Complete
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
+  ) : (
+    <></>
   );
 };
 

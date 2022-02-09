@@ -1,3 +1,5 @@
+import { Set } from "../types/exercise"
+import { Routine } from "../types/routine"
 import { User } from "../types/user"
 
 export const getMuscleGroupName = (muscle: string) => {
@@ -59,6 +61,13 @@ export const weightString = (user?: User) => {
     return user?.unit === 'imperial' ? `${user.weight} lbs` : `${user?.weight} kg`
 }
 
+export const weightInKg = (user?: User) => {
+    return user?.unit === 'imperial' ? converter.lbsToKg(user.weight) : user?.weight || 0
+}
+export const heightInCm = (user?: User) => {
+    return user?.unit === 'imperial' ? converter.ftToCm(user.height, user.heightIn) : user?.height || 0
+}
+
 export const getResizedName = (fileName: string, dimensions = '600x600') => {
     const extIndex = fileName.lastIndexOf('.');
     const ext = fileName.substring(extIndex);
@@ -89,3 +98,15 @@ const getPWADisplayMode = () => {
     }
     return 'browser';
 };
+
+
+const getCaloriesBurnedInRoutine = (user: User, routine: Routine) => {
+    routine.exercises?.flatMap(e => e.sets).reduce(
+        (acc, set) => acc + getCaloriesBurnedInSet(user, set),
+        0
+    )
+}
+
+const getCaloriesBurnedInSet = (user: User, set?: Set) => {
+    return (weightInKg(user) * 4.8 * 0.0175 * (set?.elapsedTime || 0) / 60)
+}

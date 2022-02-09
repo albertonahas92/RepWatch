@@ -6,6 +6,7 @@ import { Routine } from "../types/routine";
 import { userSelector } from "../store/userSlice";
 import _ from "lodash";
 import { omitExerciseKeys, RoutineExercise } from "../types/exercise";
+import moment from "moment";
 
 export const useRoutine = () => {
   const routine = useSelector(routineSelector);
@@ -17,23 +18,25 @@ export const useRoutine = () => {
     if (!routine) return;
     const startDate = routine.startedAt || new Date();
     const duration = new Date().getTime() - startDate.getTime();
+    const name =
+      routine.name || `${moment(routine?.startedAt).format("ddd Do")} Workout`;
+    const exercises = routine.exercises?.map(
+      (e) => _.omit(e, omitExerciseKeys) as RoutineExercise
+    );
+
     const _routine = {
       ..._.omit(routine, [
-        "exercises",
+        // "exercises",
         "active",
         "startedAt",
         "createdAt",
         "updatedAt",
       ]),
+      name,
       finishedAt: firebase.firestore.FieldValue.serverTimestamp(),
       duration,
+      exercises,
     };
-
-    const exercises = routine.exercises
-      ?.map((e) => _.omit(e, omitExerciseKeys) as RoutineExercise)
-      .map((e) => {
-        return { ...e, date: firebase.firestore.FieldValue.serverTimestamp() };
-      });
 
     return firebase
       .firestore()

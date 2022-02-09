@@ -23,6 +23,8 @@ import { userSelector } from "../../store/userSlice";
 import { StyledMenu } from "../TopBar/TopBar";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export const SetForm: FC<Props> = ({
   index,
@@ -220,6 +222,16 @@ export const SetForm: FC<Props> = ({
         open={open}
         onClose={handleSetMenuClose}
       >
+        <MenuItem
+          onClick={() => {
+            handleSetMenuClose();
+            dispatch(setExercise(exercise));
+            dispatch(setExerciseModal(true));
+          }}
+        >
+          <InfoOutlinedIcon />
+          Exercise Details
+        </MenuItem>
         <MenuItem
           onClick={() => {
             handleSetMenuClose();
