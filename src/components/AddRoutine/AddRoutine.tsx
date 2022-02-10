@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Fade,
   Grid,
   IconButton,
   List,
@@ -119,42 +120,51 @@ export const AddRoutine = () => {
           </Typography>
         </Box>
         <Box>
-          <Stack
-            direction="row"
-            sx={{ justifyContent: "center", alignItems: "center" }}
-            spacing={2}
+          <Fade
+            in={true}
+            timeout={200}
+            style={{
+              transitionDelay: `100ms`,
+            }}
+            unmountOnExit
           >
-            <FrontDiagram
-              highlights={Array.from(
-                new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-              )}
-              // secondaryHighlights={Array.from(
-              //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
-              // )}
-              secondaryHighlights={[]}
-              style={{
-                fontSize: "12em",
-                maxWidth: 120,
-                color: theme.palette.text.secondary,
-                fill: theme.palette.text.secondary,
-              }}
-            />
-            <BackDiagram
-              highlights={Array.from(
-                new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-              )}
-              // secondaryHighlights={Array.from(
-              //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
-              // )}
-              secondaryHighlights={[]}
-              style={{
-                fontSize: "12em",
-                maxWidth: 120,
-                color: theme.palette.text.secondary,
-                fill: theme.palette.text.secondary,
-              }}
-            />
-          </Stack>
+            <Stack
+              direction="row"
+              sx={{ justifyContent: "center", alignItems: "center" }}
+              spacing={2}
+            >
+              <FrontDiagram
+                highlights={Array.from(
+                  new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
+                )}
+                // secondaryHighlights={Array.from(
+                //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
+                // )}
+                secondaryHighlights={[]}
+                style={{
+                  fontSize: "12em",
+                  maxWidth: 120,
+                  color: theme.palette.text.secondary,
+                  fill: theme.palette.text.secondary,
+                }}
+              />
+              <BackDiagram
+                highlights={Array.from(
+                  new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
+                )}
+                // secondaryHighlights={Array.from(
+                //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
+                // )}
+                secondaryHighlights={[]}
+                style={{
+                  fontSize: "12em",
+                  maxWidth: 120,
+                  color: theme.palette.text.secondary,
+                  fill: theme.palette.text.secondary,
+                }}
+              />
+            </Stack>
+          </Fade>
         </Box>
         <TextField
           error={Boolean(formik.touched.name && formik.errors.name)}
@@ -222,7 +232,7 @@ export const AddRoutine = () => {
             type="submit"
             variant="outlined"
           >
-            Save
+            Save Routine
           </Button>
         </Box>
       </form>

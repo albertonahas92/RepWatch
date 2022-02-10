@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import firebase from "../config";
+import { historySelector, setHistory } from "../store/historySlice";
 import { userSelector } from "../store/userSlice";
 import { Exercise, RoutineExercise } from "../types/exercise";
 import { RoutineHistory } from "../types/routine";
 
 export const useHistory = () => {
   const user = useSelector(userSelector);
-  const [history, setHistory] = useState<RoutineHistory[]>();
+  const history = useSelector(historySelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!user) {
@@ -22,7 +24,7 @@ export const useHistory = () => {
         querySnapshot.forEach((doc: any) => {
           routinesArr.push({ id: doc.id, routine: doc.data() });
         });
-        setHistory(routinesArr);
+        dispatch(setHistory(routinesArr));
       });
 
     return () => {
@@ -30,5 +32,5 @@ export const useHistory = () => {
     };
   }, [user]);
 
-  return { history };
+  return history;
 };

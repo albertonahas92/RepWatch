@@ -54,11 +54,26 @@ export const converter = {
     lbsToKg: (lbs = 0) => Math.round(lbs / 2.20462262)
 };
 
+export const goalString = (goal?: string) => {
+    switch (goal) {
+        case "general":
+            return "General Fitness"
+        case "strength":
+            return "Build Strength"
+        case "muscle":
+            return "Gain Muscle"
+        case "endurance":
+            return "Endurance"
+        default:
+            "";
+    }
+}
+
 export const heightString = (user?: User) => {
     return user?.unit === 'imperial' ? `${user.height} ft. ${user.heightIn} in.` : `${user?.height} cm`
 }
-export const weightString = (user?: User) => {
-    return user?.unit === 'imperial' ? `${user.weight} lbs` : `${user?.weight} kg`
+export const weightString = (user?: User, weight?: number) => {
+    return user?.unit === 'imperial' ? `${weight || user.weight} lbs` : `${weight || user?.weight} kg`
 }
 
 export const weightInKg = (user?: User) => {

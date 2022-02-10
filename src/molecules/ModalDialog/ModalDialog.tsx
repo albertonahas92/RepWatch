@@ -45,6 +45,7 @@ export default function ModalDialog(props: Props) {
                     textAlign: "center",
                     flexGrow: 1,
                     textTransform: "capitalize",
+                    px: 2,
                   }}
                   color="primary"
                 >
@@ -52,7 +53,7 @@ export default function ModalDialog(props: Props) {
                 </Typography>
               )}
               <Box></Box>
-              <Box>
+              <Box sx={{ position: "absolute", right: 15 }}>
                 <IconButton onClick={handleClose}>
                   <CloseIcon />
                 </IconButton>

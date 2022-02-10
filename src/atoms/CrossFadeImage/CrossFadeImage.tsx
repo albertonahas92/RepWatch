@@ -73,7 +73,7 @@ const CrossFadeImage = (props: ImageProps) => {
             opacity: display ? "100%" : 0,
             position: "absolute",
             maxWidth: "100%",
-            height: 200,
+            maxHeight: 200,
             transition: `opacity ${transitionDuration}s ${curve}`,
           }}
           onLoad={() => setDisplay(true)}
@@ -86,7 +86,7 @@ const CrossFadeImage = (props: ImageProps) => {
           style={{
             position: "absolute",
             maxWidth: "100%",
-            height: 200,
+            maxHeight: 200,
             opacity: bottomOpacity + "%",
             transition: `opacity ${transitionDuration}s ${curve}`,
           }}

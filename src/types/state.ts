@@ -1,5 +1,5 @@
 import { Exercise, RoutineExercise } from "./exercise";
-import { Routine, Workout } from "./routine";
+import { Routine, RoutineHistory, Workout } from "./routine";
 import { User } from "./user";
 
 export interface State {
@@ -8,6 +8,7 @@ export interface State {
     routine: RoutineState
     exercise: ExerciseState
     alert: AlertState
+    history: HistoryState
 }
 
 export interface UserState {
@@ -20,6 +21,9 @@ export interface ExercisesState {
 export interface RoutineState {
     value?: Workout
     open?: boolean
+}
+export interface HistoryState {
+    value?: RoutineHistory[]
 }
 export interface ExerciseState {
     value?: RoutineExercise

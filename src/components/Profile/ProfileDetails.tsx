@@ -17,9 +17,12 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  InputLabel,
+  MenuItem,
   Paper,
   Radio,
   RadioGroup,
+  Select,
   Snackbar,
   Stack,
   Table,
@@ -37,7 +40,12 @@ import firebase from "../../config";
 import { SelectGender } from "../../atoms/SelectGender/SelectGender";
 import { User } from "../../types/user";
 import { useUser } from "../../hooks/useUser";
-import { converter, heightString, weightString } from "../../utils/utils";
+import {
+  converter,
+  goalString,
+  heightString,
+  weightString,
+} from "../../utils/utils";
 import HeightIcon from "@mui/icons-material/Height";
 
 export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
@@ -54,6 +62,8 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
       height: user?.height || 170,
       heightIn: user?.heightIn || 0,
       weight: user?.weight || 70,
+      goal: user?.goal || "",
+      weightGoal: user?.weightGoal || user?.weight || 70,
       unit: user?.unit || "metric",
     },
     validationSchema: Yup.object({
@@ -61,18 +71,15 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
       height: Yup.number().max(200).min(1).required("Height is required"),
       heightIn: Yup.number().max(20),
       weight: Yup.number().max(500).min(30).required("Weight is required"),
+      weightGoal: Yup.number().max(500).min(30).required("Weight is required"),
+      goal: Yup.string(),
       gender: Yup.string().required("Gender is required"),
       unit: Yup.string().required("Unit is required"),
     }),
     onSubmit: (values, { resetForm, setErrors, setSubmitting }) => {
       updateUser({
         uid: user?.uid,
-        age: values.age,
-        gender: values.gender,
-        height: values.height,
-        heightIn: values.heightIn,
-        weight: values.weight,
-        unit: values.unit,
+        ...values,
       }).then(() => {
         setSucess(true);
         props.setEditMode(false);
@@ -198,7 +205,7 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
                     <InputAdornment position="start">
                       {formik.values.unit === "imperial" ? "lb" : "kg"}
                     </InputAdornment>
-                  )
+                  ),
                 }}
                 variant="outlined"
               />
@@ -257,6 +264,57 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
                 )}
               </Stack>
             </Grid>
+            <Grid item md={4} xs={12}>
+              <TextField
+                error={Boolean(
+                  formik.touched.weightGoal && formik.errors.weightGoal
+                )}
+                helperText={
+                  formik.touched.weightGoal && formik.errors.weightGoal
+                }
+                fullWidth
+                label="weight goal"
+                margin="dense"
+                name="weightGoal"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.weightGoal}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      {formik.values.unit === "imperial" ? "lb" : "kg"}
+                    </InputAdornment>
+                  ),
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <FormControl fullWidth sx={{ minWidth: 80 }}>
+                <InputLabel id="goal-select-label">Goal</InputLabel>
+                <Select
+                  labelId="goal-select-label"
+                  id="goal-select-autowidth"
+                  value={formik.values.goal}
+                  onBlur={formik.handleBlur}
+                  onChange={(e) => {
+                    formik.setFieldValue("goal", e.target.value);
+                    formik.handleChange(e);
+                  }}
+                  label="Goal"
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="general">General Fitness</MenuItem>
+                  <MenuItem value="strength">Build Strength</MenuItem>
+                  <MenuItem value="muscle">Gain Muscle</MenuItem>
+                  <MenuItem value="endurance">Endurance</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </CardContent>
         <Divider variant="middle" />
@@ -280,47 +338,87 @@ export var AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
       </Snackbar>
     </form>
   ) : (
-    <Card elevation={0} variant="outlined">
+    <Card elevation={0} variant="elevation">
       <CardContent>
         <TableContainer component={Box}>
-          <Table aria-label="exercise table" size="small">
+          <Table
+            sx={{
+              "& th": {
+                fontWeight: "bold",
+              },
+            }}
+            aria-label="exercise table"
+            size="small"
+          >
             <TableBody>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Gender
-                </TableCell>
-                <TableCell align="right">{user?.gender}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Age
-                </TableCell>
-                <TableCell align="right">{user?.age}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Weight
-                </TableCell>
-                <TableCell align="right">
-                  {weightString(user || undefined)}
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Height
-                </TableCell>
-                <TableCell align="right">
-                  {heightString(user || undefined)}
-                </TableCell>
-              </TableRow>
+              {user?.gender && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Gender
+                  </TableCell>
+                  <TableCell sx={{ textTransform: "capitalize" }} align="right">
+                    {user?.gender}
+                  </TableCell>
+                </TableRow>
+              )}
+              {user?.age && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Age
+                  </TableCell>
+                  <TableCell align="right">{user?.age}</TableCell>
+                </TableRow>
+              )}
+              {user?.weight && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Weight
+                  </TableCell>
+                  <TableCell align="right">
+                    {weightString(user || undefined)}
+                  </TableCell>
+                </TableRow>
+              )}
+              {user?.height && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Height
+                  </TableCell>
+                  <TableCell align="right">
+                    {heightString(user || undefined)}
+                  </TableCell>
+                </TableRow>
+              )}
+              {user?.weightGoal && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Weight Goal
+                  </TableCell>
+                  <TableCell align="right">
+                    {weightString(user || undefined, user?.weightGoal)}
+                  </TableCell>
+                </TableRow>
+              )}
+              {user?.goal && (
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Goal
+                  </TableCell>
+                  <TableCell align="right">{goalString(user?.goal)}</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

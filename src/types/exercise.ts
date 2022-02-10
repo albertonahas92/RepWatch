@@ -32,7 +32,12 @@ export interface Set {
     elapsedRestTime?: number
 }
 
-
+export const omitSetKeys = [
+    'active',
+    'elapsedTime',
+    'resting',
+    'elapsedRestTime',
+]
 
 export const omitExerciseKeys = [
     'category'

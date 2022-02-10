@@ -4,21 +4,26 @@ import {
   Fade,
   Paper,
   Stack,
+  Tab,
+  tabClasses,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tabs,
   Typography,
   useTheme,
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import { Box } from "@mui/system";
 import React, { FC, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import CrossFadeImage from "../../atoms/CrossFadeImage/CrossFadeImage";
 import { BackDiagram, backHighlights } from "../../icons/backDiagram";
 import { FrontDiagram, frontHighlights } from "../../icons/frontDiagram";
+import { historySelector } from "../../store/historySlice";
 import { RoutineExercise } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 
@@ -26,7 +31,11 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
   const ommitedProps = ["instructions", "name", "index", "active", "sets"];
   const theme = useTheme();
 
+  const history = useSelector(historySelector);
+
   const [image, setImage] = useState(0);
+  const [tab, setTab] = useState(0);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setImage((im) => 1 - im);
@@ -42,6 +51,10 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
     maxWidth: 100,
     color: theme.palette.text.secondary,
     fill: theme.palette.text.secondary,
+  };
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTab(newValue);
   };
 
   return exercise ? (
@@ -81,47 +94,92 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
           </Stack>
         </Fade>
       </Box>
-
-      <Box sx={{ p: 2 }}>
-        <Typography color="textPrimary" variant="body2">
-          {exercise.instructions}
-        </Typography>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+          centered
+        >
+          <Tab label="Details" />
+          <Tab label="Progress" />
+        </Tabs>
       </Box>
-      <Divider sx={{ mb: 2 }} />
-      <CrossFadeImage
-        src={`${PUBLIC_DOMAIN_URL}/${exercise?.name.replaceAll(
-          " ",
-          "_"
-        )}/images/${image}.jpg`}
-      />
-      <TableContainer sx={{ my: 2 }} component={Paper}>
-        <Table aria-label="exercise table" size="small">
-          <TableBody>
-            {Object.entries(exercise).map(
-              (entry) =>
-                !ommitedProps.includes(entry[0]) &&
-                entry[1] != "" && (
-                  <TableRow
-                    key={entry[0]}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {entry[0]}
-                    </TableCell>
-                    <TableCell align="right">
-                      {!Array.isArray(entry[1]) ? entry[1] : entry[1].join()}
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TabPanel value={tab} index={0}>
+        <Box sx={{ p: 2 }}>
+          <Typography color="textPrimary" variant="body2">
+            {exercise.instructions}
+          </Typography>
+        </Box>
+        <Divider sx={{ mb: 2 }} />
+        <CrossFadeImage
+          src={`${PUBLIC_DOMAIN_URL}/${exercise?.name.replaceAll(
+            /[ \/]/g,
+            "_"
+          )}/images/${image}.jpg`}
+        />
+        <TableContainer sx={{ my: 2 }} component={Paper}>
+          <Table aria-label="exercise table" size="small">
+            <TableBody>
+              {Object.entries(exercise).map(
+                (entry) =>
+                  !ommitedProps.includes(entry[0]) &&
+                  entry[1] != "" && (
+                    <TableRow
+                      key={entry[0]}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {entry[0]}
+                      </TableCell>
+                      <TableCell align="right">
+                        {!Array.isArray(entry[1])
+                          ? entry[1]
+                          : entry[1].join(", ")}
+                      </TableCell>
+                    </TableRow>
+                  )
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </TabPanel>
+      <TabPanel value={tab} index={1}>
+        <Typography color="text.secondary" sx={{ p: 2 }}>
+          You have no progress yet in this exercise, let's go do it!
+        </Typography>
+      </TabPanel>
     </Box>
   ) : (
     <></>
   );
 };
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`exercise-tabpanel-${index}`}
+      aria-labelledby={`exercise-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 0 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 interface Props {
   exercise?: RoutineExercise;

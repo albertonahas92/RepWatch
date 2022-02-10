@@ -10,6 +10,7 @@ import {
   Button,
   Divider,
   Grid,
+  Box,
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import { EquipmentIcon } from "../../icons/equipment/EquipmentIcon";
@@ -139,7 +140,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
                     <>
                       <ListItem
                         key={set.id || shortid.generate()}
-                        sx={{ pl: { md: 9, xs: 0 }, pr: 0 }}
+                        sx={{ pl: { md: 7, xs: 0 }, pr: 0 }}
                       >
                         <ListItemText
                           primary={
@@ -226,16 +227,16 @@ export const Workout: FC<Props> = ({ onFinish }) => {
       </ModalDialog>
     </Container>
   ) : routine ? (
-    <Container>
+    <Box>
       <WorkoutSummary />
       <Grid columnSpacing={4} container>
         <Grid item md={12} xs={12}>
           <Button
-            color="secondary"
+            color="primary"
             fullWidth
             size="medium"
             type="button"
-            variant="outlined"
+            variant="contained"
             onClick={discardWorkout}
             sx={{ my: 1 }}
           >
@@ -243,7 +244,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
           </Button>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   ) : (
     <></>
   );

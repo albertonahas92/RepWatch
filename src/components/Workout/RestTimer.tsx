@@ -76,7 +76,7 @@ export const RestTimer: FC<Props> = ({ onRestFinish }) => {
         onClick={() => {
           onRestFinish(time);
         }}
-        sx={{ my: 2 }}
+        sx={{ my: 1 }}
       >
         Skip
       </Button>

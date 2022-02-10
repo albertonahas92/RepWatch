@@ -5,6 +5,7 @@ import {
   IconButton,
   InputAdornment,
   MenuItem,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -25,6 +26,13 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 export const SetForm: FC<Props> = ({
   index,
@@ -115,7 +123,7 @@ export const SetForm: FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (elapsedTime && elapsedTime !== initialElapsedTime) {
+    if (elapsedTime !== initialElapsedTime) {
       updateSetState();
     }
   }, [elapsedTime]);
@@ -144,6 +152,12 @@ export const SetForm: FC<Props> = ({
         >
           Set {index + 1}
         </Typography>
+        {!!elapsedTime && (
+          <CheckCircleOutlinedIcon
+            color="primary"
+            sx={{ fontSize: "1em", ml: 1 }}
+          />
+        )}
       </Grid>
       <Grid item md={2} xs={3} sx={{ display: "flex", alignItems: "center" }}>
         <Chip
@@ -172,6 +186,20 @@ export const SetForm: FC<Props> = ({
           variant="outlined"
           size="small"
           sx={{ m: 0 }}
+          // InputProps={{
+          //   endAdornment: (
+          //     <InputAdornment position="end">
+          //       <Stack direction="column">
+          //         <IconButton color="primary" size="small" sx={{ m: 0, p: 0 }}>
+          //           <AddOutlinedIcon sx={{ fontSize: 14 }} />
+          //         </IconButton>
+          //         <IconButton color="primary" size="small" sx={{ m: 0, p: 0 }}>
+          //           <RemoveOutlinedIcon sx={{ fontSize: 14 }} />
+          //         </IconButton>
+          //       </Stack>
+          //     </InputAdornment>
+          //   ),
+          // }}
         />
       </Grid>
       <Grid item md={2} xs={4}>
@@ -231,6 +259,15 @@ export const SetForm: FC<Props> = ({
         >
           <InfoOutlinedIcon />
           Exercise Details
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleSetMenuClose();
+            setElapsedTime(60);
+          }}
+        >
+          <CheckCircleOutlinedIcon />
+          Mark as done
         </MenuItem>
         <MenuItem
           onClick={() => {

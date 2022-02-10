@@ -161,6 +161,7 @@ export var TopBar: FC<Props> = function (props) {
               }}
               src={user.photoURL}
               alt="profile photo"
+              onClick={() => navigate("/profile")}
             >
               <UserCircleIcon fontSize="small" />
             </Avatar>

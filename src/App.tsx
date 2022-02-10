@@ -36,6 +36,7 @@ import { ColorModeContext } from "./components/Providers/Providers";
 import { alertSelector, setAlertOpen } from "./store/alertSlice";
 import { AlertDialog } from "./molecules/AlertDialog/AlertDialog";
 import moment from "moment";
+import { useHistory } from "./hooks/useHistory";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -77,6 +78,7 @@ const App = function ({
   const analytics = useAnalytics();
   const { authError } = useAuthRedirect();
   const { saveRoutine } = useRoutine();
+  const history = useHistory();
 
   const [notification, setNotification] = useState({ title: "", body: "" });
   const openWorkoutModal = useSelector(routineModalSelector);

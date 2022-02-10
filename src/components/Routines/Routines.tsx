@@ -32,9 +32,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useRoutines } from "../../hooks/useRoutines";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { WorkoutSummary } from "../Workout/WorkoutSummary";
+import { historySelector } from "../../store/historySlice";
+import { omitSetKeys, Set } from "../../types/exercise";
+import _ from "lodash";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
+  const history = useSelector(historySelector);
   const currentRoutine = useSelector(routineSelector);
   const { deleteRoutine, addRoutine } = useRoutines();
 
@@ -89,7 +93,18 @@ export const Routines = () => {
     if (routine?.exercises && routine?.exercises.length > 0) {
       routine.exercises[0].active = true;
     }
-    dispatch(setRoutine({ ...routine, active: true, startedAt: new Date() }));
+    const exercises = routine.exercises?.map((e) => {
+      return {
+        ...e,
+        sets: history
+          ?.flatMap((h) => h.routine.exercises)
+          .find((he) => he?.name === e.name)
+          ?.sets?.map((s) => _.omit(s, omitSetKeys) as Set),
+      };
+    });
+    dispatch(
+      setRoutine({ ...routine, active: true, startedAt: new Date(), exercises })
+    );
   };
 
   const displayRoutines = () => {
@@ -136,6 +151,16 @@ export const Routines = () => {
               >
                 {routine.exercises?.map((e) => e.name).join()}
               </Typography>
+              {/* <Typography
+                color="secondary"
+                className="RoutineDescription"
+                variant="body2"
+              >
+                {history
+                  ?.find((he) => he?.routine.name === routine?.name)
+                  ?.routine.finishedAt?.toDate()
+                  .toLocaleString()}
+              </Typography> */}
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
               <Button onClick={() => startWorkout(routine)} size="small">
@@ -183,7 +208,6 @@ export const Routines = () => {
           }}
         >
           <Container maxWidth="md">
-
             <Typography
               component="h4"
               variant="h4"

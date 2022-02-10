@@ -1,12 +1,14 @@
-import { Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "../../hooks/useHistory";
+import { historySelector } from "../../store/historySlice";
 import { RoutineHistory } from "../../types/routine";
 import { HistoryList } from "./HistoryList";
 import { HistoryTimeline } from "./HistoryTimeline";
 
 export const History = () => {
-  const { history } = useHistory();
+  const history = useSelector(historySelector);
 
   const displayRoutines = () => {
     return history?.map((r: RoutineHistory) => {
@@ -15,9 +17,27 @@ export const History = () => {
   };
 
   return (
-    <Container>
-      History
-      <HistoryList history={history} />
-    </Container>
+    <Box
+      sx={{
+        bgcolor: "background.paper",
+        pt: 3,
+        pb: 6,
+        height: "100%",
+        flexGrow: 1,
+      }}
+    >
+      <Container>
+        <Typography
+          component="h5"
+          variant="h5"
+          align="center"
+          color="text.primary"
+          gutterBottom
+        >
+          History
+        </Typography>
+        <HistoryList history={history} />
+      </Container>
+    </Box>
   );
 };

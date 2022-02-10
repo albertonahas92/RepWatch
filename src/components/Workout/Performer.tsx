@@ -48,7 +48,7 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
         onClick={onClickDone}
         endIcon={<Done />}
       >
-        Complete
+        Done
       </Button>
       {/* <IconButton
         sx={{ mt: 2 }}
