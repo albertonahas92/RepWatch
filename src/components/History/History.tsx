@@ -5,7 +5,6 @@ import { useHistory } from "../../hooks/useHistory";
 import { historySelector } from "../../store/historySlice";
 import { RoutineHistory } from "../../types/routine";
 import { HistoryList } from "./HistoryList";
-import { HistoryTimeline } from "./HistoryTimeline";
 
 export const History = () => {
   const history = useSelector(historySelector);
