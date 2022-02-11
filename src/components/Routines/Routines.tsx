@@ -7,6 +7,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CircularProgress,
   Container,
   Divider,
   Fab,
@@ -35,6 +36,7 @@ import { WorkoutSummary } from "../Workout/WorkoutSummary";
 import { historySelector } from "../../store/historySlice";
 import { omitSetKeys, Set } from "../../types/exercise";
 import _ from "lodash";
+import { setAlert } from "../../store/alertSlice";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
@@ -67,6 +69,17 @@ export const Routines = () => {
 
   const onEditRoutine = () => {
     if (!routine) {
+      return;
+    }
+    if (currentRoutine?.active) {
+      dispatch(
+        setAlert({
+          title: "You have a workout in progress",
+          message:
+            "Please finish or discard your current workout before editing",
+          open: true,
+        })
+      );
       return;
     }
     dispatch(setRoutine(routine));
@@ -111,7 +124,7 @@ export const Routines = () => {
     return routines.map((r: any) => {
       const routine: Routine = { ...r.data(), id: r.id };
       return (
-        <Grid item md={4} xs={12}>
+        <Grid key={r.id} item md={4} xs={12}>
           <Card key={routine.name} variant={"outlined"}>
             <CardHeader
               avatar={
@@ -226,7 +239,7 @@ export const Routines = () => {
               Start an empty workout
             </Button>
             <Grid sx={{ p: 2 }} spacing={2} justifyContent="center" container>
-              {displayRoutines()}
+              {routines.length ? displayRoutines() : <CircularProgress />}
             </Grid>
             <Stack
               sx={{ pt: 2 }}

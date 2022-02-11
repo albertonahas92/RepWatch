@@ -4,7 +4,7 @@ import { RoutineExercise, Set } from '../types/exercise'
 import { Routine, Workout } from '../types/routine'
 import { RoutineState, State } from '../types/state'
 
-const initialState = { value: undefined, open: false }
+const initialState = { value: undefined, edit: undefined, open: false }
 
 export const routineSlice = createSlice({
   name: 'routine',
@@ -12,6 +12,9 @@ export const routineSlice = createSlice({
   reducers: {
     setRoutine: (state: RoutineState, action: PayloadAction<Workout | undefined>) => {
       state.value = action.payload
+    },
+    setEditingRoutine: (state: RoutineState, action: PayloadAction<Routine | undefined>) => {
+      state.edit = action.payload
     },
     updateExercise: (state: RoutineState, action: PayloadAction<RoutineExercise>) => {
       if (state.value) {
@@ -26,15 +29,6 @@ export const routineSlice = createSlice({
       }
     },
     updateSet: (state: RoutineState, action: PayloadAction<{ index: number, set: Set, name: string }>) => {
-      // if (state.value && state.value.exercises) {
-      //   const exercise = state.value.exercises.find(e => e.name === action.payload.name)
-      //   if (exercise) {
-      //     if (exercise.sets && exercise.sets[action.payload.index]) {
-      //       exercise.sets[action.payload.index] = action.payload.set
-      //     }
-      //   }
-      // }
-
       if (state.value) {
         state.value.exercises = state.value.exercises?.map((e) =>
           e.name === action.payload.name ?
@@ -49,9 +43,10 @@ export const routineSlice = createSlice({
 })
 
 export const routineSelector = (state: State) => state.routine.value
+export const editingRoutineSelector = (state: State) => state.routine.edit
 export const routineModalSelector = (state: State) => state.routine.open
 
 // Action creators are generated for each case reducer function
-export const { setRoutine, updateExercise, updateExercises, updateSet, setRoutineModal } = routineSlice.actions
+export const { setRoutine, setEditingRoutine, updateExercise, updateExercises, updateSet, setRoutineModal } = routineSlice.actions
 
 export default routineSlice.reducer

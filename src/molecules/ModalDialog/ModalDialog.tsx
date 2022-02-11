@@ -12,6 +12,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Zoom from "@mui/material/Zoom";
 import { TransitionProps } from "@mui/material/transitions";
+import { useLocation } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -23,7 +24,26 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function ModalDialog(props: Props) {
-  const handleClose = () => props.setOpen(false);
+  const locaiton = useLocation();
+
+  const handleClose = () => {
+    props.setOpen(false);
+    window.history.back();
+  };
+
+  React.useEffect(() => {
+    const onHashChange = () => {
+      if (window.location.hash !== "#modal") props.setOpen(false);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  React.useEffect(() => {
+    if (props.open) {
+      window.location.hash = "#modal";
+    }
+  }, [props.open]);
 
   return (
     <div>

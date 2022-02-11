@@ -26,19 +26,26 @@ export var AppTabs = function () {
   useEffect(() => {
     if (location.pathname.indexOf("exercises") > -1) {
       setValue(4);
+      return;
     }
     if (location.pathname.indexOf("profile") > -1) {
       setValue(3);
+      return;
     }
     if (location.pathname.indexOf("routine") > -1) {
       setValue(2);
+      return;
     }
     if (location.pathname.indexOf("workout") > -1) {
       setValue(1);
+      return;
     }
     if (location.pathname.indexOf("history") > -1) {
       setValue(0);
+      return;
     }
+    setValue(1);
+    
   }, [location]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {

@@ -20,6 +20,7 @@ export interface ExercisesState {
 }
 export interface RoutineState {
     value?: Workout
+    edit?: Routine
     open?: boolean
 }
 export interface HistoryState {

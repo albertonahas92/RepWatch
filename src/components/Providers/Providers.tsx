@@ -8,10 +8,11 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import store from "../../store/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-export const useAppDispatch = () => store.dispatch
+export const useAppDispatch = () => store.dispatch;
 
-
-export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = React.createContext({
+  toggleColorMode: () => {},
+});
 
 export const Providers: FC = ({ children }) => {
   const [mode, setMode] = React.useState<"light" | "dark">("light");
@@ -23,6 +24,7 @@ export const Providers: FC = ({ children }) => {
     }),
     []
   );
+
 
   const theme = React.useMemo(
     () =>

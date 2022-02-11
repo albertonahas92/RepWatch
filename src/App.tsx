@@ -37,6 +37,7 @@ import { alertSelector, setAlertOpen } from "./store/alertSlice";
 import { AlertDialog } from "./molecules/AlertDialog/AlertDialog";
 import moment from "moment";
 import { useHistory } from "./hooks/useHistory";
+import { useLocation } from "react-router";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -79,6 +80,11 @@ const App = function ({
   const { authError } = useAuthRedirect();
   const { saveRoutine } = useRoutine();
   const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location);
+  }, [location]);
 
   const [notification, setNotification] = useState({ title: "", body: "" });
   const openWorkoutModal = useSelector(routineModalSelector);
@@ -121,6 +127,7 @@ const App = function ({
     }
     initUser();
   }, [user]);
+
 
   const signOutFromApp = () => {
     signOut?.();

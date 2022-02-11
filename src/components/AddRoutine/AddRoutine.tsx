@@ -40,19 +40,19 @@ import { setAlert } from "../../store/alertSlice";
 export const AddRoutine = () => {
   const theme = useTheme();
   const { addRoutine } = useRoutines();
-  const routine = useSelector(routineSelector);
+  const routine = useSelector(routineSelector) || {};
   const dispatch = useDispatch();
   const [openExerciseList, setOpenExerciseList] = useState(false);
 
-  const [exercises, setExercises] = useState<RoutineExercise[]>([]);
+  const [exercises, setExercises] = useState<RoutineExercise[]>([
+    ...Array.from(routine?.exercises || []),
+  ]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (routine) {
-      setExercises(routine.exercises || []);
-    }
+    dispatch(setRoutine({ ...routine, exercises }));
     return () => {};
-  }, [routine]);
+  }, [exercises]);
 
   const formik = useFormik({
     initialValues: {
@@ -78,13 +78,18 @@ export const AddRoutine = () => {
           name: values.name,
           exercises,
         }).then((doc) => {
-          setExercises([]);
-          resetForm();
-          navigate("/");
+          discardForm();
         });
       }
     },
   });
+
+  const discardForm = () => {
+    setExercises([]);
+    formik.resetForm();
+    dispatch(setRoutine(undefined));
+    navigate("/");
+  };
 
   const onAddExercise = (exercise: Exercise) => {
     if (exercises.filter((e) => e.name === exercise.name).length > 0) return;
@@ -224,15 +229,27 @@ export const AddRoutine = () => {
             Add Exercise
           </Button>
         </Box>
-        <Box sx={{ py: 2 }}>
+        <Box>
           <Button
             color="primary"
             disabled={formik.isSubmitting}
             size="large"
             type="submit"
             variant="outlined"
+            sx={{ m: 1, mb: 2 }}
           >
             Save Routine
+          </Button>
+          <Button
+            color="secondary"
+            disabled={formik.isSubmitting}
+            size="large"
+            type="button"
+            onClick={discardForm}
+            variant="outlined"
+            sx={{ m: 1, mb: 2 }}
+          >
+            Discard
           </Button>
         </Box>
       </form>
