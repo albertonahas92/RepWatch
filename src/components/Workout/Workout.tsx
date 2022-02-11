@@ -94,7 +94,22 @@ export const Workout: FC<Props> = ({ onFinish }) => {
   };
 
   const discardWorkout = () => {
-    dispatch(setRoutine(undefined));
+    if (
+      routine?.exercises?.flatMap((e) => e.sets).some((s) => s?.elapsedTime)
+    ) {
+      confirm({
+        title: "Are you sure?",
+        description: "Your current workout data will be lost",
+      })
+        .then(() => {
+          dispatch(setRoutine(undefined));
+        })
+        .catch((e: any) => {
+          console.log(e);
+        });
+    } else {
+      dispatch(setRoutine(undefined));
+    }
   };
 
   const onFinishWorkout = () => {

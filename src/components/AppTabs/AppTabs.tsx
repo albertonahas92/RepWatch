@@ -45,7 +45,6 @@ export var AppTabs = function () {
       return;
     }
     setValue(1);
-    
   }, [location]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
@@ -66,6 +65,11 @@ export var AppTabs = function () {
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
+          }}
+          sx={{
+            "& > a": {
+              minWidth: 60,
+            },
           }}
         >
           <BottomNavigationAction

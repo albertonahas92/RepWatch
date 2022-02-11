@@ -28,20 +28,35 @@ export default function ModalDialog(props: Props) {
 
   const handleClose = () => {
     props.setOpen(false);
-    window.history.back();
+    if (window.location.hash !== "") {
+      window.history.back();
+    }
   };
 
   React.useEffect(() => {
     const onHashChange = () => {
-      if (window.location.hash !== "#modal") props.setOpen(false);
+      if (props.title == "test") {
+        // debugger;
+      }
+      if (
+        props.open &&
+        !window.location.hash
+          .split("#")
+          .includes(encodeURIComponent(props.title || "") || "modal")
+      ) {
+        console.log(props.title);
+        props.setOpen(false);
+      }
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
+  }, [props.title, props.open]);
 
   React.useEffect(() => {
     if (props.open) {
-      window.location.hash = "#modal";
+      window.location.hash += `#${
+        encodeURIComponent(props.title || "") || "modal"
+      }`;
     }
   }, [props.open]);
 

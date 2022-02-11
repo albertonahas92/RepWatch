@@ -104,6 +104,15 @@ export const Routines = () => {
   };
 
   const startWorkout = (routine: Routine) => {
+    if (routine.id && routine.id === currentRoutine?.id) {
+      dispatch(
+        setRoutine({
+          ...currentRoutine,
+          active: true,
+        })
+      );
+      return;
+    }
     if (routine?.exercises && routine?.exercises.length > 0) {
       routine.exercises[0].active = true;
     }
@@ -178,7 +187,8 @@ export const Routines = () => {
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
               <Button onClick={() => startWorkout(routine)} size="small">
-                Start workout
+                {currentRoutine?.id === routine?.id ? "Resume" : "Start"}{" "}
+                workout
               </Button>
             </CardActions>
           </Card>
