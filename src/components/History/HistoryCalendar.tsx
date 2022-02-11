@@ -21,18 +21,12 @@ import {
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import StaticDatePicker from "@mui/lab/StaticDatePicker";
-import PickersDay, { PickersDayProps } from "@mui/lab/PickersDay";
+import PickersDay from "@mui/lab/PickersDay";
 import endOfWeek from "date-fns/endOfWeek";
 import isSameDay from "date-fns/isSameDay";
 import isWithinInterval from "date-fns/isWithinInterval";
 import startOfWeek from "date-fns/startOfWeek";
 import { RoutineHistory } from "../../types/routine";
-
-type CustomPickerDayProps = PickersDayProps<Date> & {
-  dayIsBetween: boolean;
-  isFirstDay: boolean;
-  isLastDay: boolean;
-};
 
 // const CustomPickersDay = styled(PickersDay, {
 //   shouldForwardProp: (prop) =>
@@ -59,13 +53,13 @@ type CustomPickerDayProps = PickersDayProps<Date> & {
 export const HistoryCalendar: React.FC<Props> = (props) => {
   const [value, setValue] = React.useState<Date | null>(new Date());
 
-  const renderWeekPickerDay = (
-    date: any,
-    selectedDates: Array<Date | null>,
-    pickersDayProps: PickersDayProps<Date>
-  ) => {
-    return <PickersDay {...pickersDayProps} disableMargin />;
-  };
+  // const renderWeekPickerDay = (
+  //   date: any,
+  //   selectedDates: Array<Date | null>,
+  //   props: any
+  // ) => {
+  //   return <PickersDay {...props} disableMargin />;
+  // };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -76,7 +70,7 @@ export const HistoryCalendar: React.FC<Props> = (props) => {
         onChange={(newValue: any) => {
           setValue(newValue);
         }}
-        renderDay={renderWeekPickerDay}
+        // renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
         inputFormat="'Week of' MMM d"
       />

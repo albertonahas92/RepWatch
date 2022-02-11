@@ -11,12 +11,11 @@
     "test": "yarn run jest -env=jsdom"
   },
   "dependencies": {
-    "@emotion/react": "^11.6.0",
+    "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.0.5",
+    "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.68",
-    "@mui/material": "^5.0.6",
-    "@mui/styled-engine-sc": "^5.0.4",
+    "@mui/material": "^5.4.1",
     "@paypal/react-paypal-js": "^7.5.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@types/animejs": "^3.1.4",
