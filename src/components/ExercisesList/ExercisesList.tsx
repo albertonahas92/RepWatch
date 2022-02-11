@@ -27,6 +27,7 @@ import { MultipleSelect } from "../../atoms/MultipleSelect/MultipleSelect";
 import { useDispatch } from "react-redux";
 import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { useTheme } from "@mui/system";
 
 export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
   const {
@@ -43,6 +44,7 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
 
   const screenSize = useWindowDimensions();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const onInfoClick = (exericse: RoutineExercise) => {
     dispatch(setExercise(exericse));
@@ -122,6 +124,7 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
             variant="outlined"
             sx={{ m: 0 }}
             InputProps={{
+              sx: { bgcolor: "backgorund.paper", color: "text.primary" },
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchOutlinedIcon />
