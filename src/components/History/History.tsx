@@ -1,7 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "../../hooks/useHistory";
 import { historySelector } from "../../store/historySlice";
 import { RoutineHistory } from "../../types/routine";
 import { HistoryList } from "./HistoryList";
