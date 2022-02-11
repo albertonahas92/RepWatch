@@ -107,7 +107,8 @@ export const WorkoutSummary = () => {
                         variant="body2"
                         color="text.primary"
                       >
-                        Set {i + 1} - {s.reps} reps - {s.weight}kg
+                        Set {i + 1} - {s.reps} reps - {s.weight}
+                        {user?.unit === "metric" ? "kg" : "lbgs"}
                       </Typography>
                     ))}
 

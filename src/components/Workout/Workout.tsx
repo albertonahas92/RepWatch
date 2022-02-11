@@ -36,12 +36,15 @@ import { useExercises } from "../../hooks/useExercises";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { ExercisesList } from "../ExercisesList/ExercisesList";
 import { WorkoutSummary } from "./WorkoutSummary";
+import { useConfirm } from "material-ui-confirm";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
 
   const routine = useSelector(routineSelector);
   const dispatch = useDispatch();
+  const confirm = useConfirm();
+
   const screenSize = useWindowDimensions();
 
   const toggleActive = (exercise: RoutineExercise) => {
@@ -92,6 +95,26 @@ export const Workout: FC<Props> = ({ onFinish }) => {
 
   const discardWorkout = () => {
     dispatch(setRoutine(undefined));
+  };
+
+  const onFinishWorkout = () => {
+    if (
+      routine?.exercises?.flatMap((e) => e.sets).some((s) => !s?.elapsedTime)
+    ) {
+      confirm({
+        title: "You have some unfinished sets",
+        description:
+          "Do you want to finish your workout and mark all sets as done?",
+      })
+        .then(() => {
+          onFinish();
+        })
+        .catch((e: any) => {
+          console.log(e);
+        });
+    } else {
+      onFinish();
+    }
   };
 
   return routine && !routine?.done ? (
@@ -210,7 +233,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
             size="medium"
             type="button"
             variant="contained"
-            onClick={onFinish}
+            onClick={onFinishWorkout}
             sx={{ my: 1, boxShadow: "none" }}
           >
             Finish Workout

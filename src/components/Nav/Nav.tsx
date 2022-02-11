@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { About } from "../ControlPages/About/About";
 import { Terms } from "../ControlPages/Terms/Terms";
 import { ControlPage } from "../ControlPages/ControlPage";
@@ -15,6 +15,8 @@ import { ExercisesList } from "../ExercisesList/ExercisesList";
 import { AddRoutine } from "../AddRoutine/AddRoutine";
 import { Box } from "@mui/material";
 import { History } from "../History/History";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../store/userSlice";
 
 const Wrapper = styled(Box)`
   text-align: center;
@@ -101,10 +103,12 @@ const Nav: FC<Props> = function ({
             </ControlPage>
           }
         />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/exercises" element={<ExercisesList />} />
-        <Route path="/routine" element={<AddRoutine />} />
-        <Route path="/history" element={<History />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/exercises" element={<ExercisesList />} />
+          <Route path="/routine" element={<AddRoutine />} />
+          <Route path="/history" element={<History />} />
+        </Route>
       </Routes>
     </Wrapper>
   );
@@ -126,4 +130,20 @@ interface Props {
   signOut?: () => void;
   error?: string;
   loading?: boolean;
+}
+
+function RequireAuth() {
+  const user = useSelector(userSelector);
+
+  let location = useLocation();
+
+  if (!user) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/" state={{ from: location }} />;
+  }
+
+  return <Outlet />;
 }

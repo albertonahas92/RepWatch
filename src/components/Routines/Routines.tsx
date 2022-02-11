@@ -45,6 +45,7 @@ export const Routines = () => {
   const { deleteRoutine, addRoutine } = useRoutines();
 
   const [routines, setRoutines] = useState<any[]>([]);
+  const [loadingRoutines, setLoadingRoutines] = useState<boolean>(true);
   const [routine, setCurrentRoutine] = useState<Routine>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
@@ -201,6 +202,7 @@ export const Routines = () => {
           routinesArr.push(doc);
         });
         setRoutines(routinesArr);
+        setLoadingRoutines(false);
       });
 
     return () => {
@@ -239,7 +241,9 @@ export const Routines = () => {
               Start an empty workout
             </Button>
             <Grid sx={{ p: 2 }} spacing={2} justifyContent="center" container>
-              {routines.length ? displayRoutines() : <CircularProgress />}
+              {routines.length
+                ? displayRoutines()
+                : loadingRoutines && <CircularProgress />}
             </Grid>
             <Stack
               sx={{ pt: 2 }}
