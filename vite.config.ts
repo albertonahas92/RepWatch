@@ -10,7 +10,7 @@ export default defineConfig({
         manifest: {
             "name": "RepWatch",
             "short_name": "repwatch",
-            "description": "Get the opinion of people from all over the world to rate your photos, for dating and social profiles",
+            "description": "Track your workouts to maximize the benefits, get personalized reports, and more",
             "icons": [
                 {
                     "src": "/pwa-chrome-192x192.png",
