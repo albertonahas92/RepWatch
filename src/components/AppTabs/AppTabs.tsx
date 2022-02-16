@@ -51,7 +51,7 @@ export var AppTabs = function () {
     setValue(newValue);
   };
 
-  return user !== null ? (
+  return user !== null && user?.complete ? (
     <HideOnScroll>
       <AppBar
         position="fixed"

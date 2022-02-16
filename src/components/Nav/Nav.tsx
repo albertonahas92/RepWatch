@@ -32,6 +32,7 @@ const Nav: FC<Props> = function ({
   signInWithFacebook,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signOut,
   loading,
   error,
 }) {
@@ -104,7 +105,7 @@ const Nav: FC<Props> = function ({
           }
         />
         <Route element={<RequireAuth />}>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile signOut={signOut} />} />
           <Route path="/exercises" element={<ExercisesList />} />
           <Route path="/routine" element={<AddRoutine />} />
           <Route path="/history" element={<History />} />

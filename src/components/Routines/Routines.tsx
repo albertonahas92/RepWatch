@@ -114,7 +114,7 @@ export const Routines = () => {
       return;
     }
     if (routine?.exercises && routine?.exercises.length > 0) {
-      routine.exercises[0].active = true;
+      routine.exercises.map((e) => (e.active = true));
     }
     const exercises = routine.exercises?.map((e) => {
       return {
@@ -172,7 +172,7 @@ export const Routines = () => {
                 className="RoutineDescription"
                 variant="body2"
               >
-                {routine.exercises?.map((e) => e.name).join()}
+                {routine.exercises?.map((e) => e.name).join(", ")}
               </Typography>
               {/* <Typography
                 color="secondary"

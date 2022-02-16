@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from "react";
+import React, { FC, MouseEvent, useEffect, useLayoutEffect } from "react";
 import styled from "@emotion/styled";
 import {
   AppBar,
@@ -29,6 +29,7 @@ import { HideOnScroll } from "../AppTabs/HideOnScroll";
 import { ColorModeContext } from "../Providers/Providers";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useUser } from "../../hooks/useUser";
 
 export const StyledMenu = styled((props: any) => (
   <Menu
@@ -85,6 +86,7 @@ export var TopBar: FC<Props> = function (props) {
   const colorMode = React.useContext(ColorModeContext);
 
   const user = useSelector((state: State) => state.user.value);
+  const { updateUser } = useUser();
   const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
@@ -98,6 +100,13 @@ export var TopBar: FC<Props> = function (props) {
     setAnchorEl(null);
     props.setNotification({});
   };
+
+  useEffect(() => {
+    if (user && user?.colorMode != theme.palette.mode) {
+      updateUser({ ...user, colorMode: theme.palette.mode });
+    }
+  }, [theme.palette.mode, user]);
+
   return (
     // <HideOnScroll down={true}>
     <DashboardNavbarRoot sx={{}} theme={theme} position="sticky">

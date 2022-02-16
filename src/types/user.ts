@@ -21,4 +21,6 @@ export interface User {
     height?: number
     heightIn?: number
     unit?: 'metric' | 'imperial'
+
+    colorMode?: 'light' | 'dark'
 }

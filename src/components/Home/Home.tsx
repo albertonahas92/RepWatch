@@ -7,13 +7,18 @@ import { Landing } from "../Landing/Landing";
 import { useUser } from "../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import { Routines } from "../Routines/Routines";
+import { ScreeningForm } from "../Profile/Screening/Screening";
 
 export const Home: FC<Props> = function () {
   const user = useSelector((state: State) => state.user.value);
   const navigate = useNavigate();
 
   return user !== null ? (
-    <Routines />
+    user?.complete ? (
+      <Routines />
+    ) : (
+      <ScreeningForm />
+    )
   ) : (
     <Landing login={() => navigate("/login")} />
   );

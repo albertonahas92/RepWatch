@@ -8,6 +8,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { RoutineExercise, Set } from "../../types/exercise";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,15 +31,18 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import anime from "animejs";
 
 export const SetForm: FC<Props> = ({
   index,
   exercise,
   removeSet,
   duplicateSet,
+  standBy,
 }) => {
   const user = useSelector(userSelector);
 
@@ -70,6 +74,7 @@ export const SetForm: FC<Props> = ({
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const handleRepsChange = (e: any) => {
     setReps(e.target.value);
@@ -136,6 +141,24 @@ export const SetForm: FC<Props> = ({
   const handleSetMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const animation = () => {
+    anime({
+      targets: ".standby",
+      color: [theme.palette.primary.main, theme.palette.secondary.main],
+      easing: "easeInOutSine",
+      duration: 500,
+      loop: true,
+      direction: "alternate",
+    });
+  };
+
+  useEffect(() => {
+    if (standBy) {
+      animation();
+    }
+    return () => {};
+  }, [standBy]);
 
   return (
     <Grid columnSpacing={2} container>
@@ -225,7 +248,8 @@ export const SetForm: FC<Props> = ({
       </Grid>
       <Grid item md={1} xs={2}>
         <IconButton
-          color={active ? "primary" : "default"}
+          color={active ? "primary" : elapsedTime ? "default" : "primary"}
+          className={!active && standBy ? "standby" : ""}
           type="button"
           onClick={onTimerClick}
         >
@@ -259,6 +283,15 @@ export const SetForm: FC<Props> = ({
         >
           <InfoOutlinedIcon />
           Exercise Details
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleSetMenuClose();
+            onTimerClick();
+          }}
+        >
+          <PlayCircleOutlineIcon />
+          {!active ? "Start" : "Pause"} Set
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -318,4 +351,5 @@ interface Props {
   index: number;
   removeSet: (exercise: RoutineExercise, index: number) => void;
   duplicateSet?: (exercise: RoutineExercise, index: number) => void;
+  standBy?: boolean;
 }

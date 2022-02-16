@@ -93,9 +93,10 @@ export const Workout: FC<Props> = ({ onFinish }) => {
     setOpenExerciseList(false);
   };
 
-  const discardWorkout = () => {
+  const discardWorkout = (showComfirmation?: boolean) => {
     if (
-      routine?.exercises?.flatMap((e) => e.sets).some((s) => s?.elapsedTime)
+      routine?.exercises?.flatMap((e) => e.sets).some((s) => s?.elapsedTime) &&
+      showComfirmation
     ) {
       confirm({
         title: "Are you sure?",
@@ -175,7 +176,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
               <Collapse in={exercise.active} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {exercise.sets?.map((set: Set, index: number) => (
-                    <>
+                    <React.Fragment key={set.id || shortid.generate()}>
                       <ListItem
                         key={set.id || shortid.generate()}
                         sx={{ pl: { md: 7, xs: 0 }, pr: 0 }}
@@ -192,7 +193,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
                         />
                       </ListItem>
                       {screenSize === "xs" && <Divider />}
-                    </>
+                    </React.Fragment>
                   ))}
                 </List>
                 <Button
@@ -235,7 +236,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
             size="medium"
             type="button"
             variant="outlined"
-            onClick={discardWorkout}
+            onClick={() => discardWorkout(true)}
             sx={{ my: 1 }}
           >
             Discard Workout
@@ -275,7 +276,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
             size="medium"
             type="button"
             variant="contained"
-            onClick={discardWorkout}
+            onClick={() => discardWorkout()}
             sx={{ my: 1 }}
           >
             Complete

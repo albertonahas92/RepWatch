@@ -70,7 +70,12 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
           </IconButton>
         }
       >
-        <ListItemButton onClick={() => onSelectExercise?.(exercise)}>
+        <ListItemButton
+          onClick={() =>
+            onSelectExercise?.(exercise) ||
+            onInfoClick(exercise as RoutineExercise)
+          }
+        >
           {/* <ListItemIcon>
               <EquipmentIcon
                 style={{ fontSize: "25px" }}

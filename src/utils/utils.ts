@@ -1,5 +1,5 @@
-import { Set } from "../types/exercise"
-import { Routine } from "../types/routine"
+import { RoutineExercise, Set } from "../types/exercise"
+import { Routine, Workout } from "../types/routine"
 import { User } from "../types/user"
 
 export const getMuscleGroupName = (muscle: string) => {
@@ -54,6 +54,10 @@ export const converter = {
     lbsToKg: (lbs = 0) => Math.round(lbs / 2.20462262)
 };
 
+export const compareDates = (d1?: Date, d2?: Date) => {
+    return d1 && d2 && d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()
+}
+
 export const goalString = (goal?: string) => {
     switch (goal) {
         case "general":
@@ -81,6 +85,22 @@ export const weightInKg = (user?: User) => {
 }
 export const heightInCm = (user?: User) => {
     return user?.unit === 'imperial' ? converter.ftToCm(user.height, user.heightIn) : user?.height || 0
+}
+
+export const getSetVolume = (set?: Set) => (set?.reps || 0) * (set?.weight || 0)
+
+export const getExericseVolume = (exercise?: RoutineExercise) => {
+    return exercise?.sets?.reduce((acc, val) => {
+        return acc + getSetVolume(val);
+    }, 0);
+}
+
+export const getRoutineVolume = (routine?: Workout) => {
+    return routine?.exercises
+        ?.flatMap((e) => e.sets)
+        .reduce((acc, val) => {
+            return acc + getSetVolume(val);
+        }, 0);
 }
 
 export const getResizedName = (fileName: string, dimensions = '600x600') => {

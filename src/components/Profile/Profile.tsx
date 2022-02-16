@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Container,
@@ -45,7 +45,7 @@ const ProfilePhoto = styled("div")(({ theme }) => ({
   },
 }));
 
-export var Profile = function () {
+export const Profile: FC<Props> = ({ signOut }) => {
   const user = useSelector((state: State) => state.user.value);
 
   const [editMode, setEditMode] = useState(false);
@@ -118,9 +118,19 @@ export var Profile = function () {
         </Grid>
         <Grid xs={12} item>
           <Button
+            onClick={signOut}
+            color="warning"
+            size="small"
+            variant="outlined"
+          >
+            Sign out
+          </Button>
+        </Grid>
+        <Grid xs={12} item>
+          <Button
             onClick={() => setOpenDeleteAccount(true)}
             color="warning"
-            size="medium"
+            size="small"
             variant="text"
           >
             Delete Account
@@ -142,3 +152,7 @@ export var Profile = function () {
     </Container>
   );
 };
+
+interface Props {
+  signOut?: () => void;
+}

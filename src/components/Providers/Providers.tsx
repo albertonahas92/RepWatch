@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Provider } from "react-redux";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blue, grey } from "@mui/material/colors";
@@ -15,7 +15,9 @@ export const ColorModeContext = React.createContext({
 });
 
 export const Providers: FC = ({ children }) => {
-  const [mode, setMode] = React.useState<"light" | "dark">("light");
+  const initialState =
+    JSON.parse(localStorage.getItem("mode") as string) || "light";
+  const [mode, setMode] = React.useState<"light" | "dark">(initialState);
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
@@ -25,6 +27,9 @@ export const Providers: FC = ({ children }) => {
     []
   );
 
+  useEffect(() => {
+    localStorage.setItem("mode", JSON.stringify(mode));
+  }, [mode]);
 
   const theme = React.useMemo(
     () =>

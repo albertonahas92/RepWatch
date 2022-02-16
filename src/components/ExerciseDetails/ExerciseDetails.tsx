@@ -26,6 +26,7 @@ import { FrontDiagram, frontHighlights } from "../../icons/frontDiagram";
 import { historySelector } from "../../store/historySlice";
 import { RoutineExercise } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
+import { ExerciseReport } from "./ExerciseReport";
 
 export const ExerciseDetails: FC<Props> = ({ exercise }) => {
   const ommitedProps = ["instructions", "name", "index", "active", "sets"];
@@ -145,9 +146,15 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
         </TableContainer>
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        <Typography color="text.secondary" sx={{ p: 2 }}>
-          You have no progress yet in this exercise, let's go do it!
-        </Typography>
+        {!history?.filter((h) =>
+          h.routine.exercises?.some((e) => e.name === exercise.name)
+        ).length ? (
+          <Typography color="text.secondary" sx={{ p: 2 }}>
+            You have no progress yet in this exercise, let's go do it!
+          </Typography>
+        ) : (
+          <ExerciseReport exercise={exercise} />
+        )}
       </TabPanel>
     </Box>
   ) : (

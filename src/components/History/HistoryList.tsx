@@ -10,6 +10,7 @@ import {
   IconButton,
   MenuItem,
   Button,
+  ListItemButton,
 } from "@mui/material";
 import React, { MouseEvent, useState } from "react";
 import { Routine, RoutineHistory } from "../../types/routine";
@@ -21,6 +22,8 @@ import { useDispatch } from "react-redux";
 import { setRoutine } from "../../store/routineSlice";
 import { useNavigate } from "react-router-dom";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
+import { WorkoutDetails } from "./WorkoutDetails";
 
 const Label = styled("span")(({ theme }) => ({
   background: theme.palette.action.hover,
@@ -41,6 +44,7 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
 
   const [showCount, setShowCount] = useState(10);
 
+  const [openWorkoutModal, setOpenWorkoutModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [routine, setCurrentRoutine] = useState<RoutineHistory>();
 
@@ -94,60 +98,67 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
                     </IconButton>
                   }
                 >
-                  <ListItemAvatar>
-                    <Typography
-                      color="text.secondary"
-                      variant="h6"
-                      sx={{ fontWeight: "light", fontSize: 16 }}
-                    >
-                      {moment(routine.finishedAt?.toDate()).format("Do")}
-                    </Typography>
-                    <Typography color="text.secondary">
-                      {moment(routine.finishedAt?.toDate()).format("MMM")}
-                    </Typography>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <>
-                        <Typography
-                          color="text.primary"
-                          component="h5"
-                          variant="body1"
-                        >
-                          {routine?.name}
-                        </Typography>
-                      </>
-                    }
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          sx={{ display: "inline", fontSize: 12 }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {routine.exercises?.map(
-                            (e) =>
-                              e.sets?.length && (
-                                <Label key={e.name}>
-                                  {e.sets?.length} x {e.name}
-                                </Label>
-                              )
-                          )}
-                        </Typography>
-                        <Typography
-                          color="text.secondary"
-                          component={TimeLabel}
-                          variant="body2"
-                        >
-                          {Math.round(
-                            moment.duration(routine.duration || 0).asMinutes()
-                          )}{" "}
-                          minutes
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
+                  <ListItemButton
+                    onClick={() => {
+                      setOpenWorkoutModal(true);
+                      setCurrentRoutine(history);
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Typography
+                        color="text.secondary"
+                        variant="h6"
+                        sx={{ fontWeight: "light", fontSize: 16 }}
+                      >
+                        {moment(routine.finishedAt?.toDate()).format("Do")}
+                      </Typography>
+                      <Typography color="text.secondary">
+                        {moment(routine.finishedAt?.toDate()).format("MMM")}
+                      </Typography>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <>
+                          <Typography
+                            color="text.primary"
+                            component="h5"
+                            variant="body1"
+                          >
+                            {routine?.name}
+                          </Typography>
+                        </>
+                      }
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            sx={{ display: "inline", fontSize: 12 }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {routine.exercises?.map(
+                              (e) =>
+                                e.sets?.length && (
+                                  <Label key={e.name}>
+                                    {e.sets?.length} x {e.name}
+                                  </Label>
+                                )
+                            )}
+                          </Typography>
+                          <Typography
+                            color="text.secondary"
+                            component={TimeLabel}
+                            variant="body2"
+                          >
+                            {Math.round(
+                              moment.duration(routine.duration || 0).asMinutes()
+                            )}{" "}
+                            minutes
+                          </Typography>
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItemButton>
                 </ListItem>
                 <Divider variant="inset" component="li" />
               </React.Fragment>
@@ -182,6 +193,19 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
           Save as routine
         </MenuItem>
       </StyledMenu>
+      <ModalDialog
+        closeButton={true}
+        open={openWorkoutModal}
+        setOpen={(open) => {
+          setOpenWorkoutModal(open);
+          if (!open) {
+            setCurrentRoutine(undefined);
+          }
+        }}
+        title={routine?.routine?.name}
+      >
+        <WorkoutDetails routine={routine?.routine} />
+      </ModalDialog>
     </>
   );
 };
