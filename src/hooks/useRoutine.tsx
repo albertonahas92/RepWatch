@@ -16,6 +16,7 @@ export const useRoutine = () => {
 
   const saveRoutine = () => {
     if (!routine) return;
+
     const startDate = routine.startedAt || new Date();
     const duration = new Date().getTime() - startDate.getTime();
     const name =
@@ -33,19 +34,22 @@ export const useRoutine = () => {
         "updatedAt",
       ]),
       name,
-      finishedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      duration,
+      finishedAt:
+        routine.finishedAt || firebase.firestore.FieldValue.serverTimestamp(),
+      duration: routine.duration || duration,
       exercises,
     };
 
-    return firebase
-      .firestore()
-      .collection(`users/${user?.uid}/history`)
-      .add(_routine)
-      .then((doc) => {
-        const id = doc.id;
-        saveRoutineExercises(id, exercises || []).then((res) => {});
-      });
+    return !routine.historicalId
+      ? firebase
+          .firestore()
+          .collection(`users/${user?.uid}/history`)
+          .add(_routine)
+      : firebase
+          .firestore()
+          .collection(`users/${user?.uid}/history`)
+          .doc(routine.historicalId)
+          .update(_routine);
   };
 
   useEffect(() => {

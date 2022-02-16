@@ -138,7 +138,7 @@ export const HistoryCalendar: React.FC<Props> = ({ history }) => {
       >
         <>
           {workouts?.map((w) => (
-            <WorkoutDetails routine={w.routine} />
+            <WorkoutDetails routine={w.routine} historicalId={w.id} />
           ))}
         </>
       </ModalDialog>

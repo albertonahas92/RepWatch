@@ -58,16 +58,18 @@ export const WorkoutSummary = () => {
 
   return (
     <>
-      <Container sx={{ textAlign: "center" }}>
-        <Box sx={{ maxWidth: 150, m: "auto" }}>
-          <Fireworks />
-        </Box>
-        <Typography variant="h4">Well done!</Typography>
-        <Typography variant="body1">
-          You have lifted a total of {volume}
-          {user?.unit === "metric" ? "kg" : "lbgs"}!!
-        </Typography>
-      </Container>
+      {!routine?.historicalId && (
+        <Container sx={{ textAlign: "center" }}>
+          <Box sx={{ maxWidth: 150, m: "auto" }}>
+            <Fireworks />
+          </Box>
+          <Typography variant="h4">Well done!</Typography>
+          <Typography variant="body1">
+            You have lifted a total of {volume}
+            {user?.unit === "metric" ? "kg" : "lbgs"}!!
+          </Typography>
+        </Container>
+      )}
       <WorkoutDetails routine={routine} />
     </>
   );

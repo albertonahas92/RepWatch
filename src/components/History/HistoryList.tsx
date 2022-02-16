@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { WorkoutDetails } from "./WorkoutDetails";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 const Label = styled("span")(({ theme }) => ({
   background: theme.palette.action.hover,
@@ -68,6 +69,18 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
     if (routine) {
       dispatch(setRoutine(routine.routine));
       navigate("/routine");
+    }
+  };
+
+  const onEditWorkout = () => {
+    if (routine) {
+      dispatch(
+        setRoutine({
+          ...routine.routine,
+          active: true,
+          historicalId: routine.id,
+        })
+      );
     }
   };
 
@@ -192,6 +205,15 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
           <LibraryAddOutlinedIcon />
           Save as routine
         </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleRoutineMenuClose();
+            onEditWorkout();
+          }}
+        >
+          <EditOutlinedIcon />
+          Edit workout
+        </MenuItem>
       </StyledMenu>
       <ModalDialog
         closeButton={true}
@@ -204,7 +226,7 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
         }}
         title={routine?.routine?.name}
       >
-        <WorkoutDetails routine={routine?.routine} />
+        <WorkoutDetails routine={routine?.routine} historicalId={routine?.id} />
       </ModalDialog>
     </>
   );

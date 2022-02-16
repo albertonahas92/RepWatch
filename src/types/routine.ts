@@ -8,6 +8,7 @@ export interface Routine {
     createdAt?: firebase.firestore.Timestamp
 }
 export interface Workout extends Routine {
+    historicalId?: string
     done?: boolean
     active?: boolean
     startedAt?: Date

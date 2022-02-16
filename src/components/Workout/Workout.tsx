@@ -11,6 +11,10 @@ import {
   Divider,
   Grid,
   Box,
+  Typography,
+  Stack,
+  Chip,
+  TextField,
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import { EquipmentIcon } from "../../icons/equipment/EquipmentIcon";
@@ -26,6 +30,7 @@ import {
   updateExercise,
   updateExercises,
 } from "../../store/routineSlice";
+import firebase from "../../config";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { SetForm } from "./SetForm";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -37,9 +42,26 @@ import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { ExercisesList } from "../ExercisesList/ExercisesList";
 import { WorkoutSummary } from "./WorkoutSummary";
 import { useConfirm } from "material-ui-confirm";
+import EditIcon from "@mui/icons-material/Edit";
+import { DateTimePicker, LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
+  const [editDate, setEditDate] = useState(false);
+
+  const handleChange = (newValue: Date | null) => {
+    const finishedAt = newValue
+      ? firebase.firestore.Timestamp.fromDate(newValue)
+      : undefined;
+    dispatch(
+      setRoutine({
+        ...routine,
+        finishedAt,
+      })
+    );
+    setEditDate(false);
+  };
 
   const routine = useSelector(routineSelector);
   const dispatch = useDispatch();
@@ -115,7 +137,8 @@ export const Workout: FC<Props> = ({ onFinish }) => {
 
   const onFinishWorkout = () => {
     if (
-      routine?.exercises?.flatMap((e) => e.sets).some((s) => !s?.elapsedTime)
+      routine?.exercises?.flatMap((e) => e.sets).some((s) => !s?.elapsedTime) &&
+      !routine.historicalId
     ) {
       confirm({
         title: "You have some unfinished sets",
@@ -134,137 +157,166 @@ export const Workout: FC<Props> = ({ onFinish }) => {
   };
 
   return routine && !routine?.done ? (
-    <Container sx={{ p: 0 }} maxWidth="md">
-      <List dense={true}>
-        {routine?.exercises?.map((exercise: RoutineExercise) => {
-          // if (exercises) {
-          //   exercise = {
-          //     ...exercise,
-          //     ...exercises.find((e) => e.name === exercise.name),
-          //   };
-          // }
-          return (
-            <React.Fragment key={exercise.name}>
-              <ListItem
-                sx={{ pl: { xs: 0 } }}
-                secondaryAction={
-                  <IconButton
-                    onClick={() => {
-                      toggleActive(exercise);
-                    }}
-                    edge="end"
-                    aria-label="delete"
-                  >
-                    {!exercise.active ? (
-                      <KeyboardArrowRightSharpIcon />
-                    ) : (
-                      <RemoveOutlinedIcon />
-                    )}
-                  </IconButton>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Container sx={{ p: 0 }} maxWidth="md">
+        {routine?.finishedAt && (
+          <Box sx={{ float: "right", "& div": { zIndex: 999 } }}>
+            {!editDate ? (
+              <Chip
+                label={
+                  <Typography variant="caption">
+                    {routine?.finishedAt?.toDate().toDateString()}
+                  </Typography>
                 }
-              >
-                <ListItemAvatar>
-                  <Avatar>
-                    <EquipmentIcon
-                      style={{ fontSize: "25px" }}
-                      icon={exercise.equipment || ""}
-                    />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={exercise.name} />
-              </ListItem>
-              <Collapse in={exercise.active} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {exercise.sets?.map((set: Set, index: number) => (
-                    <React.Fragment key={set.id || shortid.generate()}>
-                      <ListItem
-                        key={set.id || shortid.generate()}
-                        sx={{ pl: { md: 7, xs: 0 }, pr: 0 }}
-                      >
-                        <ListItemText
-                          primary={
-                            <SetForm
-                              index={index}
-                              removeSet={removeSet}
-                              duplicateSet={duplicateSet}
-                              exercise={exercise}
-                            />
-                          }
-                        />
-                      </ListItem>
-                      {screenSize === "xs" && <Divider />}
-                    </React.Fragment>
-                  ))}
-                </List>
-                <Button
-                  color="warning"
-                  // disabled={formik.isSubmitting}
-                  fullWidth
-                  size="small"
-                  type="button"
-                  variant="text"
-                  onClick={() => addSet(exercise)}
-                  endIcon={<AddCircleSharpIcon />}
-                  sx={{ my: 1 }}
+                onDelete={() => {
+                  setEditDate(true);
+                }}
+                deleteIcon={<EditIcon />}
+                variant="filled"
+              ></Chip>
+            ) : (
+              <DateTimePicker
+                label="Workout date"
+                value={routine.finishedAt.toDate()}
+                onChange={handleChange}
+                renderInput={(params) => (
+                  <TextField variant="standard" {...params} />
+                )}
+              />
+            )}
+          </Box>
+        )}
+        <List dense={true}>
+          {routine?.exercises?.map((exercise: RoutineExercise) => {
+            // if (exercises) {
+            //   exercise = {
+            //     ...exercise,
+            //     ...exercises.find((e) => e.name === exercise.name),
+            //   };
+            // }
+            return (
+              <React.Fragment key={exercise.name}>
+                <ListItem
+                  sx={{ pl: { xs: 0 } }}
+                  secondaryAction={
+                    <IconButton
+                      onClick={() => {
+                        toggleActive(exercise);
+                      }}
+                      edge="end"
+                      aria-label="delete"
+                    >
+                      {!exercise.active ? (
+                        <KeyboardArrowRightSharpIcon />
+                      ) : (
+                        <RemoveOutlinedIcon />
+                      )}
+                    </IconButton>
+                  }
                 >
-                  Add Set
-                </Button>
-              </Collapse>
-            </React.Fragment>
-          );
-        })}
-      </List>
-      {/* <Divider variant="fullWidth" sx={{ my: 3 }} /> */}
-      <Button
-        color="primary"
-        // disabled={formik.isSubmitting}
-        fullWidth
-        size="small"
-        type="button"
-        variant="text"
-        onClick={() => setOpenExerciseList(true)}
-        endIcon={<AddCircleSharpIcon />}
-        sx={{ my: 1 }}
-      >
-        Add New Exercise
-      </Button>
-      <Grid columnSpacing={4} container>
-        <Grid item md={6} xs={12}>
-          <Button
-            color="secondary"
-            fullWidth
-            size="medium"
-            type="button"
-            variant="outlined"
-            onClick={() => discardWorkout(true)}
-            sx={{ my: 1 }}
-          >
-            Discard Workout
-          </Button>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <EquipmentIcon
+                        style={{ fontSize: "25px" }}
+                        icon={exercise.equipment || ""}
+                      />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={exercise.name} />
+                </ListItem>
+                <Collapse in={exercise.active} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {exercise.sets?.map((set: Set, index: number) => (
+                      <React.Fragment key={set.id || shortid.generate()}>
+                        <ListItem
+                          key={set.id || shortid.generate()}
+                          sx={{ pl: { md: 7, xs: 0 }, pr: 0 }}
+                        >
+                          <ListItemText
+                            primary={
+                              <SetForm
+                                index={index}
+                                removeSet={removeSet}
+                                duplicateSet={duplicateSet}
+                                exercise={exercise}
+                              />
+                            }
+                          />
+                        </ListItem>
+                        {screenSize === "xs" && <Divider />}
+                      </React.Fragment>
+                    ))}
+                  </List>
+                  <Button
+                    color="warning"
+                    // disabled={formik.isSubmitting}
+                    fullWidth
+                    size="small"
+                    type="button"
+                    variant="text"
+                    onClick={() => addSet(exercise)}
+                    endIcon={<AddCircleSharpIcon />}
+                    sx={{ my: 1 }}
+                  >
+                    Add Set
+                  </Button>
+                </Collapse>
+              </React.Fragment>
+            );
+          })}
+        </List>
+        {/* <Divider variant="fullWidth" sx={{ my: 3 }} /> */}
+        <Button
+          color="primary"
+          // disabled={formik.isSubmitting}
+          fullWidth
+          size="small"
+          type="button"
+          variant="text"
+          onClick={() => setOpenExerciseList(true)}
+          endIcon={<AddCircleSharpIcon />}
+          sx={{ my: 1 }}
+        >
+          Add New Exercise
+        </Button>
+        <Grid columnSpacing={4} container>
+          <Grid item md={6} xs={12}>
+            <Button
+              color="secondary"
+              fullWidth
+              size="medium"
+              type="button"
+              variant="outlined"
+              onClick={() => discardWorkout(true)}
+              sx={{ my: 1 }}
+            >
+              Discard {routine.historicalId ? "Changes" : "Workout"}
+            </Button>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Button
+              color="primary"
+              fullWidth
+              size="medium"
+              type="button"
+              variant="contained"
+              onClick={onFinishWorkout}
+              sx={{ my: 1, boxShadow: "none" }}
+            >
+              {routine.historicalId ? "Save" : "Finish"} Workout
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item md={6} xs={12}>
-          <Button
-            color="primary"
-            fullWidth
-            size="medium"
-            type="button"
-            variant="contained"
-            onClick={onFinishWorkout}
-            sx={{ my: 1, boxShadow: "none" }}
-          >
-            Finish Workout
-          </Button>
-        </Grid>
-      </Grid>
-      <ModalDialog
-        closeButton={true}
-        title={"Select Exercise"}
-        open={openExerciseList}
-        setOpen={setOpenExerciseList}
-      >
-        <ExercisesList onSelectExercise={onAddExercise} />
-      </ModalDialog>
-    </Container>
+        <ModalDialog
+          closeButton={true}
+          title={"Select Exercise"}
+          open={openExerciseList}
+          setOpen={setOpenExerciseList}
+        >
+          <ExercisesList onSelectExercise={onAddExercise} />
+        </ModalDialog>
+      </Container>
+    </LocalizationProvider>
   ) : routine ? (
     <Box>
       <WorkoutSummary />

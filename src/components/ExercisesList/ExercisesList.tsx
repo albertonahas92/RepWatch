@@ -72,8 +72,9 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
       >
         <ListItemButton
           onClick={() =>
-            onSelectExercise?.(exercise) ||
-            onInfoClick(exercise as RoutineExercise)
+            onSelectExercise
+              ? onSelectExercise(exercise)
+              : onInfoClick(exercise as RoutineExercise)
           }
         >
           {/* <ListItemIcon>
