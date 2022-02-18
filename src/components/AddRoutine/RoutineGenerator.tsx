@@ -20,23 +20,14 @@ export const RoutineGenerator = () => {
 
   return (
     <Box>
-      <Fade
-        in={true}
-        timeout={200}
-        style={{
-          transitionDelay: `100ms`,
-        }}
-        unmountOnExit
-      >
-        <MuscleDiagrams
-          highlights={Array.from(
-            new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-          )}
-          secondaryHighlights={muscleGroups}
-          isClickable={true}
-          onMuscleGroupClick={onMuscleGroupClick}
-        />
-      </Fade>
+      <MuscleDiagrams
+        highlights={Array.from(
+          new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
+        )}
+        secondaryHighlights={muscleGroups}
+        isClickable={true}
+        onMuscleGroupClick={onMuscleGroupClick}
+      />
     </Box>
   );
 };

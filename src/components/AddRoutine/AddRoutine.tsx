@@ -147,14 +147,6 @@ export const AddRoutine = () => {
           </Typography>
         </Box>
         <Box>
-          <Fade
-            in={true}
-            timeout={200}
-            style={{
-              transitionDelay: `100ms`,
-            }}
-            unmountOnExit
-          >
             <MuscleDiagrams
               highlights={Array.from(
                 new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
@@ -163,7 +155,6 @@ export const AddRoutine = () => {
               isClickable={true}
               onMuscleGroupClick={onMuscleGroupClick}
             />
-          </Fade>
         </Box>
         <TextField
           error={Boolean(formik.touched.name && formik.errors.name)}
