@@ -29,7 +29,10 @@ import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useTheme } from "@mui/system";
 
-export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
+export const ExercisesList: React.FC<Props> = ({
+  onSelectExercise,
+  muscleGroups,
+}) => {
   const {
     exercises,
     term,
@@ -40,7 +43,7 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
     musclesFilter,
     setEquipmentsFilter,
     setMusclesFilter,
-  } = useExercises();
+  } = useExercises(muscleGroups);
 
   const screenSize = useWindowDimensions();
   const dispatch = useDispatch();
@@ -183,4 +186,5 @@ export const ExercisesList: React.FC<Props> = ({ onSelectExercise }) => {
 
 interface Props {
   onSelectExercise?: (exercise: Exercise) => void;
+  muscleGroups?: string[];
 }

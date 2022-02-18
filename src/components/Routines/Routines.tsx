@@ -37,6 +37,9 @@ import { historySelector } from "../../store/historySlice";
 import { omitSetKeys, Set } from "../../types/exercise";
 import _ from "lodash";
 import { setAlert } from "../../store/alertSlice";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
+import { RoutineDetails } from "./RoutineDetails";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
@@ -45,7 +48,10 @@ export const Routines = () => {
   const { deleteRoutine, addRoutine } = useRoutines();
 
   const [routines, setRoutines] = useState<any[]>([]);
+
   const [loadingRoutines, setLoadingRoutines] = useState<boolean>(true);
+  const [showRoutineDetails, setShowRoutineDetails] = useState<boolean>(false);
+  const [routineDetails, setRoutineDetails] = useState<Routine>();
   const [routine, setCurrentRoutine] = useState<Routine>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
@@ -101,6 +107,14 @@ export const Routines = () => {
     const duplicate = { ...routine };
     delete duplicate.id;
     addRoutine(duplicate);
+  };
+
+  const onDetailsClick = () => {
+    if (!routine) {
+      return;
+    }
+    setRoutineDetails(routine);
+    setShowRoutineDetails(true);
   };
 
   const startWorkout = (routine: Routine) => {
@@ -270,6 +284,14 @@ export const Routines = () => {
               </Button>
             </Stack>
           </Container>
+          <ModalDialog
+            closeButton={true}
+            open={showRoutineDetails || false}
+            setOpen={setShowRoutineDetails}
+            title={routineDetails?.name}
+          >
+            <RoutineDetails routine={routineDetails} />
+          </ModalDialog>
           <StyledMenu
             id="routine-menu"
             MenuListProps={{
@@ -279,6 +301,15 @@ export const Routines = () => {
             open={open}
             onClose={handleRoutineMenuClose}
           >
+            <MenuItem
+              onClick={() => {
+                onDetailsClick();
+                handleRoutineMenuClose();
+              }}
+            >
+              <InfoOutlinedIcon />
+              Details
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleRoutineMenuClose();

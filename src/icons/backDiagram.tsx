@@ -19,17 +19,22 @@ export const backHighlights = [
   "calfs",
 ];
 
-export const BackDiagram = (props: DiagramProps) => {
+export const BackDiagram: React.FC<DiagramProps> = ({
+  onMuscleGroupClick,
+  ...props
+}) => {
   const Icon = createSvgIcon(
     <Diagram
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       style={props.style}
+      isClickable={props.isClickable}
       viewBox="0 0 548.99 1055.91"
     >
       <title>diagram2</title>
       <g
         id="glutes"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("glutes") > -1
@@ -48,6 +53,7 @@ export const BackDiagram = (props: DiagramProps) => {
       <path d="M492.89,504.7c-8.75-25.7-21.57-47.58-34-67.82a226,226,0,0,0-17.75-24.95c-10.07-12.29-14.82-27.21-14.87-46.82.5,0,1,0,1.49,0,14.06,0,25.94-5,36.25-15.34l1.11,1.88c1.56,2.64,2.91,4.93,4.16,7.31,14.3,27.35,23.51,55.82,30.64,80.06,1.15,3.89,2.28,7.8,3.41,11.7,3.26,11.29,6.64,23,10.42,34.32,1.77,5.34.79,8.22-3.62,10.64-4.23,2.32-8.52,4.52-13.07,6.85Z" />
       <g
         id="traps"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("traps") > -1
@@ -63,6 +69,7 @@ export const BackDiagram = (props: DiagramProps) => {
       </g>
       <g
         id="middle_back"
+        onClick={onMuscleGroupClick}
         data-name="middle back"
         style={{
           fill: `${
@@ -79,6 +86,7 @@ export const BackDiagram = (props: DiagramProps) => {
       </g>
       <g
         id="shoulders"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("shoulders") > -1
@@ -97,6 +105,7 @@ export const BackDiagram = (props: DiagramProps) => {
       <path d="M226.74,154.84c14.27-9.26,21.41-23.81,21.84-44.49.11-5.14,1.11-8.43,3.47-11.36,1.47-1.82,2.91-3.65,4.36-5.49,3.92-5,8-10.12,12.32-14.8a25.63,25.63,0,0,1,6.46-4.44c.82-.45,1.65-.91,2.48-1.4l.27.16q0,8.78.06,17.55c.07,15,.15,30.5-.22,45.72-.19,8-5.65,13.71-14.59,15.18-8.76,1.44-17.7,2.11-27.16,2.83-3.05.23-6.19.46-9.39.73Z" />
       <g
         id="lower_back"
+        onClick={onMuscleGroupClick}
         data-name="lower back"
         style={{
           fill: `${
@@ -113,6 +122,7 @@ export const BackDiagram = (props: DiagramProps) => {
       </g>
       <g
         id="calfs"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("calfs") > -1
@@ -133,6 +143,7 @@ export const BackDiagram = (props: DiagramProps) => {
       <path d="M328.49,154.6c-2.47-.19-4.91-.35-7.3-.5-7.61-.49-14.8-.95-21.75-2.49-9.48-2.11-12.7-6.47-12.75-17.28-.07-14.15-.05-28.27,0-43.21,0-5.18,0-10.45,0-15.84l.28.2a17,17,0,0,1,3.89,3.26c5.91,8,11,15.31,15.57,22.44a13.74,13.74,0,0,1,2,7.12C308.12,127.7,314.69,142.85,328.49,154.6Z" />
       <g
         id="lats"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("lats") > -1
@@ -154,6 +165,7 @@ export const BackDiagram = (props: DiagramProps) => {
       <path d="M170.73,523.24c.8-5.26,1.69-10.58,2.93-15.72,2.36-9.74,5-19.59,7.62-29.12,2.27-8.4,4.63-17.09,6.77-25.69,1-3.87,2.57-6.06,8.11-6.58-1.24,27.37-12.9,51.33-24.18,74.53C171.56,521.51,171.15,522.37,170.73,523.24Z" />
       <g
         id="triceps"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("triceps") > -1
@@ -173,6 +185,7 @@ export const BackDiagram = (props: DiagramProps) => {
       </g>
       <g
         id="hamstrings"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("hamstrings") > -1

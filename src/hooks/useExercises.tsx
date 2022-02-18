@@ -8,15 +8,22 @@ import firebase from "../config";
 import { Exercise, RoutineExercise } from "../types/exercise";
 import { setExercise, setExerciseModal } from "../store/exerciseSlice";
 
-export const useExercises = () => {
+export const useExercises = (
+  initialMuscles?: string[],
+  initialEquipments?: string[]
+) => {
   const completeExercises = useSelector(exercisesSelector);
   const [exercises, setExercisesList] = useState(completeExercises);
   const [equipments, setEquipments] = useState<string[]>();
   const [muscles, setMuscles] = useState<string[]>();
 
   const [term, setTerm] = useState("");
-  const [equipmentsFilter, setEquipmentsFilter] = useState<string[]>();
-  const [musclesFilter, setMusclesFilter] = useState<string[]>();
+  const [equipmentsFilter, setEquipmentsFilter] = useState<string[]>(
+    initialEquipments || []
+  );
+  const [musclesFilter, setMusclesFilter] = useState<string[]>(
+    initialMuscles || []
+  );
 
   const dispatch = useDispatch();
 

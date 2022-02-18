@@ -5,11 +5,29 @@ import { styled } from "@mui/material";
 export const highlightColor = "#EF463F";
 export const secondaryColor = "#10AEC7";
 
-export const Diagram = styled("svg")`
-  & g {
-    transition: 1s all;
-  }
-`;
+// export const Diagram = styled("svg")`
+//   & g {
+//     transition: 1s all;
+//   }
+//   & g:hover {
+//     color: ${highlightColor};
+//     cursor: pointer;
+//   }
+// `;
+
+export const Diagram = styled("svg", {
+  shouldForwardProp: (prop) => prop !== "isClickable",
+})<{ isClickable?: boolean }>(({ theme, isClickable }) => ({
+  "& g": {
+    transition: "1s all",
+  },
+  ...(isClickable && {
+    "& g:hover": {
+      color: secondaryColor,
+      cursor: "pointer",
+    },
+  }),
+}));
 
 export const frontHighlights = [
   "chest",
@@ -22,10 +40,14 @@ export const frontHighlights = [
   "adductors",
 ];
 
-export const FrontDiagram: React.FC<DiagramProps> = (props) => {
+export const FrontDiagram: React.FC<DiagramProps> = ({
+  onMuscleGroupClick,
+  ...props
+}) => {
   const Icon = createSvgIcon(
     <Diagram
       style={props.style}
+      isClickable={props.isClickable}
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 578.98 1057.82"
@@ -34,6 +56,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M284.8,128.2c-8.57-1-17.9-5.74-27-13.82a2.62,2.62,0,0,1-.84-1.22c-1.13-9.15-5.72-16.57-10.16-23.75-.86-1.38-1.72-2.77-2.55-4.17-5.41-9.06-6.38-17.7-3-26.41,1.71-4.34,1.63-9.24,1.55-14,0-1.44,0-2.8,0-4.15C243.31,15.1,258.31.27,284,0h2a62.48,62.48,0,0,1,11.3.83c22,4.09,34,18.19,35.64,41.93.18,2.61.43,5.26.67,7.82.47,5.07,1,10.31,1,15.42a32,32,0,0,1-8.75,21.8c-5.77,6.38-8.55,13.17-8.5,20.77,0,4-1.59,6.81-5.56,9.67C303.66,124,296,128,284.8,128.2Z" />
       <g
         id="chest"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("chest") > -1
@@ -49,6 +72,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       </g>
       <g
         id="quadriceps"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("quadriceps") > -1
@@ -66,6 +90,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M375.61,931.05c-.09-1-.2-2-.31-3a37.19,37.19,0,0,1-.31-9.24c5.72-40.85-3-79.64-26.64-118.59-4-6.51-3.38-13.77-2.77-21.45.21-2.68.43-5.46.44-8.18.19-.57,2.12-2,3-2.71l.74-.55A53.12,53.12,0,0,1,382.88,756c.75,0,1.49,0,2.24,0,3.65.14,6.1.29,7,1.1s1.19,3.08,1.77,6.87l0,.35c2.6,16.87,1.69,34.1.81,50.77-.5,9.6-1,19.53-.88,29.33.39,26.56-3.82,51.56-12.52,74.3-1.21,3.18-2.78,6.35-4.29,9.42Z" />
       <g
         id="biceps"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("biceps") > -1
@@ -87,6 +112,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M175.27,1057.82a10.85,10.85,0,0,1-5.81-2.11,98.32,98.32,0,0,1,7.55-7.81c6.71-6.45,13.66-13.13,15.34-23.73,2.65-16.74,1.72-29.64-3-41.84l-2.13-5.5-1.66,5.67c-.15.53-.35,1.06-.54,1.59a13.22,13.22,0,0,0-1.06,4.4c-.11,7.71-.08,15.55-.05,23.13l0,6.35a26.1,26.1,0,0,1-8.3,19.64,41.93,41.93,0,0,0-2.86,3.15,27.81,27.81,0,0,1-3.71,3.85c-1,.78-2,1.69-3,2.57-2.66,2.37-5.68,5-7.82,5h-.17a25.18,25.18,0,0,1-19.09-11c-1.65-2.36-1.4-4.34,1-7.57,3.49-4.77,7.11-9.57,10.62-14.22l4.65-6.18c10.73-14.32,21.59-31.94,21.41-54.54,9.17.31,14.31.61,16.47,2.64s2.27,6.9,2.18,16.77c-.13,14.77-.27,31.52-2.07,47.72-.75,6.68-3.41,14.26-8.13,23.17C181.94,1054.94,178.73,1057.82,175.27,1057.82Z" />
       <g
         id="shoulders"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("shoulders") > -1
@@ -103,6 +129,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M282.19,204.19c-2.52-7.2-4.89-14-7.37-20.79-1.84-5.05-3.76-10.16-5.63-15.1-3.45-9.16-7-18.62-10.16-28a53.34,53.34,0,0,1-2-11.57c-.15-1.42-.3-2.88-.49-4.33,10.64,8.32,21.2,12.54,31.4,12.54,9.45,0,18.76-3.6,27.71-10.7,2.22,3.14,2.34,6.23.37,9.39-11.35,18.19-18.63,38.36-25.67,57.87-2,5.45-4,11.09-6.09,16.59Q283.19,207.08,282.19,204.19Z" />
       <g
         id="abductors"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("abductors") > -1
@@ -118,6 +145,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       </g>
       <g
         id="forearms"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("forearms") > -1
@@ -135,6 +163,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       </g>
       <g
         id="adductors"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("adductors") > -1
@@ -162,6 +191,7 @@ export const FrontDiagram: React.FC<DiagramProps> = (props) => {
       <path d="M367.45,905.54c-19.24-34.55-25.78-62.62-21.34-91.82C362.29,843.37,369.3,873.52,367.45,905.54Z" />
       <g
         id="abdominals"
+        onClick={onMuscleGroupClick}
         style={{
           fill: `${
             props.highlights.indexOf("abdominals") > -1
@@ -209,4 +239,6 @@ export interface DiagramProps {
   highlights: string[];
   secondaryHighlights: string[];
   style?: React.CSSProperties;
+  isClickable?: boolean;
+  onMuscleGroupClick?: React.MouseEventHandler<SVGGElement>;
 }

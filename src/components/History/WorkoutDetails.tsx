@@ -9,7 +9,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import { RoutineHistory, Workout } from "../../types/routine";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { userSelector } from "../../store/userSlice";
@@ -17,10 +17,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setRoutine } from "../../store/routineSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import { typography } from "@mui/system";
+import { getSetRPM } from "../../utils/utils";
 
 export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
+
+  const unit = useMemo(
+    () => (user?.unit === "imperial" ? "lbs" : "kg"),
+    [user]
+  );
 
   const onEditWorkout = () => {
     if (routine) {
@@ -40,7 +46,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
       <Typography variant="caption">
         {routine?.finishedAt?.toDate().toLocaleString()}
       </Typography>
-      <List >
+      <List>
         {routine?.exercises?.map((exercise, i) => (
           <React.Fragment key={i}>
             <ListItem alignItems="flex-start">
@@ -78,7 +84,8 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                         color="text.primary"
                       >
                         <strong>Set {i + 1}</strong> - {s.reps} x {s.weight}{" "}
-                        {user?.unit === "imperial" ? "lbs" : "kg"}
+                        {unit}
+                        {/* {s.weight && ` - 1RPM ${getSetRPM(s)} ${unit}`} */}
                       </Typography>
                     ))}
 

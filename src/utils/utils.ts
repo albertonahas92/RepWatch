@@ -87,6 +87,7 @@ export const heightInCm = (user?: User) => {
     return user?.unit === 'imperial' ? converter.ftToCm(user.height, user.heightIn) : user?.height || 0
 }
 
+export const getSetRPM = (set?: Set) => Math.round((set?.weight || 0) / (1.0278 - 0.0278 * (set?.reps || 1)))
 export const getSetVolume = (set?: Set) => (set?.reps || 0) * (set?.weight || 0)
 
 export const getExericseVolume = (exercise?: RoutineExercise) => {

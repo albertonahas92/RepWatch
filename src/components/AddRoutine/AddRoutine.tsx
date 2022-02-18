@@ -36,6 +36,7 @@ import { useExercises } from "../../hooks/useExercises";
 import { useTheme } from "@mui/system";
 import { AlertDialog } from "../../molecules/AlertDialog/AlertDialog";
 import { setAlert } from "../../store/alertSlice";
+import { MuscleDiagrams } from "./partials/MuscleDiagrams";
 
 export const AddRoutine = () => {
   const theme = useTheme();
@@ -43,6 +44,9 @@ export const AddRoutine = () => {
   const routine = useSelector(routineSelector) || {};
   const dispatch = useDispatch();
   const [openExerciseList, setOpenExerciseList] = useState(false);
+  const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
+    string[] | undefined
+  >();
 
   const [exercises, setExercises] = useState<RoutineExercise[]>([
     ...Array.from(routine?.exercises || []),
@@ -99,6 +103,7 @@ export const AddRoutine = () => {
       index: exercises.length,
     };
     setExercises((exs) => [...exs, routineExercise]);
+    setSelectedMuscleGroups(undefined);
     setOpenExerciseList(false);
   };
 
@@ -111,6 +116,23 @@ export const AddRoutine = () => {
     if (!destination) return;
     const reorderedList = reorder(exercises, source.index, destination.index);
     setExercises(reorderedList);
+  };
+
+  useEffect(() => {
+    if (selectedMuscleGroups) {
+      setOpenExerciseList(true);
+    }
+  }, [selectedMuscleGroups]);
+
+  const onMuscleGroupClick: React.MouseEventHandler<SVGGElement> = (e) => {
+    const parentElement = (e.target as Element).parentElement;
+    if (!parentElement || parentElement.nodeName !== "g") return;
+    const groupName = parentElement.dataset["name"] || parentElement.id;
+    if (selectedMuscleGroups?.includes(groupName)) {
+      setSelectedMuscleGroups(undefined);
+    } else {
+      setSelectedMuscleGroups([groupName]);
+    }
   };
 
   return (
@@ -133,42 +155,14 @@ export const AddRoutine = () => {
             }}
             unmountOnExit
           >
-            <Stack
-              direction="row"
-              sx={{ justifyContent: "center", alignItems: "center" }}
-              spacing={2}
-            >
-              <FrontDiagram
-                highlights={Array.from(
-                  new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-                )}
-                // secondaryHighlights={Array.from(
-                //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
-                // )}
-                secondaryHighlights={[]}
-                style={{
-                  fontSize: "12em",
-                  maxWidth: 120,
-                  color: theme.palette.text.secondary,
-                  fill: theme.palette.text.secondary,
-                }}
-              />
-              <BackDiagram
-                highlights={Array.from(
-                  new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-                )}
-                // secondaryHighlights={Array.from(
-                //   new Set(exercises.flatMap((e) => e.secondaryMuscles || ""))
-                // )}
-                secondaryHighlights={[]}
-                style={{
-                  fontSize: "12em",
-                  maxWidth: 120,
-                  color: theme.palette.text.secondary,
-                  fill: theme.palette.text.secondary,
-                }}
-              />
-            </Stack>
+            <MuscleDiagrams
+              highlights={Array.from(
+                new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
+              )}
+              secondaryHighlights={selectedMuscleGroups || []}
+              isClickable={true}
+              onMuscleGroupClick={onMuscleGroupClick}
+            />
           </Fade>
         </Box>
         <TextField
@@ -184,32 +178,6 @@ export const AddRoutine = () => {
           value={formik.values.name}
           variant="filled"
         />
-        {/* <List dense={true}>
-          {exercises.map((exercise: Exercise) => (
-            <ListItem
-              key={exercise.name}
-              secondaryAction={
-                <IconButton
-                  onClick={() => onDeleteExercise(exercise)}
-                  edge="end"
-                  aria-label="delete"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              }
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <EquipmentIcon
-                    style={{ fontSize: "25px" }}
-                    icon={exercise.equipment}
-                  />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={exercise.name} />
-            </ListItem>
-          ))}
-        </List> */}
         <DraggableList
           onDeleteExercise={onDeleteExercise}
           exercises={exercises}
@@ -259,7 +227,10 @@ export const AddRoutine = () => {
         open={openExerciseList}
         setOpen={setOpenExerciseList}
       >
-        <ExercisesList onSelectExercise={onAddExercise} />
+        <ExercisesList
+          onSelectExercise={onAddExercise}
+          muscleGroups={selectedMuscleGroups}
+        />
       </ModalDialog>
     </Container>
   );
