@@ -12,30 +12,21 @@ export var Privacy = function () {
                 <p>1. What information do we collect?</p>
 
                 <p>
-                    When registering on our site, rating photos, or testing
-                    photos, as appropriate, we collect information from you in
-                    order to provide and improve upon our service. It&apos;s
-                    apparent, first of all, that you can post images to
-                    Photofeeler.
+                    When registering on our site, as appropriate, we collect information from you in
+                    order to provide and improve upon our service.
                 </p>
 
                 <p>We also may collect your:</p>
 
                 <p>
                     First name Email address Birth date or birth year Gender
-                    Additionally, if you register using Facebook or LinkedIn,
+                    Additionally, if you register using Facebook or Google,
                     you may be asked for further information specific to your
-                    Facebook or LinkedIn account. (Typically this will include
+                    Facebook or Google account. (Typically this will include
                     your public profile information.) It is Facebook and
-                    LinkedIn&apos;s responsibility that a list of this
+                    Google&apos;s responsibility that a list of this
                     information be shown to you, so that you can accept or deny
                     those requests at the time of registration.
-                </p>
-
-                <p>
-                    You may optionally provide us with occupation-related
-                    information when adding a context label to Business images
-                    in which you are the photo subject.
                 </p>
 
                 <p>2. What do we use your information for?</p>
@@ -57,14 +48,7 @@ export var Privacy = function () {
                 </p>
 
                 <p>
-                    If you optionally choose to label a Business photo of
-                    yourself with a description of what you do for work,
-                    Photofeeler provides this context to targeted users so that
-                    they may rate photos more accurately.
-                </p>
-
-                <p>
-                    Any actions performed on Photofeeler are collected and
+                    Any actions performed on RepWatch are collected and
                     retained as a core function of providing and maintaining our
                     service and may be used without identifying information in
                     scientific research.
