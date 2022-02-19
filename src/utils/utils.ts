@@ -10,6 +10,12 @@ export const workoutPlaces = [
     "crossfit",
 ]
 
+export const nonWeightedEquipments = [
+    "body only",
+    "bands",
+    "foam roll",
+]
+
 export const equipmentsPlaces = {
     'body only': ["home"],
     'machine': ["gym"],
@@ -62,10 +68,10 @@ export const muscles = {
 
 
 export const goalCateogries = {
-    "general":[],
-    "strength":[],
-    "muscle":[],
-    "endurance":[],
+    "general": [],
+    "strength": [],
+    "muscle": [],
+    "endurance": [],
 }
 
 export const getMuscleGroupName = (muscle: string) => {

@@ -36,6 +36,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import anime from "animejs";
+import { nonWeightedEquipments } from "../../utils/utils";
 
 export const SetForm: FC<Props> = ({
   index,
@@ -226,25 +227,27 @@ export const SetForm: FC<Props> = ({
         />
       </Grid>
       <Grid item md={2} xs={4}>
-        <TextField
-          label="weight"
-          margin="dense"
-          name="weight"
-          onChange={handleWeightChange}
-          onBlur={updateSetState}
-          type="text"
-          value={weight}
-          variant="outlined"
-          size="small"
-          sx={{ m: 0 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <small>{user?.unit === "imperial" ? "lb" : "kg"}</small>
-              </InputAdornment>
-            ),
-          }}
-        />
+        {!nonWeightedEquipments.includes(exercise.equipment || "") && (
+          <TextField
+            label="weight"
+            margin="dense"
+            name="weight"
+            onChange={handleWeightChange}
+            onBlur={updateSetState}
+            type="text"
+            value={weight}
+            variant="outlined"
+            size="small"
+            sx={{ m: 0 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <small>{user?.unit === "imperial" ? "lb" : "kg"}</small>
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
       </Grid>
       <Grid item md={1} xs={2}>
         <IconButton

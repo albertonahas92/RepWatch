@@ -100,7 +100,13 @@ export const HistoryCalendar: React.FC<Props> = ({ history }) => {
           <Typography
             component="small"
             color="primary"
-            sx={{ fontSize: 12 }}
+            sx={{
+              fontSize: 12,
+              whiteSpace: 'nowrap',
+              maxWidth: 35,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
             variant="body2"
           >
             {workouts[0].name}

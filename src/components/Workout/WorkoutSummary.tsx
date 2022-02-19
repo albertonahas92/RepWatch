@@ -64,10 +64,12 @@ export const WorkoutSummary = () => {
             <Fireworks />
           </Box>
           <Typography variant="h4">Well done!</Typography>
-          <Typography variant="body1">
-            You have lifted a total of {volume}
-            {user?.unit === "metric" ? "kg" : "lbgs"}!!
-          </Typography>
+          {!!volume && (
+            <Typography variant="body1">
+              You have lifted a total of {volume}
+              {user?.unit === "metric" ? "kg" : "lbgs"}!!
+            </Typography>
+          )}
         </Container>
       )}
       <WorkoutDetails routine={routine} />

@@ -151,7 +151,7 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
                           >
                             {routine.exercises?.map(
                               (e) =>
-                                e.sets?.length && (
+                                !!e.sets?.length && (
                                   <Label key={e.name}>
                                     {e.sets?.length} x {e.name}
                                   </Label>

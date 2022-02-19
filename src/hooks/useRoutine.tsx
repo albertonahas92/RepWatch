@@ -39,7 +39,6 @@ export const useRoutine = () => {
       duration: routine.duration || duration,
       exercises,
     };
-
     return !routine.historicalId
       ? firebase
           .firestore()

@@ -128,7 +128,6 @@ const App = function ({
     initUser();
   }, [user]);
 
-
   const signOutFromApp = () => {
     signOut?.();
     signOutUser();
@@ -143,8 +142,10 @@ const App = function ({
   }, [routine]);
 
   const onFinishWorkout = () => {
-    saveRoutine();
-    dispatch(setRoutine({ ...routine, done: true }));
+    saveRoutine()?.then((doc) => {
+      const id = doc?.id;
+      dispatch(setRoutine({ ...routine, done: true, id }));
+    });
   };
 
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));

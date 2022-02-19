@@ -8,6 +8,8 @@ import {
   Divider,
   Button,
   Box,
+  Alert,
+  Chip,
 } from "@mui/material";
 import React, { FC, useMemo } from "react";
 import { RoutineHistory, Workout } from "../../types/routine";
@@ -18,9 +20,12 @@ import { setRoutine } from "../../store/routineSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import { typography } from "@mui/system";
 import { getSetRPM } from "../../utils/utils";
+import { historySelector } from "../../store/historySlice";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 
 export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
   const user = useSelector(userSelector);
+  const history = useSelector(historySelector);
   const dispatch = useDispatch();
 
   const unit = useMemo(
@@ -47,49 +52,84 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
         {routine?.finishedAt?.toDate().toLocaleString()}
       </Typography>
       <List>
-        {routine?.exercises?.map((exercise, i) => (
-          <React.Fragment key={i}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar>
-                  <Typography
-                    component="span"
-                    sx={{ fontWeight: "light" }}
-                    variant="body2"
-                  >
-                    {exercise.sets?.length}
-                  </Typography>
-                  <CloseOutlinedIcon sx={{ fontSize: 16 }} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <>
-                    <Typography
-                      color="text.primary"
-                      component="h5"
-                      variant="body1"
-                    >
-                      {exercise?.name}
-                    </Typography>
-                  </>
-                }
-                secondary={
-                  <React.Fragment>
-                    {exercise.sets?.map((s, i) => (
-                      <Typography
-                        sx={{ fontSize: 12 }}
-                        component="div"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        <strong>Set {i + 1}</strong> - {s.reps} x {s.weight}{" "}
-                        {unit}
-                        {/* {s.weight && ` - 1RPM ${getSetRPM(s)} ${unit}`} */}
-                      </Typography>
-                    ))}
+        {routine?.exercises
+          ?.filter((e) => e.sets?.length)
+          .map((exercise, i) => {
+            const prevRPM = Math.max(
+              ...(history
+                ?.filter((h) => h.id !== routine.id)
+                .flatMap((h) => h.routine.exercises)
+                .filter((e) => e?.name === exercise.name)
+                .flatMap((e) => e?.sets)
+                .map((s) => getSetRPM(s) || 0) || [0])
+            );
 
-                    {/* <Typography
+            return (
+              <React.Fragment key={i}>
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Typography
+                        component="span"
+                        sx={{ fontWeight: "light" }}
+                        variant="body2"
+                      >
+                        {exercise.sets?.length}
+                      </Typography>
+                      <CloseOutlinedIcon sx={{ fontSize: 16 }} />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <>
+                        <Typography
+                          color="text.primary"
+                          component="h5"
+                          variant="body1"
+                        >
+                          {exercise?.name}
+                        </Typography>
+                      </>
+                    }
+                    secondary={
+                      <React.Fragment>
+                        {exercise.sets?.map((s, i) => (
+                          <Typography
+                            sx={{ fontSize: 14 }}
+                            component="div"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            <Chip
+                              label={`Set ${i + 1}`}
+                              color="primary"
+                              variant="filled"
+                              size="small"
+                              // icon={<CheckCircleOutlinedIcon />}
+                              sx={{ my: 0.4, mr:1 }}
+                            />
+                            {s.reps}{" "}
+                            {!!s.weight && (
+                              <span style={{ marginRight: 8 }}>
+                                x {s.weight}
+                                {unit}
+                              </span>
+                            )}
+                            {/* {s.weight && ` - 1RPM ${getSetRPM(s)} ${unit}`} */}
+                            {getSetRPM(s) > prevRPM && (
+                              <Chip
+                                label={`New RPM! ${getSetRPM(s)}${unit}`}
+                                color="success"
+                                variant="outlined"
+                                size="small"
+                                // icon={<CheckCircleOutlinedIcon />}
+                                sx={{ my: 0.2 }}
+                              />
+                            )}
+                          </Typography>
+                        ))}
+
+                        {/* <Typography
                 color="text.secondary"
                 component="span"
                 sx={{ display: "inline-block" }}
@@ -100,13 +140,14 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                 )}{" "}
                 minutes
               </Typography> */}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </React.Fragment>
-        ))}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </React.Fragment>
+            );
+          })}
       </List>
       {historicalId && (
         <Button
