@@ -203,8 +203,10 @@ export const RoutineGenerator: FC<Props> = ({ onFinish }) => {
                   return (
                     <Chip
                       sx={{
-                        backgroundColor: `${active ? "#999" : "#eee"}`,
-                        color: `${active ? "#fff" : "inherit"}`,
+                        backgroundColor: `${
+                          active ? "text.secondary" : "bg.paper"
+                        }`,
+                        color: `${active ? "background.default" : "inherit"}`,
                         m: 0.4,
                       }}
                       onClick={() => handleSplitClick(t)}
@@ -268,8 +270,10 @@ export const RoutineGenerator: FC<Props> = ({ onFinish }) => {
                   return (
                     <Chip
                       sx={{
-                        backgroundColor: `${active ? "#999" : "#eee"}`,
-                        color: `${active ? "#fff" : "inherit"}`,
+                        backgroundColor: `${
+                          active ? "text.secondary" : "bg.paper"
+                        }`,
+                        color: `${active ? "background.default" : "inherit"}`,
                         m: 0.4,
                       }}
                       onClick={() => handleWorkoutPlaceClick(t)}
