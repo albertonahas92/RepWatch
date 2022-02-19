@@ -1,6 +1,72 @@
-import { RoutineExercise, Set } from "../types/exercise"
+import { RoutineExercise, ESet as _Set } from "../types/exercise"
 import { Routine, Workout } from "../types/routine"
 import { User } from "../types/user"
+
+
+export const workoutPlaces = [
+    "all",
+    "home",
+    "gym",
+    "crossfit",
+]
+
+export const equipmentsPlaces = {
+    'body only': ["home"],
+    'machine': ["gym"],
+    'other': [],
+    'foam roll': ["crossfit", "home"],
+    'kettlebells': ["crossfit"],
+    'dumbbell': ["gym", "crossfit"],
+    'cable': ["gym"],
+    'barbell': ["gym", "crossfit"],
+    'medicine ball': ["crossfit"],
+    'bands': ["crossfit", "home"],
+    'exercise ball': ["crossfit"],
+    'e-z curl bar': ["crossfit", "gym"],
+}
+
+export const splits = [
+    "push",
+    "pull",
+    "legs",
+    "core",
+    "arms",
+    "upper",
+    "lower",
+    "full",
+    "biceps",
+    "triceps",
+    "back",
+    "chest",
+    "shoulders",
+]
+
+export const muscles = {
+    "hamstrings": ["legs", "lower"],
+    "quadriceps": ["legs", "lower"],
+    "calves": ["legs", "lower"],
+    "glutes": ["legs", "lower"],
+    "abductors": ["legs", "lower"],
+    "adductors": ["legs", "lower"],
+    "biceps": ["arms", "pull", "upper", "biceps"],
+    "triceps": ["arms", "push", "upper", "triceps"],
+    "forearms": ["arms", "pull"],
+    "abdominals": ["core", "lower", "abdominals"],
+    "middle back": ["pull", "upper", "back"],
+    "lower back": ["pull", "upper", "back"],
+    "lats": ["pull", "upper", "back"],
+    "traps": ["pull", "upper", "back"],
+    "chest": ["push", "upper", "chest"],
+    "shoulders": ["push", "upper", "shoulders"],
+}
+
+
+export const goalCateogries = {
+    "general":[],
+    "strength":[],
+    "muscle":[],
+    "endurance":[],
+}
 
 export const getMuscleGroupName = (muscle: string) => {
     switch (muscle) {
@@ -12,6 +78,13 @@ export const getMuscleGroupName = (muscle: string) => {
             return muscle;
     }
 }
+
+
+export const getWorkoutSplits = () => Object.assign({}, ...([...new Set(Object.values(muscles).flatMap(e => e))]
+    .map(s => { return { [s]: Object.keys(muscles).filter((m: any) => getKeyValue(m)(muscles).includes(s)) } })))
+
+export const getPlaceEquipments = () => Object.assign({}, ...([...new Set(Object.values(equipmentsPlaces).flatMap(e => e))]
+    .map(s => { return { [s]: Object.keys(equipmentsPlaces).filter((m: any) => getKeyValue(m)(equipmentsPlaces).includes(s)) } })))
 
 export const getExerciseMuscleGroups = (muscles: string[]) => {
 
@@ -73,6 +146,18 @@ export const goalString = (goal?: string) => {
     }
 }
 
+
+export const getLevelNum = (l?: string) => {
+    switch (l) {
+        case "beginner":
+            return 1;
+        case "intermediate":
+            return 2;
+        default:
+            return 3;
+    }
+};
+
 export const heightString = (user?: User) => {
     return user?.unit === 'imperial' ? `${user.height} ft. ${user.heightIn} in.` : `${user?.height} cm`
 }
@@ -87,8 +172,8 @@ export const heightInCm = (user?: User) => {
     return user?.unit === 'imperial' ? converter.ftToCm(user.height, user.heightIn) : user?.height || 0
 }
 
-export const getSetRPM = (set?: Set) => Math.round((set?.weight || 0) / (1.0278 - 0.0278 * (set?.reps || 1)))
-export const getSetVolume = (set?: Set) => (set?.reps || 0) * (set?.weight || 0)
+export const getSetRPM = (set?: _Set) => Math.round((set?.weight || 0) / (1.0278 - 0.0278 * (set?.reps || 1)))
+export const getSetVolume = (set?: _Set) => (set?.reps || 0) * (set?.weight || 0)
 
 export const getExericseVolume = (exercise?: RoutineExercise) => {
     return exercise?.sets?.reduce((acc, val) => {
@@ -143,6 +228,8 @@ const getCaloriesBurnedInRoutine = (user: User, routine: Routine) => {
     )
 }
 
-const getCaloriesBurnedInSet = (user: User, set?: Set) => {
+const getCaloriesBurnedInSet = (user: User, set?: _Set) => {
     return (weightInKg(user) * 4.8 * 0.0175 * (set?.elapsedTime || 0) / 60)
 }
+
+const getKeyValue = (key: string) => (obj: Record<string, any>) => obj[key];

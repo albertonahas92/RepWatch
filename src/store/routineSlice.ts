@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RoutineExercise, Set } from '../types/exercise'
+import { RoutineExercise, ESet } from '../types/exercise'
 import { Routine, Workout } from '../types/routine'
 import { RoutineState, State } from '../types/state'
 
@@ -28,7 +28,7 @@ export const routineSlice = createSlice({
         state.value.exercises = action.payload
       }
     },
-    updateSet: (state: RoutineState, action: PayloadAction<{ index: number, set: Set, name: string }>) => {
+    updateSet: (state: RoutineState, action: PayloadAction<{ index: number, set: ESet, name: string }>) => {
       if (state.value) {
         state.value.exercises = state.value.exercises?.map((e) =>
           e.name === action.payload.name ?

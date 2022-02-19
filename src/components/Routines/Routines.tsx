@@ -34,7 +34,7 @@ import { useRoutines } from "../../hooks/useRoutines";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { WorkoutSummary } from "../Workout/WorkoutSummary";
 import { historySelector } from "../../store/historySlice";
-import { omitSetKeys, Set } from "../../types/exercise";
+import { omitSetKeys, ESet } from "../../types/exercise";
 import _ from "lodash";
 import { setAlert } from "../../store/alertSlice";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -136,7 +136,7 @@ export const Routines = () => {
         sets: history
           ?.flatMap((h) => h.routine.exercises)
           .find((he) => he?.name === e.name)
-          ?.sets?.map((s) => _.omit(s, omitSetKeys) as Set),
+          ?.sets?.map((s) => _.omit(s, omitSetKeys) as ESet),
       };
     });
     dispatch(

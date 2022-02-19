@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import { EquipmentIcon } from "../../icons/equipment/EquipmentIcon";
-import { Exercise, RoutineExercise, Set } from "../../types/exercise";
+import { Exercise, RoutineExercise, ESet } from "../../types/exercise";
 import KeyboardArrowRightSharpIcon from "@mui/icons-material/KeyboardArrowRightSharp";
 import MinimizeOutlinedIcon from "@mui/icons-material/MinimizeOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
@@ -89,7 +89,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
 
   const duplicateSet = (exercise: RoutineExercise, index: number) => {
     let sets = exercise.sets || [];
-    const duplicate: Set = {
+    const duplicate: ESet = {
       ...sets[index],
       elapsedTime: 0,
       elapsedRestTime: 0,
@@ -226,7 +226,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
                 </ListItem>
                 <Collapse in={exercise.active} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    {exercise.sets?.map((set: Set, index: number) => (
+                    {exercise.sets?.map((set: ESet, index: number) => (
                       <React.Fragment key={set.id || shortid.generate()}>
                         <ListItem
                           key={set.id || shortid.generate()}

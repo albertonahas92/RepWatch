@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React, { FC, useEffect, useState } from "react";
 import CrossFadeImage from "../../atoms/CrossFadeImage/CrossFadeImage";
 import { Timer } from "../../atoms/Timer/Timer";
-import { RoutineExercise, Set } from "../../types/exercise";
+import { RoutineExercise, ESet } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Done } from "../../icons/done";
@@ -64,6 +64,6 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
 
 interface Props {
   exercise?: RoutineExercise;
-  set?: Set;
+  set?: ESet;
   onClickDone: () => void;
 }

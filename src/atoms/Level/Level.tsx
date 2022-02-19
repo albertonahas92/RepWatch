@@ -1,5 +1,6 @@
 import { styled } from "@mui/material";
 import React from "react";
+import { getLevelNum } from "../../utils/utils";
 
 const Bars = styled("span", {
   shouldForwardProp: (prop) => prop !== "level",
@@ -13,17 +14,6 @@ const Bars = styled("span", {
     display: "inline-block",
   },
 }));
-
-const getLevelNum = (l?: string) => {
-  switch (l) {
-    case "beginner":
-      return 1;
-    case "intermediate":
-      return 2;
-    default:
-      return 3;
-  }
-};
 
 const getLevelColor = (l?: number) => {
   switch (l) {

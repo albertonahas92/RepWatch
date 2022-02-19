@@ -16,7 +16,7 @@ export const backHighlights = [
   "lower back",
   "middle back",
   "shoulders",
-  "calfs",
+  "calves",
 ];
 
 export const BackDiagram: React.FC<DiagramProps> = ({
@@ -121,13 +121,13 @@ export const BackDiagram: React.FC<DiagramProps> = ({
         <path d="M309.59,437.8c5.78-33.48,29.85-52.74,54.84-69.22V369c0,2.46,0,4.46,0,6.46q0,7.05-.07,14.1c-.08,11.73-.16,23.86,0,35.8,0,2-.05,4.09-.89,4.95-.53.54-1.58.81-3.14.81h-.62c-2.09-.09-4.2-.13-6.27-.13A141.92,141.92,0,0,0,309.59,437.8Z" />
       </g>
       <g
-        id="calfs"
+        id="calves"
         onClick={onMuscleGroupClick}
         style={{
           fill: `${
-            props.highlights.indexOf("calfs") > -1
+            props.highlights.indexOf("calves") > -1
               ? highlightColor
-              : props.secondaryHighlights.indexOf("calfs") > -1
+              : props.secondaryHighlights.indexOf("calves") > -1
               ? secondaryColor
               : "currentColor"
           }`,

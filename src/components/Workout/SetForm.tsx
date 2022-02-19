@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { RoutineExercise, Set } from "../../types/exercise";
+import { RoutineExercise, ESet } from "../../types/exercise";
 import { useDispatch, useSelector } from "react-redux";
 import { updateExercises, updateSet } from "../../store/routineSlice";
 import ClearSharpIcon from "@mui/icons-material/ClearSharp";
@@ -58,7 +58,7 @@ export const SetForm: FC<Props> = ({
     exercise?.sets && exercise.sets[index].active ? true : false;
   const initialResting =
     exercise?.sets && exercise.sets[index].resting ? true : false;
-  const set: Set = exercise?.sets
+  const set: ESet = exercise?.sets
     ? exercise.sets[index]
     : { index: 0, reps: 0, weight: 0 };
 
@@ -84,7 +84,7 @@ export const SetForm: FC<Props> = ({
   };
 
   const updateSetState = () => {
-    const updatedSet: Set = {
+    const updatedSet: ESet = {
       ...set,
       reps,
       weight,

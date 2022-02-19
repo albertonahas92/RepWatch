@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RoutineExercise, Set } from '../types/exercise'
+import { RoutineExercise, ESet } from '../types/exercise'
 import { Routine, RoutineHistory, Workout } from '../types/routine'
 import { HistoryState, RoutineState, State } from '../types/state'
 

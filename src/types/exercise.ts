@@ -16,12 +16,12 @@ export interface Exercise {
 export interface RoutineExercise extends Exercise {
     index: number
     active?: boolean
-    sets?: Set[]
+    sets?: ESet[]
     elapsedTime?: number
     date?: firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
 
-export interface Set {
+export interface ESet {
     id?: string
     index: number
     reps?: number

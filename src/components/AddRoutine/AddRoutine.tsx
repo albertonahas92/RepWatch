@@ -37,6 +37,8 @@ import { useTheme } from "@mui/system";
 import { AlertDialog } from "../../molecules/AlertDialog/AlertDialog";
 import { setAlert } from "../../store/alertSlice";
 import { MuscleDiagrams } from "./partials/MuscleDiagrams";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { RoutineGenerator } from "./RoutineGenerator";
 
 export const AddRoutine = () => {
   const theme = useTheme();
@@ -44,6 +46,7 @@ export const AddRoutine = () => {
   const routine = useSelector(routineSelector) || {};
   const dispatch = useDispatch();
   const [openExerciseList, setOpenExerciseList] = useState(false);
+  const [openRoutineGenerator, setOpenRoutineGenerator] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
     string[] | undefined
   >();
@@ -95,7 +98,7 @@ export const AddRoutine = () => {
     navigate("/");
   };
 
-  const onAddExercise = (exercise: Exercise) => {
+  const addExercise = (exercise: Exercise) => {
     if (exercises.filter((e) => e.name === exercise.name).length > 0) return;
 
     const routineExercise: RoutineExercise = {
@@ -103,6 +106,10 @@ export const AddRoutine = () => {
       index: exercises.length,
     };
     setExercises((exs) => [...exs, routineExercise]);
+  };
+
+  const onAddExercise = (exercise: Exercise) => {
+    addExercise(exercise);
     setSelectedMuscleGroups(undefined);
     setOpenExerciseList(false);
   };
@@ -135,6 +142,13 @@ export const AddRoutine = () => {
     }
   };
 
+  const onFinishGenerateRoutine = (exercises: Exercise[]) => {
+    exercises.forEach((e) => addExercise(e));
+
+    setSelectedMuscleGroups(undefined);
+    setOpenRoutineGenerator(false);
+  };
+
   return (
     <Container maxWidth="sm">
       <form onSubmit={formik.handleSubmit}>
@@ -147,14 +161,14 @@ export const AddRoutine = () => {
           </Typography>
         </Box>
         <Box>
-            <MuscleDiagrams
-              highlights={Array.from(
-                new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
-              )}
-              secondaryHighlights={selectedMuscleGroups || []}
-              isClickable={true}
-              onMuscleGroupClick={onMuscleGroupClick}
-            />
+          <MuscleDiagrams
+            highlights={Array.from(
+              new Set(exercises.flatMap((e) => e.primaryMuscles || ""))
+            )}
+            secondaryHighlights={selectedMuscleGroups || []}
+            isClickable={true}
+            onMuscleGroupClick={onMuscleGroupClick}
+          />
         </Box>
         <TextField
           error={Boolean(formik.touched.name && formik.errors.name)}
@@ -174,7 +188,7 @@ export const AddRoutine = () => {
           exercises={exercises}
           onDragEnd={onDragEnd}
         />
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ py: 1 }}>
           <Button
             color="warning"
             disabled={formik.isSubmitting}
@@ -186,6 +200,18 @@ export const AddRoutine = () => {
             endIcon={<AddCircleSharpIcon />}
           >
             Add Exercise
+          </Button>
+          <Button
+            color="secondary"
+            disabled={formik.isSubmitting}
+            fullWidth
+            size="large"
+            type="button"
+            variant="text"
+            onClick={() => setOpenRoutineGenerator(true)}
+            endIcon={<SettingsSuggestIcon />}
+          >
+            Generate Exercises
           </Button>
         </Box>
         <Box>
@@ -212,6 +238,14 @@ export const AddRoutine = () => {
           </Button>
         </Box>
       </form>
+      <ModalDialog
+        closeButton={true}
+        title={"Exercises Generator"}
+        open={openRoutineGenerator}
+        setOpen={setOpenRoutineGenerator}
+      >
+        <RoutineGenerator onFinish={onFinishGenerateRoutine} />
+      </ModalDialog>
       <ModalDialog
         closeButton={true}
         title={"Select Exercise"}

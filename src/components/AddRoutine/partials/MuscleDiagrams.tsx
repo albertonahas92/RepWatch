@@ -29,7 +29,7 @@ export const MuscleDiagrams: FC<Props> = ({
           highlights={highlights}
           secondaryHighlights={secondaryHighlights}
           style={{
-            fontSize: "12em",
+            fontSize: "13em",
             maxWidth: 120,
             color: theme.palette.text.secondary,
             fill: theme.palette.text.secondary,
@@ -41,7 +41,7 @@ export const MuscleDiagrams: FC<Props> = ({
           highlights={highlights}
           secondaryHighlights={secondaryHighlights}
           style={{
-            fontSize: "12em",
+            fontSize: "13em",
             maxWidth: 120,
             color: theme.palette.text.secondary,
             fill: theme.palette.text.secondary,

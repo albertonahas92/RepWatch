@@ -11,22 +11,34 @@ import React, { FC } from "react";
 import { EquipmentIcon } from "../../icons/equipment/EquipmentIcon";
 import { RoutineExercise } from "../../types/exercise";
 import { Routine } from "../../types/routine";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useDispatch } from "react-redux";
+import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
 
 export const RoutineDetails: FC<Props> = ({ routine }) => {
-    
+  const dispatch = useDispatch();
+  const onInfoClick = (exericse: RoutineExercise) => {
+    dispatch(setExercise(exericse));
+    dispatch(setExerciseModal(true));
+  };
+
   return (
     <Box>
       <List dense={true}>
         {routine?.exercises?.map((exercise: RoutineExercise) => {
-          // if (exercises) {
-          //   exercise = {
-          //     ...exercise,
-          //     ...exercises.find((e) => e.name === exercise.name),
-          //   };
-          // }
           return (
             <React.Fragment key={exercise.name}>
-              <ListItem sx={{ pl: { xs: 0 } }}>
+              <ListItem
+                sx={{ pl: { xs: 0 } }}
+                secondaryAction={
+                  <IconButton
+                    onClick={() => onInfoClick(exercise as RoutineExercise)}
+                    aria-label="delete"
+                  >
+                    <InfoOutlinedIcon />
+                  </IconButton>
+                }
+              >
                 <ListItemAvatar>
                   <Avatar>
                     <EquipmentIcon
