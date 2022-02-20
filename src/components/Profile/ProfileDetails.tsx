@@ -51,17 +51,7 @@ export const AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
         variant="elevation"
       >
         <CardContent>
-          <Box
-            sx={{
-              height: 300,
-              "& tspan": { fill: theme.palette.text.secondary },
-              "& .recharts-tooltip-label": {
-                color: theme.palette.secondary.dark,
-              },
-            }}
-          >
-            <MusclesMap />
-          </Box>
+          <MusclesMap />
           <ProfileInfoTable user={user} />
           {/* <IconButton onClick={() => props.setEditMode(true)}>
           <EditIcon fontSize="medium" />

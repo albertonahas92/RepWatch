@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import { Box, useTheme } from "@mui/system";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import SwitchToggle from "../../atoms/SwitchToggle/SwitchToggle";
@@ -15,6 +16,8 @@ import { getSetRPM, getStrengthLevel } from "../../utils/utils";
 export const MusclesMap: FC<Props> = () => {
   const user = useSelector(userSelector);
   const history = useSelector(historySelector);
+
+  const theme = useTheme();
 
   const [compare, setCompare] = useState(false);
 
@@ -54,7 +57,15 @@ export const MusclesMap: FC<Props> = () => {
   }, [compare]);
 
   return !!data.length ? (
-    <>
+    <Box
+      sx={{
+        height: 300,
+        "& tspan": { fill: theme.palette.text.secondary },
+        "& .recharts-tooltip-label": {
+          color: theme.palette.secondary.dark,
+        },
+      }}
+    >
       <RadarReport argument="muscle" keys={chartKeys} data={data} />
       <Stack
         direction="row"
@@ -71,7 +82,7 @@ export const MusclesMap: FC<Props> = () => {
           }}
         />
       </Stack>
-    </>
+    </Box>
   ) : (
     <></>
   );

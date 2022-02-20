@@ -10,6 +10,7 @@ import {
   Box,
   Alert,
   Chip,
+  IconButton,
 } from "@mui/material";
 import React, { FC, useMemo } from "react";
 import { RoutineHistory, Workout } from "../../types/routine";
@@ -22,6 +23,9 @@ import { typography } from "@mui/system";
 import { getSetRPM } from "../../utils/utils";
 import { historySelector } from "../../store/historySlice";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
+import { RoutineExercise } from "../../types/exercise";
 
 export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
   const user = useSelector(userSelector);
@@ -32,6 +36,11 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
     () => (user?.unit === "imperial" ? "lbs" : "kg"),
     [user]
   );
+
+  const onInfoClick = (exericse: RoutineExercise) => {
+    dispatch(setExercise(exericse));
+    dispatch(setExerciseModal(true));
+  };
 
   const onEditWorkout = () => {
     if (routine) {
@@ -66,7 +75,17 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
 
             return (
               <React.Fragment key={i}>
-                <ListItem alignItems="flex-start">
+                <ListItem
+                  secondaryAction={
+                    <IconButton
+                      onClick={() => onInfoClick(exercise)}
+                      aria-label="delete"
+                    >
+                      <InfoOutlinedIcon />
+                    </IconButton>
+                  }
+                  alignItems="flex-start"
+                >
                   <ListItemAvatar>
                     <Avatar>
                       <Typography

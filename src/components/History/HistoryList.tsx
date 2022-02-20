@@ -25,9 +25,10 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { WorkoutDetails } from "./WorkoutDetails";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const Label = styled("span")(({ theme }) => ({
-  background: theme.palette.action.hover,
+  // background: theme.palette.action.hover,
   margin: "4px 0",
   marginRight: "8px",
   padding: "2px 8px",
@@ -154,7 +155,8 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
                               (e) =>
                                 !!e.sets?.length && (
                                   <Label key={e.name}>
-                                    {e.sets?.length} x {e.name}
+                                    <strong>{e.sets?.length} x </strong>{" "}
+                                    {e.name}
                                   </Label>
                                 )
                             )}
@@ -162,7 +164,7 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
                           <Typography
                             color="text.secondary"
                             component={TimeLabel}
-                            variant="body2"
+                            variant="caption"
                           >
                             {Math.round(
                               moment.duration(routine.duration || 0).asMinutes()
@@ -197,6 +199,16 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
         open={open}
         onClose={handleRoutineMenuClose}
       >
+        <MenuItem
+          onClick={() => {
+            handleRoutineMenuClose();
+            setOpenWorkoutModal(true);
+            setCurrentRoutine(routine);
+          }}
+        >
+          <InfoOutlinedIcon />
+          View details
+        </MenuItem>
         <MenuItem
           onClick={() => {
             handleRoutineMenuClose();

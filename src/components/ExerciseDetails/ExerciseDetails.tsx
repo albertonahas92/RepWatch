@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import { Box } from "@mui/system";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import CrossFadeImage from "../../atoms/CrossFadeImage/CrossFadeImage";
 import { BackDiagram, backHighlights } from "../../icons/backDiagram";
@@ -33,6 +33,14 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
   const theme = useTheme();
 
   const history = useSelector(historySelector);
+
+  const exerciseHistory = useMemo(() => {
+    return history
+      ?.flatMap((h) => h.routine?.exercises)
+      .filter((e) => e?.name === exercise?.name && !!e?.sets?.length);
+  }, [history, exercise]);
+
+  console.log(exerciseHistory);
 
   const [image, setImage] = useState(0);
   const [tab, setTab] = useState(0);
@@ -146,11 +154,9 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
         </TableContainer>
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        {!history?.filter((h) =>
-          h.routine.exercises?.some((e) => e.name === exercise.name)
-        ).length ? (
+        {(exerciseHistory?.length || 0) < 2 ? (
           <Typography color="text.secondary" sx={{ p: 2 }}>
-            You have no progress yet in this exercise, let's go do it!
+            You don't have enough data yet to show the progress, let's go do it!
           </Typography>
         ) : (
           <ExerciseReport exercise={exercise} />
