@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   Container,
@@ -27,6 +27,10 @@ import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { State } from "../../types/state";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { DeleteAccountForm } from "./DeleteAccountForm";
+import { historySelector } from "../../store/historySlice";
+import { userSelector } from "../../store/userSlice";
+import _ from "lodash";
+import moment from "moment";
 
 const ProfilePhoto = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -46,7 +50,26 @@ const ProfilePhoto = styled("div")(({ theme }) => ({
 }));
 
 export const Profile: FC<Props> = ({ signOut }) => {
-  const user = useSelector((state: State) => state.user.value);
+  const user = useSelector(userSelector);
+  const history = useSelector(historySelector);
+
+  const streak = useMemo(() => {
+    const historyByWeek = _.groupBy(history, (h) =>
+      moment(h.routine.finishedAt?.toDate()).week()
+    );
+    let proceed = true;
+    let weekIndex = moment().week();
+    let streackCount = 0;
+    while (proceed && weekIndex > 0) {
+      if (historyByWeek[weekIndex]) {
+        weekIndex--;
+        streackCount++;
+      } else {
+        proceed = false;
+      }
+    }
+    return streackCount;
+  }, [user, history]);
 
   const [editMode, setEditMode] = useState(false);
   const [openDeleteAccount, setOpenDeleteAccount] = useState(false);
@@ -76,7 +99,7 @@ export const Profile: FC<Props> = ({ signOut }) => {
 
   return (
     <Container maxWidth="lg">
-      <Grid sx={{ mt: 2, mb: 4 }} spacing={2} container>
+      <Grid sx={{ my: 2 }} spacing={2} container>
         <Grid xs={12} item>
           <Box>
             <Box
@@ -101,10 +124,16 @@ export const Profile: FC<Props> = ({ signOut }) => {
               >
                 <UserCircleIcon fontSize="large" />
               </Avatar>
-              <ProgressRing value={user?.streak} />
+              <ProgressRing value={streak * 10} />
               <Typography variant="h5" color="text.secondary">
                 {user?.displayName}
               </Typography>
+              {!!streak && (
+                <Typography variant="body2" color="primary">
+                  You're on {streak}{" "}
+                  {streak > 1 ? "weeks" : "week"} streak
+                </Typography>
+              )}
             </Box>
           </Box>
           {/* <Divider sx={{ mt: 2, mb: 2 }} variant="middle" /> */}

@@ -20,10 +20,12 @@ import { ProfileInfoTable } from "./ProfileInfoTable";
 import { GoalsForm } from "./Partials/GoalsForm";
 import { ProfileFormHoc } from "./ProfileFormHoc";
 import { BasicInfoForm } from "./Partials/BasicInfoForm";
+import { MusclesMap } from "./MusclesMap";
+import { useTheme } from "@mui/system";
 
 export const AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
   const [sucess, setSucess] = useState(false);
-
+  const theme = useTheme();
   const { updateUser } = useUser();
 
   const onSubmitSuccess = () => {
@@ -49,6 +51,17 @@ export const AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
         variant="elevation"
       >
         <CardContent>
+          <Box
+            sx={{
+              height: 300,
+              "& tspan": { fill: theme.palette.text.secondary },
+              "& .recharts-tooltip-label": {
+                color: theme.palette.secondary.dark,
+              },
+            }}
+          >
+            <MusclesMap />
+          </Box>
           <ProfileInfoTable user={user} />
           {/* <IconButton onClick={() => props.setEditMode(true)}>
           <EditIcon fontSize="medium" />

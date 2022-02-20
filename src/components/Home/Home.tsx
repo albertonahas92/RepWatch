@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../types/state";
-import { RegisterStep2 } from "../Auth/Register/RegisterStep2";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { Landing } from "../Landing/Landing";
 import { useUser } from "../../hooks/useUser";

@@ -6,7 +6,7 @@ export interface User {
     displayName?: string
     photoURL?: string
     email?: string
-    gender?: string
+    gender?: 'male' | 'female'
     lastWorkoutAt?: firebase.firestore.Timestamp
     onBoarding?: boolean
     streak?: number
@@ -23,4 +23,11 @@ export interface User {
     unit?: 'metric' | 'imperial'
 
     colorMode?: 'light' | 'dark'
+    weightRecords?: weightRecord[]
+}
+
+
+export interface weightRecord {
+    date: firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    weight: number
 }

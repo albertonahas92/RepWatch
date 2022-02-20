@@ -2,6 +2,7 @@ import * as React from "react";
 import clsx from "clsx";
 import { styled } from "@mui/system";
 import { useSwitch } from "@mui/base/SwitchUnstyled";
+import { CSSProperties } from "@mui/styled-engine";
 
 const SwitchRoot = styled("span")`
   display: inline-block;
@@ -57,8 +58,8 @@ const SwitchThumb = styled("span")(
 
 const SwitchTrack = styled("span")(
   ({ theme }) => `
-  background-color: ${theme.palette.mode === "dark" ? "#8796A5" : "#fff"};
-  border-color: ${theme.palette.mode === "dark" ? "#8796A5" : "#666"};
+  background-color: ${theme.palette.background.default};
+  border-color: ${theme.palette.secondary.dark};
   border-style: solid;
   border-width:2px;
   border-radius: 10px;
@@ -72,7 +73,7 @@ const SwitchTrack = styled("span")(
 `
 );
 
-const MUISwitch = function (props: any) {
+const MUISwitch = function ({ style, ...props }: any) {
   const { getInputProps, checked, disabled, focusVisible } = useSwitch(props);
 
   const stateClasses = {
@@ -82,7 +83,7 @@ const MUISwitch = function (props: any) {
   };
 
   return (
-    <SwitchRoot className={clsx(stateClasses)}>
+    <SwitchRoot style={style} className={clsx(stateClasses)}>
       <SwitchTrack>
         <SwitchThumb className={clsx(stateClasses)} />
       </SwitchTrack>
@@ -95,10 +96,17 @@ export default function SwitchToggle(props: SwitchProps) {
   const handleChange = (e: any) => {
     props.handleToggleChange?.(e.target.checked);
   };
-  return <MUISwitch checked={props.active} onChange={handleChange} />;
+  return (
+    <MUISwitch
+      style={props.style}
+      checked={props.active}
+      onChange={handleChange}
+    />
+  );
 }
 
 interface SwitchProps {
   handleToggleChange?: (checked: boolean) => void;
   active: boolean;
+  style?: CSSProperties;
 }

@@ -136,6 +136,7 @@ export const HistoryList: React.FC<Props> = ({ history }) => {
                             color="text.primary"
                             component="h5"
                             variant="body1"
+                            sx={{ textTransform: "capitalize" }}
                           >
                             {routine?.name}
                           </Typography>

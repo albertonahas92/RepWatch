@@ -106,7 +106,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                               variant="filled"
                               size="small"
                               // icon={<CheckCircleOutlinedIcon />}
-                              sx={{ my: 0.4, mr:1 }}
+                              sx={{ my: 0.4, mr: 1 }}
                             />
                             {s.reps}{" "}
                             {!!s.weight && (
@@ -115,10 +115,10 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                                 {unit}
                               </span>
                             )}
-                            {/* {s.weight && ` - 1RPM ${getSetRPM(s)} ${unit}`} */}
+                            {/* {s.weight && ` - 1RM ${getSetRPM(s)} ${unit}`} */}
                             {getSetRPM(s) > prevRPM && (
                               <Chip
-                                label={`New RPM! ${getSetRPM(s)}${unit}`}
+                                label={`New 1RM! ${getSetRPM(s)}${unit}`}
                                 color="success"
                                 variant="outlined"
                                 size="small"

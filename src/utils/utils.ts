@@ -1,6 +1,7 @@
 import { RoutineExercise, ESet as _Set } from "../types/exercise"
 import { Routine, Workout } from "../types/routine"
 import { User } from "../types/user"
+import { strengthRecord, strengthStandards } from "./strengthStandards"
 
 
 export const workoutPlaces = [
@@ -239,3 +240,27 @@ const getCaloriesBurnedInSet = (user: User, set?: _Set) => {
 }
 
 const getKeyValue = (key: string) => (obj: Record<string, any>) => obj[key];
+
+export const getStrengthLevel = (muscle: string, weight: number, user?: User | null) => {
+    const standards: strengthRecord = getKeyValue(muscle)(strengthStandards)
+    const userStandards = [0, ...standards[user?.gender || 'male']]
+    const ratio = weight / (user?.weight || 1)
+
+    let levelIndex = userStandards.findIndex(s => s > ratio)
+
+    if (levelIndex === -1) {
+        return 20 * userStandards.length - 1
+    }
+    const strength = 20 * (levelIndex - 1)
+
+    const diff = ratio - userStandards[levelIndex - 1]
+    const levelDiff = userStandards[levelIndex] - userStandards[levelIndex - 1]
+    const strengthDiff = Math.round(((diff) / levelDiff) * 100 / userStandards.length)
+
+    if (muscle === 'chest') {
+
+        console.log(diff, levelDiff, levelIndex, strengthDiff);
+    }
+
+    return (strength + strengthDiff)
+}
