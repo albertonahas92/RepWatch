@@ -20,6 +20,24 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
     };
   }, []);
 
+  useEffect(() => {
+    let _navigator: any;
+    _navigator = window.navigator;
+
+    let screenLock: any;
+    if (_navigator.wakeLock) {
+      _navigator.wakeLock.request("screen").then((lock: any) => {
+        screenLock = lock;
+      });
+    }
+
+    return () => {
+      if (screenLock) {
+        screenLock.release();
+      }
+    };
+  }, []);
+
   return (
     <Box
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -66,4 +84,8 @@ interface Props {
   exercise?: RoutineExercise;
   set?: ESet;
   onClickDone: () => void;
+}
+
+interface BaseWebLockSentinelEventMap {
+  onrelease: Event;
 }

@@ -46,14 +46,21 @@ import EditIcon from "@mui/icons-material/Edit";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { historySelector } from "../../store/historySlice";
-import { getExercisesHistory, sortExercisesHistory } from "../../utils/helpers";
+import {
+  getExercisesHistory,
+  getNextWeight,
+  getRepsCount,
+  sortExercisesHistory,
+} from "../../utils/helpers";
 import { WorkoutExercisesListItem } from "./Partials/WorkoutExercisesListItem";
+import { userSelector } from "../../store/userSlice";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
   const [editDate, setEditDate] = useState(false);
 
   const routine = useSelector(routineSelector);
+  const user = useSelector(userSelector);
 
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -81,7 +88,13 @@ export const Workout: FC<Props> = ({ onFinish }) => {
   const addSet = (exercise: RoutineExercise) => {
     let sets = exercise.sets || [];
     const index = exercise.sets?.length || 0;
-    sets = [...sets, { id: shortid.generate(), reps: 12, weight: 0, index }];
+    const repsCount = getRepsCount(user, exercise, index);
+    const prevWeight = index === 0 ? 0 : exercise.sets?.at(index - 1)?.weight;
+    const weight = getNextWeight(user, exercise, prevWeight);
+    sets = [
+      ...sets,
+      { id: shortid.generate(), reps: repsCount, weight: weight, index },
+    ];
     dispatch(updateExercise({ ...exercise, sets }));
   };
 

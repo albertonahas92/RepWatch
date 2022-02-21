@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { MouseEvent, useState } from "react";
 import { Routine, RoutineHistory } from "../../types/routine";
-import * as moment from "moment";
+import moment from "moment";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import { StyledMenu } from "../TopBar/TopBar";
 import LibraryAddOutlinedIcon from "@mui/icons-material/LibraryAddOutlined";
