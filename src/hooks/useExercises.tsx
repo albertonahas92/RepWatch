@@ -88,6 +88,9 @@ export const useExercises = (
       dispatch(setExercises(data.exercises as any));
   }, [data]);
 
+  const findExercise = (name?: string) =>
+    completeExercises && name && completeExercises.find((e) => e.name === name);
+
   return {
     exercises,
     term,
@@ -98,6 +101,7 @@ export const useExercises = (
     setEquipmentsFilter,
     musclesFilter,
     setMusclesFilter,
+    findExercise,
   };
   // return { fetchExercises, data };
 };

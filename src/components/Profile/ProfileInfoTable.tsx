@@ -91,6 +91,18 @@ export const ProfileInfoTable = ({ user }: { user?: User | null }) => {
               <TableCell align="right">{goalString(user?.goal)}</TableCell>
             </TableRow>
           )}
+          {user?.frequencyGoal && (
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Training Goal
+              </TableCell>
+              <TableCell align="right">
+                {user?.frequencyGoal} Times a week
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

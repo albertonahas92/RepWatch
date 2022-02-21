@@ -27,10 +27,7 @@ export const LineReport: React.FC<Props> = ({ data, keys, argument, unit }) => {
           bottom: 0,
         }}
       >
-        <CartesianGrid
-          stroke={theme.palette.divider}
-          strokeDasharray="3 3"
-        />
+        <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
         <XAxis dataKey={argument} />
         <YAxis />
         <Tooltip />
@@ -38,6 +35,7 @@ export const LineReport: React.FC<Props> = ({ data, keys, argument, unit }) => {
         {[...keys.keys()].map((k) => (
           <Line
             type="linear"
+            key={k}
             dataKey={k}
             stroke={theme.palette.primary.light}
           />

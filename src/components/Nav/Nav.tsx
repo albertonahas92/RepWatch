@@ -18,14 +18,27 @@ import { History } from "../History/History";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../store/userSlice";
 
-const Wrapper = styled(Box)`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex-grow: 1;
-  margin-bottom: 60px;
-`;
+// const Wrapper = styled(Box)`
+//   text-align: center;
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+//   flex-grow: 1;
+//   margin-bottom: 60px;
+// `;
+
+const Wrapper = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "hasMarginBottom",
+})<{ hasMarginBottom?: boolean }>(({ theme, hasMarginBottom }) => ({
+  textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  flexGrow: 1,
+  ...(hasMarginBottom && {
+    marginBottom: 60,
+  }),
+}));
 
 const Nav: FC<Props> = function ({
   signInWithGoogle,
@@ -37,9 +50,9 @@ const Nav: FC<Props> = function ({
   error,
 }) {
   const navigate = useNavigate();
-
+  const user = useSelector(userSelector);
   return (
-    <Wrapper>
+    <Wrapper hasMarginBottom={!!user}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

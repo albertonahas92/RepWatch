@@ -15,6 +15,7 @@ export interface User {
 
     goal?: string
     weightGoal?: number
+    frequencyGoal?: number
     experience?: number
 
     weight?: number

@@ -17,6 +17,7 @@ export function ProfileFormHoc<P>({ user, ...props }: Props) {
       weight: user?.weight || 70,
       goal: user?.goal || "",
       weightGoal: user?.weightGoal || user?.weight || 70,
+      frequencyGoal: user?.frequencyGoal || 5,
       unit: user?.unit || "metric",
     },
     validationSchema: Yup.object({
@@ -25,6 +26,10 @@ export function ProfileFormHoc<P>({ user, ...props }: Props) {
       heightIn: Yup.number().max(20),
       weight: Yup.number().max(500).min(30).required("Weight is required"),
       weightGoal: Yup.number().max(500).min(30).required("Weight is required"),
+      frequencyGoal: Yup.number()
+        .max(7)
+        .min(1)
+        .required("Frequency is required"),
       goal: Yup.string(),
       gender: Yup.string().required("Gender is required"),
       unit: Yup.string().required("Unit is required"),

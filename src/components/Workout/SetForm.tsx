@@ -38,7 +38,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import anime from "animejs";
 import { nonWeightedEquipments } from "../../utils/utils";
 
-export const SetForm: FC<Props> = ({
+export const SetFormComp: FC<Props> = ({
   index,
   exercise,
   removeSet,
@@ -356,3 +356,5 @@ interface Props {
   duplicateSet?: (exercise: RoutineExercise, index: number) => void;
   standBy?: boolean;
 }
+
+export const SetForm = React.memo(SetFormComp);

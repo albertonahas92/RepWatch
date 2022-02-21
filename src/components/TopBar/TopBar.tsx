@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/system";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Logo } from "../../icons/logo";
@@ -30,6 +30,8 @@ import { ColorModeContext } from "../Providers/Providers";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useUser } from "../../hooks/useUser";
+import { setDrawer } from "../../store/drawerSlice";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export const StyledMenu = styled((props: any) => (
   <Menu
@@ -83,6 +85,8 @@ export var TopBar: FC<Props> = function (props) {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const theme = useTheme();
+  const dispatch = useDispatch();
+
   const colorMode = React.useContext(ColorModeContext);
 
   const user = useSelector((state: State) => state.user.value);
@@ -99,6 +103,10 @@ export var TopBar: FC<Props> = function (props) {
   const handleNotificationsClose = () => {
     setAnchorEl(null);
     props.setNotification({});
+  };
+
+  const openDrawer = () => {
+    dispatch(setDrawer(true));
   };
 
   useEffect(() => {
@@ -119,11 +127,14 @@ export var TopBar: FC<Props> = function (props) {
       >
         {user ? (
           <>
-            <Tooltip title="Logout">
+            <IconButton onClick={openDrawer} sx={{ ml: 1 }}>
+              <MenuIcon fontSize="small" />
+            </IconButton>
+            {/* <Tooltip title="Logout">
               <IconButton onClick={props.signOut} sx={{ ml: 1 }}>
                 <LogoutIcon fontSize="small" />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Box sx={{ flexGrow: 1 }} />
             {props.deferredPrompt && (
               <Tooltip title="Install the app">

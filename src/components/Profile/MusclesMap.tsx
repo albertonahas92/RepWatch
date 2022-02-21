@@ -4,6 +4,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import SwitchToggle from "../../atoms/SwitchToggle/SwitchToggle";
 import { useExercises } from "../../hooks/useExercises";
+import { useStats } from "../../hooks/useStats";
 import { RadarReport } from "../../molecules/Reports/RadarReport";
 import { historySelector } from "../../store/historySlice";
 import { userSelector } from "../../store/userSlice";
@@ -15,7 +16,6 @@ import { getSetRPM, getStrengthLevel } from "../../utils/utils";
 
 export const MusclesMap: FC<Props> = () => {
   const user = useSelector(userSelector);
-  const history = useSelector(historySelector);
 
   const theme = useTheme();
 
@@ -23,29 +23,7 @@ export const MusclesMap: FC<Props> = () => {
 
   const { exercises } = useExercises();
 
-  const data = useMemo(() => {
-    return Object.keys(strengthStandards)
-      .map((m: string) => {
-        const muscleExercises = exercises
-          ?.filter((e) => e.primaryMuscles?.includes(m))
-          .map((e) => e.name);
-
-        const RM: number = Math.max(
-          ...(history
-            ?.flatMap((h) => h.routine.exercises)
-            .filter((e) => muscleExercises?.includes(e?.name || ""))
-            .flatMap((e) => e?.sets)
-            .map((s) => getSetRPM(s) || 0) || [0])
-        );
-
-        return {
-          muscle: m,
-          level: getStrengthLevel(m, RM, user),
-          ...strengthLevels,
-        };
-      })
-      .filter((d) => !!d.level);
-  }, [user, history]);
+  const { strengthData } = useStats();
 
   const chartKeys = useMemo(() => {
     const keysMap = new Map();
@@ -56,7 +34,7 @@ export const MusclesMap: FC<Props> = () => {
     return keysMap;
   }, [compare]);
 
-  return !!data.length ? (
+  return !!strengthData.length ? (
     <Box
       sx={{
         height: 300,
@@ -66,7 +44,7 @@ export const MusclesMap: FC<Props> = () => {
         },
       }}
     >
-      <RadarReport argument="muscle" keys={chartKeys} data={data} />
+      <RadarReport argument="muscle" keys={chartKeys} data={strengthData} />
       <Stack
         direction="row"
         spacing={2}

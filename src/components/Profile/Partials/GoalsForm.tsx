@@ -60,6 +60,29 @@ export const GoalsForm = (props: FormikProps<User>) => {
           </Select>
         </FormControl>
       </Grid>
+      <Grid item md={4} xs={12}>
+        <FormControl fullWidth sx={{ minWidth: 80, mt: 1 }}>
+          <InputLabel id="frequencyGoal-select-label">Training Goal</InputLabel>
+          <Select
+            labelId="frequencyGoal-select-label"
+            id="frequencyGoal-select-autowidth"
+            value={props.values.frequencyGoal}
+            onBlur={props.handleBlur}
+            onChange={(e) => {
+              props.setFieldValue("frequencyGoal", e.target.value);
+              props.handleChange(e);
+            }}
+            label="Training Goal"
+            fullWidth
+          >
+            {Array.from(Array(5).keys()).map((i) => (
+              <MenuItem key={i} value={i + 2}>
+                {i + 2} Times a week
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
     </>
   );
 };

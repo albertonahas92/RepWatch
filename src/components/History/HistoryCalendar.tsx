@@ -90,7 +90,7 @@ export const HistoryCalendar: React.FC<Props> = ({ history }) => {
     );
     const istrainingday = !!workouts?.length;
     return (
-      <Stack>
+      <Stack key={date.toISOString()}>
         <CustomPickersDay
           istrainingday={istrainingday}
           {...pickersDayProps}
@@ -102,7 +102,7 @@ export const HistoryCalendar: React.FC<Props> = ({ history }) => {
             color="primary"
             sx={{
               fontSize: 12,
-              whiteSpace: 'nowrap',
+              whiteSpace: "nowrap",
               maxWidth: 35,
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -144,7 +144,11 @@ export const HistoryCalendar: React.FC<Props> = ({ history }) => {
       >
         <>
           {workouts?.map((w) => (
-            <WorkoutDetails routine={w.routine} historicalId={w.id} />
+            <WorkoutDetails
+              key={w.id}
+              routine={w.routine}
+              historicalId={w.id}
+            />
           ))}
         </>
       </ModalDialog>

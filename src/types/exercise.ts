@@ -32,6 +32,11 @@ export interface ESet {
     elapsedRestTime?: number
 }
 
+export interface ExerciseHistory {
+    exercise: RoutineExercise;
+    date: Date
+}
+
 export const omitSetKeys = [
     'active',
     'elapsedTime',
@@ -45,7 +50,7 @@ export const omitExerciseKeys = [
     , 'level'
     , 'mechanic'
     // , 'equipment'
-    , 'primaryMuscles'
+    // , 'primaryMuscles'
     , 'secondaryMuscles'
     , 'instructions'
     , 'category'

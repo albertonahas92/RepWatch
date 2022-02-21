@@ -6,6 +6,7 @@ import { LineReport } from "../../molecules/Reports/LineReport";
 import { historySelector } from "../../store/historySlice";
 import { userSelector } from "../../store/userSlice";
 import { RoutineExercise } from "../../types/exercise";
+import { getExercisesHistory, sortExercisesHistory } from "../../utils/helpers";
 import { getExericseVolume, getSetRPM } from "../../utils/utils";
 
 export const ExerciseReport: FC<Props> = ({ exercise }) => {
@@ -14,17 +15,8 @@ export const ExerciseReport: FC<Props> = ({ exercise }) => {
   const unit = useMemo(() => (user?.unit === "imperial" ? "lb" : "kg"), [user]);
   const data = useMemo(
     () =>
-      history
-        ?.flatMap((h) =>
-          h?.routine?.exercises?.map((e) => {
-            return {
-              exercise: e,
-              date: h.routine.finishedAt?.toDate() || new Date(),
-            };
-          })
-        )
-        .filter((e) => e?.exercise?.name === exercise.name)
-        .sort((a, b) => (a?.date.getTime() || 0) - (b?.date.getTime() || 0))
+      getExercisesHistory(history, exercise?.name)
+        ?.sort(sortExercisesHistory)
         .map((e) => {
           return {
             date: `${e?.date.getDate()}/${(e?.date.getMonth() || 0) + 1}`,

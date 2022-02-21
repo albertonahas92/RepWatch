@@ -24,21 +24,31 @@ import { getSetRPM } from "../../utils/utils";
 import { historySelector } from "../../store/historySlice";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
+import {
+  exerciseModalSelector,
+  setExercise,
+  setExerciseModal,
+} from "../../store/exerciseSlice";
 import { RoutineExercise } from "../../types/exercise";
+import { useExercises } from "../../hooks/useExercises";
 
 export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
   const user = useSelector(userSelector);
   const history = useSelector(historySelector);
   const dispatch = useDispatch();
-
+  const { findExercise } = useExercises();
   const unit = useMemo(
     () => (user?.unit === "imperial" ? "lbs" : "kg"),
     [user]
   );
 
   const onInfoClick = (exericse: RoutineExercise) => {
-    dispatch(setExercise(exericse));
+    if (!exericse?.primaryMuscles) {
+      const fullExercise = findExercise(exericse?.name);
+      fullExercise && dispatch(setExercise({ ...fullExercise, ...exericse }));
+    } else {
+      dispatch(setExercise(exericse));
+    }
     dispatch(setExerciseModal(true));
   };
 
@@ -113,12 +123,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                     secondary={
                       <React.Fragment>
                         {exercise.sets?.map((s, i) => (
-                          <Typography
-                            sx={{ fontSize: 14 }}
-                            component="div"
-                            variant="body2"
-                            color="text.primary"
-                          >
+                          <React.Fragment key={i}>
                             <Chip
                               label={`Set ${i + 1}`}
                               color="primary"
@@ -127,13 +132,20 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                               // icon={<CheckCircleOutlinedIcon />}
                               sx={{ my: 0.4, mr: 1 }}
                             />
-                            {s.reps}{" "}
-                            {!!s.weight && (
-                              <span style={{ marginRight: 8 }}>
-                                x {s.weight}
-                                {unit}
-                              </span>
-                            )}
+                            <Typography
+                              sx={{ fontSize: 14, display: "inline" }}
+                              component="div"
+                              variant="body2"
+                              color="text.primary"
+                            >
+                              {s.reps}{" "}
+                              {!!s.weight && (
+                                <span style={{ marginRight: 8 }}>
+                                  x {s.weight}
+                                  {unit}
+                                </span>
+                              )}
+                            </Typography>
                             {/* {s.weight && ` - 1RM ${getSetRPM(s)} ${unit}`} */}
                             {getSetRPM(s) > prevRPM && (
                               <Chip
@@ -145,7 +157,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                                 sx={{ my: 0.2 }}
                               />
                             )}
-                          </Typography>
+                          </React.Fragment>
                         ))}
 
                         {/* <Typography

@@ -51,7 +51,6 @@ export const AccountProfileDetails: FC<Props> = function ({ user, ...props }) {
         variant="elevation"
       >
         <CardContent>
-          <MusclesMap />
           <ProfileInfoTable user={user} />
           {/* <IconButton onClick={() => props.setEditMode(true)}>
           <EditIcon fontSize="medium" />

@@ -5,6 +5,7 @@ import routineReducer from './routineSlice';
 import exerciseReducer from './exerciseSlice';
 import alertReducer from './alertSlice';
 import historyReducer from './historySlice';
+import drawerReducer from './drawerSlice';
 
 export default configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export default configureStore({
         exercise: exerciseReducer,
         alert: alertReducer,
         history: historyReducer,
+        drawer: drawerReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

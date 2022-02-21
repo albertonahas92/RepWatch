@@ -45,12 +45,27 @@ import { useConfirm } from "material-ui-confirm";
 import EditIcon from "@mui/icons-material/Edit";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { historySelector } from "../../store/historySlice";
+import { getExercisesHistory, sortExercisesHistory } from "../../utils/helpers";
+import { WorkoutExercisesListItem } from "./Partials/WorkoutExercisesListItem";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
   const [editDate, setEditDate] = useState(false);
 
-  const handleChange = (newValue: Date | null) => {
+  const routine = useSelector(routineSelector);
+
+  const dispatch = useDispatch();
+  const confirm = useConfirm();
+
+  const screenSize = useWindowDimensions();
+
+  const toggleActive = (exercise: RoutineExercise) => {
+    const active = exercise.active ? false : true;
+    dispatch(updateExercise({ ...exercise, active }));
+  };
+
+  const handleDateChange = (newValue: Date | null) => {
     const finishedAt = newValue
       ? firebase.firestore.Timestamp.fromDate(newValue)
       : undefined;
@@ -61,17 +76,6 @@ export const Workout: FC<Props> = ({ onFinish }) => {
       })
     );
     setEditDate(false);
-  };
-
-  const routine = useSelector(routineSelector);
-  const dispatch = useDispatch();
-  const confirm = useConfirm();
-
-  const screenSize = useWindowDimensions();
-
-  const toggleActive = (exercise: RoutineExercise) => {
-    const active = exercise.active ? false : true;
-    dispatch(updateExercise({ ...exercise, active }));
   };
 
   const addSet = (exercise: RoutineExercise) => {
@@ -178,7 +182,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
               <DateTimePicker
                 label="Workout date"
                 value={routine.finishedAt.toDate()}
-                onChange={handleChange}
+                onChange={handleDateChange}
                 renderInput={(params) => (
                   <TextField variant="standard" {...params} />
                 )}
@@ -188,80 +192,16 @@ export const Workout: FC<Props> = ({ onFinish }) => {
         )}
         <List dense={true}>
           {routine?.exercises?.map((exercise: RoutineExercise) => {
-            // if (exercises) {
-            //   exercise = {
-            //     ...exercise,
-            //     ...exercises.find((e) => e.name === exercise.name),
-            //   };
-            // }
             return (
-              <React.Fragment key={exercise.name}>
-                <ListItem
-                  sx={{ pl: { xs: 0 } }}
-                  secondaryAction={
-                    <IconButton
-                      onClick={() => {
-                        toggleActive(exercise);
-                      }}
-                      edge="end"
-                      aria-label="delete"
-                    >
-                      {!exercise.active ? (
-                        <KeyboardArrowRightSharpIcon />
-                      ) : (
-                        <RemoveOutlinedIcon />
-                      )}
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar>
-                      <EquipmentIcon
-                        style={{ fontSize: "25px" }}
-                        icon={exercise.equipment || ""}
-                      />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={exercise.name} />
-                </ListItem>
-                <Collapse in={exercise.active} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {exercise.sets?.map((set: ESet, index: number) => (
-                      <React.Fragment key={set.id || shortid.generate()}>
-                        <ListItem
-                          key={set.id || shortid.generate()}
-                          sx={{ pl: { md: 7, xs: 0 }, pr: 0 }}
-                        >
-                          <ListItemText
-                            primary={
-                              <SetForm
-                                index={index}
-                                removeSet={removeSet}
-                                duplicateSet={duplicateSet}
-                                exercise={exercise}
-                              />
-                            }
-                          />
-                        </ListItem>
-                        {screenSize === "xs" && <Divider />}
-                      </React.Fragment>
-                    ))}
-                  </List>
-                  <Button
-                    color="warning"
-                    // disabled={formik.isSubmitting}
-                    fullWidth
-                    size="small"
-                    type="button"
-                    variant="text"
-                    onClick={() => addSet(exercise)}
-                    endIcon={<AddCircleSharpIcon />}
-                    sx={{ my: 1 }}
-                  >
-                    Add Set
-                  </Button>
-                </Collapse>
-              </React.Fragment>
+              <WorkoutExercisesListItem
+                exercise={exercise}
+                addSet={addSet}
+                removeSet={removeSet}
+                duplicateSet={duplicateSet}
+                screenSize={screenSize}
+                toggleActive={toggleActive}
+                key={exercise.name}
+              />
             );
           })}
         </List>

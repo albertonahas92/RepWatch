@@ -1,14 +1,17 @@
 import React, { FC } from "react";
 import { useTheme } from "@mui/system";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export var Landing: FC<Props> = function (props) {
   const theme = useTheme();
-
   return (
-    <div
-      style={{
-        background: theme.palette.primary.main,
+    <Box
+      sx={{
+        backgroundColor: theme.palette.primary.main,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "multiply",
         flexGrow: 1,
         textAlign: "center",
         width: "100%",
@@ -17,6 +20,7 @@ export var Landing: FC<Props> = function (props) {
         alignItems: "center",
         flexDirection: "column",
         height: "calc( 100vh - 64px )",
+        backgroundImage: `url('https://firebasestorage.googleapis.com/v0/b/gymplanner-e1632.appspot.com/o/repwatch-15.jpg?alt=media&token=91021122-11ee-40a1-b44c-ee5885b69f71') !important`,
       }}
     >
       <Typography
@@ -28,7 +32,7 @@ export var Landing: FC<Props> = function (props) {
         Watch your reps!
       </Typography>
       <Typography sx={{ m: 2, fontSize: "18px" }} variant="h3" color="white">
-        Maximaze the benefits from your workouts by starting noww
+        Maximaze the benefits from your workouts by starting now
       </Typography>
       <Button
         color="primary"
@@ -45,7 +49,7 @@ export var Landing: FC<Props> = function (props) {
       >
         Get started
       </Button>
-    </div>
+    </Box>
   );
 };
 

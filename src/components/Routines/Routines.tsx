@@ -40,6 +40,7 @@ import { setAlert } from "../../store/alertSlice";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { RoutineDetails } from "./RoutineDetails";
+import { RoutinesInfo } from "./Partials/RoutinesInfo";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
@@ -104,7 +105,7 @@ export const Routines = () => {
     if (!routine) {
       return;
     }
-    const duplicate = { ...routine };
+    const duplicate = { ...routine, name: routine.name + " 2" };
     delete duplicate.id;
     addRoutine(duplicate);
   };
@@ -257,14 +258,18 @@ export const Routines = () => {
             >
               My Routines
             </Typography>
-            <Button
-              onClick={() => startWorkout({})}
-              variant="outlined"
-              sx={{ my: 1 }}
-              endIcon={<AddCircleSharpIcon />}
-            >
-              Start an empty workout
-            </Button>
+            <Grid sx={{ px: 2 }} spacing={2} justifyContent="center" container>
+              <Grid md={12} item>
+                <Button
+                  onClick={() => startWorkout({})}
+                  variant="outlined"
+                  sx={{ my: 1 }}
+                  endIcon={<AddCircleSharpIcon />}
+                >
+                  Start a fresh workout
+                </Button>
+              </Grid>
+            </Grid>
             <Grid sx={{ p: 2 }} spacing={2} justifyContent="center" container>
               {routines.length
                 ? displayRoutines()

@@ -9,6 +9,7 @@ export interface State {
     exercise: ExerciseState
     alert: AlertState
     history: HistoryState
+    drawer: DrawerState
 }
 
 export interface UserState {
@@ -33,5 +34,8 @@ export interface ExerciseState {
 export interface AlertState {
     title?: string
     message?: string
+    open?: boolean
+}
+export interface DrawerState {
     open?: boolean
 }

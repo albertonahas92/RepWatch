@@ -14,7 +14,7 @@ import {
   Button,
   IconButton,
   Divider,
-  Tooltip,
+  Chip,
   Avatar,
 } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -31,6 +31,8 @@ import { historySelector } from "../../store/historySlice";
 import { userSelector } from "../../store/userSlice";
 import _ from "lodash";
 import moment from "moment";
+import { MusclesMap } from "./MusclesMap";
+import { useStats } from "../../hooks/useStats";
 
 const ProfilePhoto = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -53,23 +55,7 @@ export const Profile: FC<Props> = ({ signOut }) => {
   const user = useSelector(userSelector);
   const history = useSelector(historySelector);
 
-  const streak = useMemo(() => {
-    const historyByWeek = _.groupBy(history, (h) =>
-      moment(h.routine.finishedAt?.toDate()).week()
-    );
-    let proceed = true;
-    let weekIndex = moment().week();
-    let streackCount = 0;
-    while (proceed && weekIndex > 0) {
-      if (historyByWeek[weekIndex]) {
-        weekIndex--;
-        streackCount++;
-      } else {
-        proceed = false;
-      }
-    }
-    return streackCount;
-  }, [user, history]);
+  const { streak } = useStats();
 
   const [editMode, setEditMode] = useState(false);
   const [openDeleteAccount, setOpenDeleteAccount] = useState(false);
@@ -99,7 +85,7 @@ export const Profile: FC<Props> = ({ signOut }) => {
 
   return (
     <Container maxWidth="lg">
-      <Grid sx={{ my: 2 }} spacing={2} container>
+      <Grid spacing={2} container>
         <Grid xs={12} item>
           <Box>
             <Box
@@ -124,21 +110,41 @@ export const Profile: FC<Props> = ({ signOut }) => {
               >
                 <UserCircleIcon fontSize="large" />
               </Avatar>
-              <ProgressRing value={streak * 10} />
+              <ProgressRing
+                value={
+                  (streak.trainingStreak * 100) / (user?.frequencyGoal || 4)
+                }
+              />
               <Typography variant="h5" color="text.secondary">
                 {user?.displayName}
               </Typography>
-              {!!streak && (
+              {!!streak.weeksStreak && (
                 <Typography variant="body2" color="primary">
-                  You're on {streak}{" "}
-                  {streak > 1 ? "weeks" : "week"} streak
+                  You're on {streak.weeksStreak}{" "}
+                  {streak.weeksStreak > 1 ? "weeks" : "week"} streak
                 </Typography>
               )}
+              {!!streak.trainingStreak &&
+                user?.frequencyGoal &&
+                streak.trainingStreak < user?.frequencyGoal && (
+                  <Chip
+                    label={
+                      <Typography variant="body2">
+                        {user?.frequencyGoal - streak.trainingStreak} workouts
+                        left this week
+                      </Typography>
+                    }
+                    sx={{ mt: 1 }}
+                    variant="outlined"
+                    color="warning"
+                  ></Chip>
+                )}
             </Box>
           </Box>
           {/* <Divider sx={{ mt: 2, mb: 2 }} variant="middle" /> */}
         </Grid>
         <Grid md={12} xs={12} item>
+          <MusclesMap />
           <AccountProfileDetails
             editMode={editMode}
             setEditMode={setEditMode}

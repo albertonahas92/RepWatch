@@ -26,10 +26,10 @@ import { FrontDiagram, frontHighlights } from "../../icons/frontDiagram";
 import { historySelector } from "../../store/historySlice";
 import { RoutineExercise } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
+import { ExerciseInfo } from "./ExerciseInfo";
 import { ExerciseReport } from "./ExerciseReport";
 
 export const ExerciseDetails: FC<Props> = ({ exercise }) => {
-  const ommitedProps = ["instructions", "name", "index", "active", "sets"];
   const theme = useTheme();
 
   const history = useSelector(historySelector);
@@ -40,20 +40,7 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
       .filter((e) => e?.name === exercise?.name && !!e?.sets?.length);
   }, [history, exercise]);
 
-  console.log(exerciseHistory);
-
-  const [image, setImage] = useState(0);
   const [tab, setTab] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImage((im) => 1 - im);
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const diagramStyle = {
     fontSize: "11em",
@@ -115,43 +102,7 @@ export const ExerciseDetails: FC<Props> = ({ exercise }) => {
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
-        <Box sx={{ p: 2 }}>
-          <Typography color="textPrimary" variant="body2">
-            {exercise.instructions}
-          </Typography>
-        </Box>
-        <Divider sx={{ mb: 2 }} />
-        <CrossFadeImage
-          src={`${PUBLIC_DOMAIN_URL}/${exercise?.name.replaceAll(
-            /[ \/]/g,
-            "_"
-          )}/images/${image}.jpg`}
-        />
-        <TableContainer sx={{ my: 2 }} component={Paper}>
-          <Table aria-label="exercise table" size="small">
-            <TableBody>
-              {Object.entries(exercise).map(
-                (entry) =>
-                  !ommitedProps.includes(entry[0]) &&
-                  entry[1] != "" && (
-                    <TableRow
-                      key={entry[0]}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {entry[0]}
-                      </TableCell>
-                      <TableCell align="right">
-                        {!Array.isArray(entry[1])
-                          ? entry[1]
-                          : entry[1].join(", ")}
-                      </TableCell>
-                    </TableRow>
-                  )
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <ExerciseInfo exercise={exercise} />
       </TabPanel>
       <TabPanel value={tab} index={1}>
         {(exerciseHistory?.length || 0) < 2 ? (
