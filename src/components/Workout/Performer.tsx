@@ -7,9 +7,12 @@ import { RoutineExercise, ESet } from "../../types/exercise";
 import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Done } from "../../icons/done";
+import { useNoSleep } from "use-no-sleep";
 
 export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
   const [image, setImage] = useState(0);
+  useNoSleep(true);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setImage((im) => 1 - im);

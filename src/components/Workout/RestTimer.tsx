@@ -7,6 +7,11 @@ import { Chill } from "../../icons/chill";
 import { keyframes } from "@mui/system";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../store/userSlice";
+import { getRestTime } from "../../utils/helpers";
+import { RoutineExercise } from "../../types/exercise";
+import { useNoSleep } from "use-no-sleep";
 
 const pulse = keyframes`
   0% {
@@ -21,9 +26,15 @@ const ChillPulse = styled(Chill)(({ theme }) => ({
   animation: `${pulse} 1s infinite alternate ease`,
 }));
 
-export const RestTimer: FC<Props> = ({ onRestFinish }) => {
+export const RestTimer: FC<Props> = ({ onRestFinish, exercise, setIndex }) => {
   const [time, setTime] = useState(0);
-  const [restTime, setRestTime] = useState(60);
+  const user = useSelector(userSelector);
+
+  useNoSleep(true);
+
+  const [restTime, setRestTime] = useState(
+    getRestTime(user, exercise, setIndex)
+  );
 
   const onTimeChange = (t: number) => {
     setTime(t);
@@ -86,4 +97,6 @@ export const RestTimer: FC<Props> = ({ onRestFinish }) => {
 
 interface Props {
   onRestFinish: (time: number) => void;
+  exercise?: RoutineExercise;
+  setIndex?: number;
 }

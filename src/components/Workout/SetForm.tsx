@@ -343,7 +343,11 @@ export const SetFormComp: FC<Props> = ({
         }}
         maxWidth="sm"
       >
-        <RestTimer onRestFinish={onRestFinish} />
+        <RestTimer
+          onRestFinish={onRestFinish}
+          exercise={exercise}
+          setIndex={index}
+        />
       </ModalDialog>
     </Grid>
   );

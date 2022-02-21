@@ -124,28 +124,33 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                       <React.Fragment>
                         {exercise.sets?.map((s, i) => (
                           <React.Fragment key={i}>
-                            <Chip
-                              label={`Set ${i + 1}`}
-                              color="primary"
-                              variant="filled"
-                              size="small"
-                              // icon={<CheckCircleOutlinedIcon />}
-                              sx={{ my: 0.4, mr: 1 }}
-                            />
-                            <Typography
-                              sx={{ fontSize: 14, display: "inline" }}
-                              component="div"
-                              variant="body2"
-                              color="text.primary"
-                            >
-                              {s.reps}{" "}
-                              {!!s.weight && (
-                                <span style={{ marginRight: 8 }}>
-                                  x {s.weight}
-                                  {unit}
-                                </span>
-                              )}
-                            </Typography>
+                            <span style={{ whiteSpace: "nowrap" }}>
+                              <Chip
+                                label={`Set ${i + 1}`}
+                                color="primary"
+                                variant="filled"
+                                size="small"
+                                // icon={<CheckCircleOutlinedIcon />}
+                                sx={{ my: 0.4, mr: 1 }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: 14,
+                                  display: "inline",
+                                }}
+                                component="div"
+                                variant="body2"
+                                color="text.primary"
+                              >
+                                {s.reps}{" "}
+                                {!!s.weight && (
+                                  <span style={{ marginRight: 8 }}>
+                                    x {s.weight}
+                                    {unit}
+                                  </span>
+                                )}
+                              </Typography>
+                            </span>
                             {/* {s.weight && ` - 1RM ${getSetRPM(s)} ${unit}`} */}
                             {getSetRPM(s) > prevRPM && (
                               <Chip
@@ -154,7 +159,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                                 variant="outlined"
                                 size="small"
                                 // icon={<CheckCircleOutlinedIcon />}
-                                sx={{ my: 0.2 }}
+                                sx={{ my: 0.2, mr: 1 }}
                               />
                             )}
                           </React.Fragment>

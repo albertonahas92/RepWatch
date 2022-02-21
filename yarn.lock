@@ -7139,6 +7139,10 @@ normalize-path@^3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
+"nosleep.js@git+https://github.com/ViRPo/NoSleep.js.git#f7a6122f5d6700f18a68bff2c4114b81fdf6fa55":
+  version "0.9.0"
+  resolved "git+https://github.com/ViRPo/NoSleep.js.git#f7a6122f5d6700f18a68bff2c4114b81fdf6fa55"
+
 npm-run-path@^4.0.0, npm-run-path@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
@@ -8975,6 +8979,13 @@ use-memo-one@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.2.tgz#0c8203a329f76e040047a35a1197defe342fab20"
   integrity sha512-u2qFKtxLsia/r8qG0ZKkbytbztzRb317XCkT7yP8wxL0tZ/CzK2G+WWie5vWvpyeP7+YoPIwbJoIHJ4Ba4k0oQ==
+
+use-no-sleep@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/use-no-sleep/-/use-no-sleep-0.3.1.tgz#e510d4985b5067f9ef2a214186c1cf6758cd90b5"
+  integrity sha512-9HO+jk+oAi4RB/qUa47TNxKTupUqtLjFBtwglmm7EeyyrWygypC0gieKwfrmXq4QD9IPxjdYr/s+11lnxvELmA==
+  dependencies:
+    nosleep.js "https://github.com/ViRPo/NoSleep.js#f7a6122f5d6700f18a68bff2c4114b81fdf6fa55"
 
 use@^3.1.0:
   version "3.1.1"

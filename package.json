@@ -60,6 +60,7 @@
     "shortid": "^2.2.16",
     "styled-components": "^5.3.3",
     "thunk": "^0.0.1",
+    "use-no-sleep": "^0.3.1",
     "yarn": "^1.22.17",
     "yup": "^0.32.11"
   },
