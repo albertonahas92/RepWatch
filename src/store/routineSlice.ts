@@ -4,7 +4,10 @@ import { RoutineExercise, ESet } from '../types/exercise'
 import { Routine, Workout } from '../types/routine'
 import { RoutineState, State } from '../types/state'
 
-const initialState = { value: undefined, edit: undefined, open: false }
+const initialRoutine: Workout | undefined =
+  JSON.parse(localStorage.getItem("routine") as string) || undefined;
+
+const initialState = { value: initialRoutine, edit: undefined, open: false }
 
 export const routineSlice = createSlice({
   name: 'routine',

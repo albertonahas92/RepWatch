@@ -10,6 +10,7 @@ export interface State {
     alert: AlertState
     history: HistoryState
     drawer: DrawerState
+    feedback: FeedbackState
 }
 
 export interface UserState {
@@ -37,5 +38,8 @@ export interface AlertState {
     open?: boolean
 }
 export interface DrawerState {
+    open?: boolean
+}
+export interface FeedbackState {
     open?: boolean
 }

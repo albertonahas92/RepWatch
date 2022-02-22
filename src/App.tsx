@@ -39,6 +39,8 @@ import moment from "moment";
 import { useHistory } from "./hooks/useHistory";
 import { useLocation } from "react-router";
 import { SideDrawer } from "./components/SideDrawer/SideDrawer";
+import { FeedbackForm } from "./components/FeedbackForm/FeedbackForm";
+import { feedbackSelector, setFeedback } from "./store/feedbackSlice";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -86,6 +88,7 @@ const App = function ({
   const [notification, setNotification] = useState({ title: "", body: "" });
   const openWorkoutModal = useSelector(routineModalSelector);
   const openExerciseModal = useSelector(exerciseModalSelector);
+  const openFeedbackModal = useSelector(feedbackSelector);
   const alert = useSelector(alertSelector);
 
   const signInWithGoogle = () => {
@@ -135,6 +138,15 @@ const App = function ({
       dispatch(setRoutineModal(true));
     } else if (!routine && openWorkoutModal) {
       dispatch(setRoutineModal(false));
+    }
+    try {
+      if (routine) {
+        localStorage.setItem("routine", JSON.stringify(routine));
+      } else {
+        localStorage.removeItem("routine");
+      }
+    } catch (error) {
+      console.error(error);
     }
   }, [routine]);
 
@@ -192,6 +204,16 @@ const App = function ({
         title={exercise?.name}
       >
         <ExerciseDetails exercise={exercise} />
+      </ModalDialog>
+      <ModalDialog
+        closeButton={true}
+        open={openFeedbackModal || false}
+        setOpen={(open) => {
+          dispatch(setFeedback(open));
+        }}
+        title={"Feedback"}
+      >
+        <FeedbackForm />
       </ModalDialog>
       <AlertDialog
         title={alert.title}

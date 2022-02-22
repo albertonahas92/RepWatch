@@ -80,6 +80,11 @@ export const SetFormComp: FC<Props> = ({
   const handleRepsChange = (e: any) => {
     setReps(e.target.value);
   };
+  const handleInputFocus = (e: any) => {
+    if (e.target.value === "0") {
+      e.target.select();
+    }
+  };
   const handleWeightChange = (e: any) => {
     setWeight(e.target.value);
   };
@@ -205,6 +210,7 @@ export const SetFormComp: FC<Props> = ({
           name="reps"
           onChange={handleRepsChange}
           onBlur={updateSetState}
+          onFocus={handleInputFocus}
           type="text"
           value={reps}
           variant="outlined"
@@ -234,6 +240,7 @@ export const SetFormComp: FC<Props> = ({
             name="weight"
             onChange={handleWeightChange}
             onBlur={updateSetState}
+            onFocus={handleInputFocus}
             type="text"
             value={weight}
             variant="outlined"

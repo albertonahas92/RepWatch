@@ -12,6 +12,7 @@ export interface User {
     streak?: number
     uid?: string
     messagingToken?: string
+    feedback?: boolean
 
     goal?: string
     weightGoal?: number

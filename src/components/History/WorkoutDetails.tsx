@@ -122,48 +122,51 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                     }
                     secondary={
                       <React.Fragment>
-                        {exercise.sets?.map((s, i) => (
-                          <React.Fragment key={i}>
-                            <span style={{ whiteSpace: "nowrap" }}>
-                              <Chip
-                                label={`Set ${i + 1}`}
-                                color="primary"
-                                variant="filled"
-                                size="small"
-                                // icon={<CheckCircleOutlinedIcon />}
-                                sx={{ my: 0.4, mr: 1 }}
-                              />
-                              <Typography
-                                sx={{
-                                  fontSize: 14,
-                                  display: "inline",
-                                }}
-                                component="div"
-                                variant="body2"
-                                color="text.primary"
-                              >
-                                {s.reps}{" "}
-                                {!!s.weight && (
-                                  <span style={{ marginRight: 8 }}>
-                                    x {s.weight}
-                                    {unit}
-                                  </span>
-                                )}
-                              </Typography>
-                            </span>
-                            {/* {s.weight && ` - 1RM ${getSetRPM(s)} ${unit}`} */}
-                            {getSetRPM(s) > prevRPM && (
-                              <Chip
-                                label={`New 1RM! ${getSetRPM(s)}${unit}`}
-                                color="success"
-                                variant="outlined"
-                                size="small"
-                                // icon={<CheckCircleOutlinedIcon />}
-                                sx={{ my: 0.2, mr: 1 }}
-                              />
-                            )}
-                          </React.Fragment>
-                        ))}
+                        {exercise.sets?.map((s, i) => {
+                          const rm = getSetRPM(s);
+                          return (
+                            <React.Fragment key={i}>
+                              <span style={{ whiteSpace: "nowrap" }}>
+                                <Chip
+                                  label={`Set ${i + 1}`}
+                                  color="primary"
+                                  variant="filled"
+                                  size="small"
+                                  // icon={<CheckCircleOutlinedIcon />}
+                                  sx={{ my: 0.4, mr: 1 }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: 14,
+                                    display: "inline",
+                                  }}
+                                  component="div"
+                                  variant="body2"
+                                  color="text.primary"
+                                >
+                                  {s.reps}{" "}
+                                  {!!s.weight && (
+                                    <span style={{ marginRight: 8 }}>
+                                      x {s.weight}
+                                      {unit}
+                                    </span>
+                                  )}
+                                </Typography>
+                              </span>
+                              {/* {s.weight && ` - 1RM ${getSetRPM(s)} ${unit}`} */}
+                              {rm > 0 && rm > prevRPM && (
+                                <Chip
+                                  label={`New 1RM! ${rm}${unit}`}
+                                  color="success"
+                                  variant="outlined"
+                                  size="small"
+                                  // icon={<CheckCircleOutlinedIcon />}
+                                  sx={{ my: 0.4, mr: 1 }}
+                                />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
 
                         {/* <Typography
                 color="text.secondary"

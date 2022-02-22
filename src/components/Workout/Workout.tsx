@@ -54,6 +54,7 @@ import {
 } from "../../utils/helpers";
 import { WorkoutExercisesListItem } from "./Partials/WorkoutExercisesListItem";
 import { userSelector } from "../../store/userSlice";
+import { setFeedback } from "../../store/feedbackSlice";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
@@ -130,6 +131,13 @@ export const Workout: FC<Props> = ({ onFinish }) => {
       ])
     );
     setOpenExerciseList(false);
+  };
+
+  const onCompleteWorkout = () => {
+    discardWorkout();
+    if (!user?.feedback) {
+      dispatch(setFeedback(true));
+    }
   };
 
   const discardWorkout = (showComfirmation?: boolean) => {
@@ -281,7 +289,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
             size="medium"
             type="button"
             variant="contained"
-            onClick={() => discardWorkout()}
+            onClick={onCompleteWorkout}
             sx={{ my: 1 }}
           >
             Complete
