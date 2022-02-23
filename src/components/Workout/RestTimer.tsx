@@ -49,9 +49,13 @@ export const RestTimer: FC<Props> = ({ onRestFinish, exercise, setIndex }) => {
 
   return (
     <Box
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
-      <Typography color="secondary" variant="body2">
+      <Typography color="secondary" sx={{ mt: 1 }} variant="body2">
         Let's have some rest!
       </Typography>
       <Typography

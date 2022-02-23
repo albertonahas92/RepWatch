@@ -8,9 +8,16 @@ import { PUBLIC_DOMAIN_URL } from "../../utils/constants";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Done } from "../../icons/done";
 import { useNoSleep } from "use-no-sleep";
+import { ProgressRing } from "../../atoms/ProgressRing/ProgressRing";
 
 export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
   const [image, setImage] = useState(0);
+  const [warmupTime, setWarmupTime] = useState(0);
+
+  const totalWarmupTime = 5;
+
+  const [started, setStarted] = useState(false);
+
   useNoSleep(true);
 
   useEffect(() => {
@@ -22,6 +29,14 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
       clearInterval(interval);
     };
   }, []);
+
+  const onWarmupTimeChange = (t: number) => {
+    setWarmupTime(t);
+  };
+
+  const onPreTimerDone = () => {
+    setStarted(true);
+  };
 
   useEffect(() => {
     let _navigator: any;
@@ -41,25 +56,73 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
     };
   }, []);
 
+  const prepare = started || (set?.elapsedTime || 0) > 0;
+
   return (
     <Box
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {/* <Typography variant="h5" sx={{ textAlign: "center" }}>
-        {exercise?.name}
-      </Typography> */}
-      <Typography
-        color="secondary"
-        variant="h2"
-        sx={{ textAlign: "center", mb: 1 }}
-      >
-        <Timer startingTime={set?.elapsedTime} active={true} />
-      </Typography>
+      {prepare ? (
+        <Box>
+          <Typography
+            color="secondary"
+            variant="body2"
+            sx={{ textAlign: "center" }}
+          >
+            Elapsed time
+          </Typography>
+          <Typography
+            color="secondary"
+            variant="h2"
+            sx={{ textAlign: "center", mb: 1 }}
+          >
+            <Timer startingTime={set?.elapsedTime} active={true} />
+          </Typography>
+        </Box>
+      ) : (
+        <Box>
+          <Typography
+            color="secondary"
+            variant="body2"
+            sx={{ textAlign: "center" , mb: 1 }}
+          >
+            Warmup timer
+          </Typography>
+          <Typography
+            color="secondary.main"
+            variant="h5"
+            sx={{ textAlign: "center" }}
+          >
+            Get Ready!
+          </Typography>
+
+          <Typography
+            color="warning.light"
+            variant="h2"
+            sx={{ textAlign: "center", mt: 2 }}
+          >
+            <ProgressRing
+              color="warning.light"
+              size={200}
+              value={(warmupTime / totalWarmupTime) * 100}
+            >
+              <Timer
+                countdown={true}
+                active={true}
+                endtime={totalWarmupTime}
+                onTimeChange={onWarmupTimeChange}
+                onTimerStop={onPreTimerDone}
+              />
+            </ProgressRing>
+          </Typography>
+        </Box>
+      )}
       <CrossFadeImage
         src={`${PUBLIC_DOMAIN_URL}/${exercise?.name.replaceAll(
-          " ",
+          /[ \/]/g,
           "_"
         )}/images/${image}.jpg`}
+        style={{ display: prepare ? "flex" : "none" }}
       />
       <Button
         sx={{ mt: 2 }}
@@ -71,14 +134,6 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
       >
         Done
       </Button>
-      {/* <IconButton
-        sx={{ mt: 2 }}
-        color="primary"
-        component="span"
-        onClick={onClickDone}
-      >
-        <Done style={{ fontSize: "40px" }} />
-      </IconButton> */}
     </Box>
   );
 };

@@ -1,4 +1,3 @@
-import { CSSProperties } from "@mui/styled-engine";
 import React from "react";
 
 const usePrevious = <T extends any>(value: T) => {
@@ -26,6 +25,7 @@ type ImageProps = {
   alt?: string;
   transitionDuration?: number;
   curve?: string;
+  style?: React.CSSProperties;
 };
 
 const CrossFadeImage = (props: ImageProps) => {
@@ -65,6 +65,7 @@ const CrossFadeImage = (props: ImageProps) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        ...props.style,
       }}
     >
       {topSrc && (

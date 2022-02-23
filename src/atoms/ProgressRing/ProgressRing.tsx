@@ -8,7 +8,7 @@ const getColor = (val: number) => {
   return "primary.light";
 };
 
-export var ProgressRing: FC<Props> = function (props) {
+export var ProgressRing: FC<Props> = function ({ color, ...props }) {
   const style = {
     position: "relative",
     display: "inline-flex",
@@ -16,7 +16,7 @@ export var ProgressRing: FC<Props> = function (props) {
       strokeWidth: 1.1,
       transition: "stroke-dashoffset 1000ms linear",
       strokeLinecap: "round",
-      color: getColor(props.value || 0),
+      color: color || "primary.light",
     },
   } as const;
 
@@ -64,4 +64,5 @@ interface Props {
   label?: string;
   children?: JSX.Element;
   size?: number;
+  color?: string;
 }

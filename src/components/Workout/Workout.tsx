@@ -123,6 +123,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
     const routineExercise: RoutineExercise = {
       ...exercise,
       index: routine?.exercises?.length || 0,
+      active: true,
     };
     dispatch(
       updateExercises([
