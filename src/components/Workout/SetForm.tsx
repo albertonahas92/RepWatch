@@ -36,14 +36,11 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import anime from "animejs";
-import {
-  nonWeightedEquipments,
-  noRepsCategory,
-  toMMSS,
-} from "../../utils/utils";
+import { toMMSS } from "../../utils/utils";
 import { TimePicker } from "@mui/lab";
 import InputMask, { BeforeMaskedStateChangeStates } from "react-input-mask";
 import moment from "moment";
+import { noRepsCategory, nonWeightedEquipments } from "../../utils/constants";
 
 export const SetFormComp: FC<Props> = ({
   index,
@@ -119,7 +116,7 @@ export const SetFormComp: FC<Props> = ({
 
   const onClickDone = () => {
     setActive(false);
-    setResting(true);
+    user?.settings?.restTimer && setResting(true);
   };
 
   const onRestFinish = (time: number) => {
@@ -172,7 +169,6 @@ export const SetFormComp: FC<Props> = ({
     }
     return () => {};
   }, [standBy]);
-
 
   return (
     <Grid columnSpacing={2} container>

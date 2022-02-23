@@ -26,10 +26,21 @@ export interface User {
 
     colorMode?: 'light' | 'dark'
     weightRecords?: weightRecord[]
+
+    settings?: UserSettings
 }
 
 
 export interface weightRecord {
     date: firebase.firestore.Timestamp | firebase.firestore.FieldValue
     weight: number
+}
+
+export interface UserSettings {
+    autofillVolume?: boolean
+    applyRecommendation?: boolean
+    autostartSet?: boolean
+    warmupTimer?: boolean
+    warmupTime?: number
+    restTimer?: boolean
 }

@@ -6,6 +6,7 @@ import exerciseReducer from './exerciseSlice';
 import alertReducer from './alertSlice';
 import historyReducer from './historySlice';
 import drawerReducer from './drawerSlice';
+import snackbarReducer from './snackbarSlice';
 import feedbackReducer from './feedbackSlice';
 
 export default configureStore({
@@ -17,6 +18,7 @@ export default configureStore({
         alert: alertReducer,
         history: historyReducer,
         drawer: drawerReducer,
+        snackbar: snackbarReducer,
         feedback: feedbackReducer,
     },
     middleware: (getDefaultMiddleware) =>

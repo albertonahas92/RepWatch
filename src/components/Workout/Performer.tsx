@@ -9,14 +9,17 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Done } from "../../icons/done";
 import { useNoSleep } from "use-no-sleep";
 import { ProgressRing } from "../../atoms/ProgressRing/ProgressRing";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../store/userSlice";
 
 export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
   const [image, setImage] = useState(0);
   const [warmupTime, setWarmupTime] = useState(0);
 
-  const totalWarmupTime = 5;
+  const user = useSelector(userSelector);
 
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(!user?.settings?.warmupTimer);
+  const totalWarmupTime = user?.settings?.warmupTime;
 
   useNoSleep(true);
 
@@ -84,7 +87,7 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
           <Typography
             color="secondary"
             variant="body2"
-            sx={{ textAlign: "center" , mb: 1 }}
+            sx={{ textAlign: "center", mb: 1 }}
           >
             Warmup timer
           </Typography>

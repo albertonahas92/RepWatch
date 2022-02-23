@@ -17,6 +17,7 @@ import { Box } from "@mui/material";
 import { History } from "../History/History";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../store/userSlice";
+import { Settings } from "../Settings/Settings";
 
 // const Wrapper = styled(Box)`
 //   text-align: center;
@@ -122,6 +123,7 @@ const Nav: FC<Props> = function ({
           <Route path="/exercises" element={<ExercisesList />} />
           <Route path="/routine" element={<AddRoutine />} />
           <Route path="/history" element={<History />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </Wrapper>

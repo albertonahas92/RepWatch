@@ -135,10 +135,12 @@ export const Routines = () => {
       return {
         ...e,
         sets:
-          history
-            ?.flatMap((h) => h.routine.exercises)
-            .find((he) => he?.name === e.name)
-            ?.sets?.map((s) => _.omit(s, omitSetKeys) as ESet) || [],
+          (user?.settings?.autofillVolume &&
+            history
+              ?.flatMap((h) => h.routine.exercises)
+              .find((he) => he?.name === e.name)
+              ?.sets?.map((s) => _.omit(s, omitSetKeys) as ESet)) ||
+          [],
       };
     });
     dispatch(

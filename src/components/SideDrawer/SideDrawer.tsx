@@ -21,6 +21,7 @@ import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { Dumbbell } from "../../icons/dumbbell";
 import { userSelector } from "../../store/userSlice";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const SideDrawer: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
@@ -50,10 +51,16 @@ export const SideDrawer: React.FC<Props> = (props) => {
       <List>
         <ListItem button component={Link} to="/">
           <ListItemIcon>
-            {/* <HomeOutlinedIcon /> */}
             <Dumbbell style={{ fontSize: "25px" }} />
           </ListItemIcon>
           <ListItemText primary="Home" color="text.secondary" />
+        </ListItem>
+
+        <ListItem button component={Link} to="/settings">
+          <ListItemIcon>
+            <SettingsIcon  />
+          </ListItemIcon>
+          <ListItemText primary="Settings" color="text.secondary" />
         </ListItem>
 
         <ListItem button component={Link} to="/contact">

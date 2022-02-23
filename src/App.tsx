@@ -23,7 +23,7 @@ import {
   routineSelector,
   setRoutine,
 } from "./store/routineSlice";
-import { Box, Fab, Zoom } from "@mui/material";
+import { Alert, Box, Fab, Snackbar, Zoom } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useRoutine } from "./hooks/useRoutine";
 import {
@@ -41,6 +41,7 @@ import { useLocation } from "react-router";
 import { SideDrawer } from "./components/SideDrawer/SideDrawer";
 import { FeedbackForm } from "./components/FeedbackForm/FeedbackForm";
 import { feedbackSelector, setFeedback } from "./store/feedbackSlice";
+import { setSnackbar, snackbarSelector } from "./store/snackbarSlice";
 
 const firebaseAppAuth = firebase.auth();
 
@@ -75,6 +76,7 @@ const App = function ({
   const currentUser = useSelector((state: State) => state.user.value);
   const routine = useSelector(routineSelector);
   const exercise = useSelector(exerciseSelector);
+  const snackbar = useSelector(snackbarSelector);
 
   const { signOutUser } = useCurrentUser();
   const { handleInstallClick, deferredPrompt } = usePwa();
@@ -157,6 +159,13 @@ const App = function ({
     });
   };
 
+  const handleSnackbarClose = (event: any, reason: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(setSnackbar({ open: false, message: "" }));
+  };
+
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));
 
   return currentUser === undefined ? (
@@ -221,6 +230,15 @@ const App = function ({
         open={alert.open || false}
         setOpen={(open: boolean) => dispatch(setAlertOpen(open))}
       />
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={1000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert severity={snackbar.type} sx={{ bottom: "72px" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       {routine && routine.active && (
         <Zoom
           in={true}

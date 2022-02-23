@@ -11,6 +11,7 @@ export interface State {
     history: HistoryState
     drawer: DrawerState
     feedback: FeedbackState
+    snackbar: SnackbarState
 }
 
 export interface UserState {
@@ -39,6 +40,11 @@ export interface AlertState {
 }
 export interface DrawerState {
     open?: boolean
+}
+export interface SnackbarState {
+    open?: boolean
+    message?: string
+    type?: 'success' | 'warning' | 'error'
 }
 export interface FeedbackState {
     open?: boolean

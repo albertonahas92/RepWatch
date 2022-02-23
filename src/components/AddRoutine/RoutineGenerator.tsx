@@ -11,9 +11,6 @@ import {
   getLevelNum,
   getPlaceEquipments,
   getWorkoutSplits,
-  muscles,
-  splits,
-  workoutPlaces,
 } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import { exercisesSelector } from "../../store/exercisesSlice";
@@ -25,6 +22,7 @@ import { deepOrange } from "@mui/material/colors";
 import { userSelector } from "../../store/userSlice";
 import _ from "lodash";
 import chance from "chance";
+import { splits, workoutPlaces, muscles } from "../../utils/constants";
 
 const steps = ["Muscles", "Equipments", "Generate"];
 
