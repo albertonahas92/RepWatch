@@ -45,8 +45,8 @@ export const omitSetKeys = [
 ]
 
 export const omitExerciseKeys = [
-    // 'category'
-    , 'force'
+    'force'
+    // , 'category'
     , 'level'
     , 'mechanic'
     // , 'equipment'
