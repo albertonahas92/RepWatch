@@ -36,7 +36,14 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import anime from "animejs";
-import { nonWeightedEquipments } from "../../utils/utils";
+import {
+  nonWeightedEquipments,
+  noRepsCategory,
+  toMMSS,
+} from "../../utils/utils";
+import { TimePicker } from "@mui/lab";
+import InputMask, { BeforeMaskedStateChangeStates } from "react-input-mask";
+import moment from "moment";
 
 export const SetFormComp: FC<Props> = ({
   index,
@@ -166,6 +173,7 @@ export const SetFormComp: FC<Props> = ({
     return () => {};
   }, [standBy]);
 
+
   return (
     <Grid columnSpacing={2} container>
       <Grid
@@ -204,57 +212,67 @@ export const SetFormComp: FC<Props> = ({
         ></Chip>
       </Grid>
       <Grid item md={2} xs={4}>
-        <TextField
-          label="reps"
-          margin="dense"
-          name="reps"
-          onChange={handleRepsChange}
-          onBlur={updateSetState}
-          onFocus={handleInputFocus}
-          type="text"
-          value={reps}
-          variant="outlined"
-          size="small"
-          sx={{ m: 0 }}
-          // InputProps={{
-          //   endAdornment: (
-          //     <InputAdornment position="end">
-          //       <Stack direction="column">
-          //         <IconButton color="primary" size="small" sx={{ m: 0, p: 0 }}>
-          //           <AddOutlinedIcon sx={{ fontSize: 14 }} />
-          //         </IconButton>
-          //         <IconButton color="primary" size="small" sx={{ m: 0, p: 0 }}>
-          //           <RemoveOutlinedIcon sx={{ fontSize: 14 }} />
-          //         </IconButton>
-          //       </Stack>
-          //     </InputAdornment>
-          //   ),
-          // }}
-        />
-      </Grid>
-      <Grid item md={2} xs={4}>
-        {!nonWeightedEquipments.includes(exercise.equipment || "") && (
+        {!noRepsCategory.includes(exercise.category || "") ? (
           <TextField
-            label="weight"
+            label="reps"
             margin="dense"
-            name="weight"
-            onChange={handleWeightChange}
+            name="reps"
+            onChange={handleRepsChange}
             onBlur={updateSetState}
             onFocus={handleInputFocus}
             type="text"
-            value={weight}
+            value={reps}
             variant="outlined"
             size="small"
             sx={{ m: 0 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <small>{user?.unit === "imperial" ? "lb" : "kg"}</small>
-                </InputAdornment>
-              ),
+          />
+        ) : (
+          <TimePicker
+            label="Time"
+            value={moment(toMMSS(elapsedTime || 0), ["mm:ss"])}
+            onChange={(val) => {
+              const time = moment(val);
+              if (!time.isValid()) {
+                return;
+              }
+              const seconds = time.seconds();
+              const minutes = time.minutes() * 60;
+              setElapsedTime(seconds + minutes);
             }}
+            ampm={false}
+            ampmInClock={false}
+            disableOpenPicker={true}
+            views={["minutes", "seconds"]}
+            inputFormat="mm:ss"
+            mask="__:__"
+            renderInput={(params) => <TextField size="small" {...params} />}
           />
         )}
+      </Grid>
+      <Grid item md={2} xs={4}>
+        {!nonWeightedEquipments.includes(exercise.equipment || "") &&
+          !noRepsCategory.includes(exercise.category || "") && (
+            <TextField
+              label="weight"
+              margin="dense"
+              name="weight"
+              onChange={handleWeightChange}
+              onBlur={updateSetState}
+              onFocus={handleInputFocus}
+              type="text"
+              value={weight}
+              variant="outlined"
+              size="small"
+              sx={{ m: 0 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <small>{user?.unit === "imperial" ? "lb" : "kg"}</small>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
       </Grid>
       <Grid item md={1} xs={2}>
         <IconButton

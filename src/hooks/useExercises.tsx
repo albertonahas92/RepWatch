@@ -7,6 +7,7 @@ import * as data from "../exercises.json";
 import firebase from "../config";
 import { Exercise, RoutineExercise } from "../types/exercise";
 import { setExercise, setExerciseModal } from "../store/exerciseSlice";
+import _ from "lodash";
 
 export const useExercises = (
   initialMuscles?: string[],
@@ -70,15 +71,18 @@ export const useExercises = (
 
   useEffect(() => {
     setExercisesList(
-      completeExercises?.filter(
-        (e) =>
-          (!term || e.name.toLowerCase().match(term.toLowerCase())) &&
-          (!musclesFilter ||
-            !musclesFilter.length ||
-            e.primaryMuscles?.some((m) => musclesFilter.includes(m))) &&
-          (!equipmentsFilter ||
-            !equipmentsFilter.length ||
-            equipmentsFilter.includes(e.equipment || ""))
+      _.orderBy(
+        completeExercises?.filter(
+          (e) =>
+            (!term || e.name.toLowerCase().match(term.toLowerCase())) &&
+            (!musclesFilter ||
+              !musclesFilter.length ||
+              e.primaryMuscles?.some((m) => musclesFilter.includes(m))) &&
+            (!equipmentsFilter ||
+              !equipmentsFilter.length ||
+              equipmentsFilter.includes(e.equipment || ""))
+        ),
+        ["level", "name"]
       )
     );
   }, [term, musclesFilter, equipmentsFilter]);

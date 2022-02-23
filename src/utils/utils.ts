@@ -16,6 +16,10 @@ export const nonWeightedEquipments = [
     "bands",
     "foam roll",
 ]
+export const noRepsCategory = [
+    "cardio",
+    "stretching",
+]
 
 export const equipmentsPlaces = {
     'body only': ["home"],
@@ -195,6 +199,8 @@ export const getRoutineVolume = (routine?: Workout) => {
             return acc + getSetVolume(val);
         }, 0);
 }
+
+export const toMMSS = (seconds: number) => new Date(seconds * 1000).toISOString().substr(14, 5)
 
 export const getResizedName = (fileName: string, dimensions = '600x600') => {
     const extIndex = fileName.lastIndexOf('.');
