@@ -89,9 +89,18 @@ export const Workout: FC<Props> = ({ onFinish }) => {
   const addSet = (exercise: RoutineExercise) => {
     let sets = exercise.sets || [];
     const index = exercise.sets?.length || 0;
-    const repsCount = getRepsCount(user, exercise, index);
-    const prevWeight = index === 0 ? 0 : exercise.sets?.at(index - 1)?.weight;
-    const weight = getNextWeight(user, exercise, prevWeight);
+    let repsCount = 0,
+      prevWeight = 0,
+      weight = 0;
+      
+    try {
+      repsCount = getRepsCount(user, exercise, index);
+      prevWeight = index === 0 ? 0 : exercise.sets?.at(index - 1)?.weight || 0;
+      weight = getNextWeight(user, exercise, prevWeight);
+    } catch (error) {
+      alert(error);
+    }
+
     sets = [
       ...sets,
       { id: shortid.generate(), reps: repsCount, weight: weight, index },

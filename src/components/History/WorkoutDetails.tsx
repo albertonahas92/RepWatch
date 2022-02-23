@@ -32,7 +32,11 @@ import {
 import { RoutineExercise } from "../../types/exercise";
 import { useExercises } from "../../hooks/useExercises";
 
-export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
+export const WorkoutDetails: FC<Props> = ({
+  routine,
+  historicalId,
+  setOpen,
+}) => {
   const user = useSelector(userSelector);
   const history = useSelector(historySelector);
   const dispatch = useDispatch();
@@ -61,6 +65,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
           historicalId: historicalId,
         })
       );
+      setOpen?.(false);
     }
   };
 
@@ -125,8 +130,12 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                         {exercise.sets?.map((s, i) => {
                           const rm = getSetRPM(s);
                           return (
-                            <React.Fragment key={i}>
-                              <span style={{ whiteSpace: "nowrap" }}>
+                            <Box key={i}>
+                              <span
+                                style={{
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
                                 <Chip
                                   label={`Set ${i + 1}`}
                                   color="primary"
@@ -164,7 +173,7 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
                                   sx={{ my: 0.4, mr: 1 }}
                                 />
                               )}
-                            </React.Fragment>
+                            </Box>
                           );
                         })}
 
@@ -209,4 +218,5 @@ export const WorkoutDetails: FC<Props> = ({ routine, historicalId }) => {
 interface Props {
   routine?: Workout;
   historicalId?: string;
+  setOpen?: (open: boolean) => any;
 }
