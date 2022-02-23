@@ -107,7 +107,7 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
             <ProgressRing
               color="warning.light"
               size={200}
-              value={(warmupTime / totalWarmupTime) * 100}
+              value={(warmupTime / (totalWarmupTime || 1)) * 100}
             >
               <Timer
                 countdown={true}
