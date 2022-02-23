@@ -28,34 +28,34 @@ export const useExercises = (
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // add all exercises from JSON
-    firebase
-      .firestore()
-      .collection("exercises")
-      .get()
-      .then((sub) => {
-        if (sub.docs.length === 0) {
-          const db = firebase.firestore();
-          const exercises1 = [...data.exercises];
-          const exercises2 = exercises1.splice(499);
+  // useEffect(() => {
+  //   // add all exercises from JSON
+  //   firebase
+  //     .firestore()
+  //     .collection("exercises")
+  //     .get()
+  //     .then((sub) => {
+  //       if (sub.docs.length === 0) {
+  //         const db = firebase.firestore();
+  //         const exercises1 = [...data.exercises];
+  //         const exercises2 = exercises1.splice(499);
 
-          const batch = db.batch();
-          exercises1.forEach((ex: Exercise) => {
-            const docRef = db.collection(`exercises`).doc();
-            batch.set(docRef, ex);
-          });
-          batch.commit();
+  //         const batch = db.batch();
+  //         exercises1.forEach((ex: Exercise) => {
+  //           const docRef = db.collection(`exercises`).doc();
+  //           batch.set(docRef, ex);
+  //         });
+  //         batch.commit();
 
-          const batch2 = db.batch();
-          exercises2.forEach((ex: Exercise) => {
-            const docRef = db.collection(`exercises`).doc();
-            batch2.set(docRef, ex);
-          });
-          batch2.commit();
-        }
-      });
-  }, []);
+  //         const batch2 = db.batch();
+  //         exercises2.forEach((ex: Exercise) => {
+  //           const docRef = db.collection(`exercises`).doc();
+  //           batch2.set(docRef, ex);
+  //         });
+  //         batch2.commit();
+  //       }
+  //     });
+  // }, []);
 
   useEffect(() => {
     setExercisesList(completeExercises);
