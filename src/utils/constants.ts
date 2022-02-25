@@ -22,7 +22,6 @@ export const nonWeightedEquipments = [
 ]
 export const noRepsCategory = [
     "cardio",
-    "stretching",
 ]
 
 export const equipmentsPlaces = {

@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "app.netlify.repwatch.twa",
+                     "sha256_cert_fingerprints": ["D7:6B:61:27:16:B1:C2:1E:53:05:84:5E:03:61:D9:1A:DD:9D:32:27:D9:9D:FD:E6:D2:AE:8E:C6:24:16:8B:F6"] }
+      }
+]
