@@ -91,7 +91,7 @@ const App = function ({
   const openWorkoutModal = useSelector(routineModalSelector);
   const openExerciseModal = useSelector(exerciseModalSelector);
   const openFeedbackModal = useSelector(feedbackSelector);
-  const alert = useSelector(alertSelector);
+  const alertWidget = useSelector(alertSelector);
 
   const signInWithGoogle = () => {
     analytics.submitRecord("login with google attempt");
@@ -116,15 +116,19 @@ const App = function ({
 
   useEffect(() => {
     async function initUser() {
-      if (user && user.uid) {
-        const messagingToken = await getToken();
-        if (messagingToken) {
-          user.messagingToken = messagingToken;
+      try {
+        if (user && user.uid) {
+          const messagingToken = await getToken();
+          if (messagingToken) {
+            user.messagingToken = messagingToken;
+          }
+          dispatch(setServerUser(user));
+          initNotificationListener();
+        } else if (user === null) {
+          signOutUser();
         }
-        dispatch(setServerUser(user));
-        initNotificationListener();
-      } else if (user === null) {
-        signOutUser();
+      } catch (error) {
+        alert(error);
       }
     }
     initUser();
@@ -149,6 +153,7 @@ const App = function ({
       }
     } catch (error) {
       console.error(error);
+      alert(error);
     }
   }, [routine]);
 
@@ -225,9 +230,9 @@ const App = function ({
         <FeedbackForm />
       </ModalDialog>
       <AlertDialog
-        title={alert.title}
-        message={alert.message}
-        open={alert.open || false}
+        title={alertWidget.title}
+        message={alertWidget.message}
+        open={alertWidget.open || false}
         setOpen={(open: boolean) => dispatch(setAlertOpen(open))}
       />
       <Snackbar

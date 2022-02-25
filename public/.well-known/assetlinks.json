@@ -1,6 +1,15 @@
-[{
-        "relation": ["delegate_permission/common.handle_all_urls"],
-        "target" : { "namespace": "android_app", "package_name": "app.netlify.repwatch.twa",
-                     "sha256_cert_fingerprints": ["D7:6B:61:27:16:B1:C2:1E:53:05:84:5E:03:61:D9:1A:DD:9D:32:27:D9:9D:FD:E6:D2:AE:8E:C6:24:16:8B:F6"] }
+[
+      {
+            "relation": [
+                  "delegate_permission/common.handle_all_urls"
+            ],
+            "target": {
+                  "namespace": "android_app",
+                  "package_name": "app.netlify.repwatch.twa",
+                  "sha256_cert_fingerprints": [
+                        "D7:6B:61:27:16:B1:C2:1E:53:05:84:5E:03:61:D9:1A:DD:9D:32:27:D9:9D:FD:E6:D2:AE:8E:C6:24:16:8B:F6",
+                        "BA:A0:B5:FB:B8:34:4C:74:18:30:87:7E:A1:1D:00:B3:A6:8A:05:D6:B3:46:0A:CC:10:DB:AD:6E:3B:18:9F:2A"
+                  ]
+            }
       }
 ]
