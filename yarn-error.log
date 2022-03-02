@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/use-sound
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/howle
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ASUS\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Ruby24-x64\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft MPI\Bin;C:\ProgramData\Oracle\Java\javapath;C:\program files (x86)\intel\intel(r) management engine components\icls;C:\program files\intel\intel(r) management engine components\icls;C:\windows\system32;C:\windows;C:\windows\system32\wbem;C:\windows\system32\windowspowershell\v1.0;C:\windows\system32\openssh;C:\program files (x86)\intel\intel(r) management engine components\dal;C:\program files\intel\intel(r) management engine components\dal;C:\program files (x86)\intel\intel(r) management engine components\ipt;C:\program files\intel\intel(r) management engine components\ipt;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files (x86)\Skype\Phone;C:\Program Files\dotnet;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn;C:\Program Files\Microsoft SQL Server\1;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Common Files\Autodesk Shared;C:\Program Files (x86)\Autodesk\Backburner;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn;C:\Program Files\Microsoft SQL Server\140\DTS\Binn;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\Yarn\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\dotnet;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\ProgramData\ComposerSetup\bin;C:\Users\ASUS\AppData\Local\Programs\Python\Python39\Scripts;C:\Users\ASUS\AppData\Local\Programs\Python\Python39;C:\Users\ASUS\.windows-build-tools\python27;C:\Users\ASUS\AppData\Roaming\nvm\v8.9.4\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Program Files\nodejs\node_modules\windows-build-tools\node_modules\.bin;C:\Program Files\nodejs\node_modules\.bin;C:\Ruby24-x64\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft MPI\Bin;C:\ProgramData\Oracle\Java\javapath;C:\program files (x86)\intel\intel(r) management engine components\icls;C:\program files\intel\intel(r) management engine components\icls;C:\windows\system32;C:\windows;C:\windows\system32\wbem;C:\windows\system32\windowspowershell\v1.0;C:\windows\system32\openssh;C:\program files (x86)\intel\intel(r) management engine components\dal;C:\program files\intel\intel(r) management engine components\dal;C:\program files (x86)\intel\intel(r) management engine components\ipt;C:\program files\intel\intel(r) management engine components\ipt;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files (x86)\Skype\Phone;C:\Program Files\dotnet;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn;C:\Program Files\Microsoft SQL Server\1;C:\Users\ASUS\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ASUS\AppData\Local\GitHubDesktop\bin;C:\Users\ASUS\AppData\Local\atom\bin;C:\xampp\php;D:\flutter_windows_v1.2.1-stable\flutter\bin;C:\Users\ASUS\AppData\Local\Programs\Python\Python37-32;C:\Program Files\Git\usr\bin;C:\Users\ASUS\AppData\Local\Programs\Fiddler;C:\Users\ASUS\AppData\Local\Yarn\bin;C:\Users\ASUS\.dotnet\tools;C:\Program Files\JetBrains\PyCharm Community Edition 2020.3.3\bin;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;C:\Users\ASUS\AppData\Roaming\Composer\vendor\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fuse-sound: Not found
+  Error: https://registry.yarnpkg.com/@types%2fhowle: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66056:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140665:22)
       at Request.emit (events.js:376:20)
@@ -51,9 +51,11 @@ npm manifest:
       "@types/chance": "^1.1.3",
       "@types/d3-scale": "^4.0.2",
       "@types/d3-shape": "^3.0.2",
+      "@types/howler": "^2.2.5",
       "@types/moment": "^2.13.0",
       "@types/moment-precise-range-plugin": "^0.2.0",
       "@types/react-input-mask": "^3.0.1",
+      "@types/react-sound": "^1.2.3",
       "@types/recharts": "^1.8.23",
       "add": "^2.0.6",
       "animejs": "^3.2.1",
@@ -66,6 +68,7 @@ npm manifest:
       "esbuild": "^0.14.2",
       "firebase": "^8.10.0",
       "formik": "^2.2.9",
+      "howler": "^2.2.3",
       "lodash": "^4.17.21",
       "material-ui-confirm": "^3.0.2",
       "moment": "^2.29.1",
@@ -2637,6 +2640,11 @@ Lockfile:
       "@types/react" "*"
       hoist-non-react-statics "^3.3.0"
   
+  "@types/howler@^2.2.5":
+    version "2.2.5"
+    resolved "https://registry.yarnpkg.com/@types/howler/-/howler-2.2.5.tgz#54c37f28638c8e4440b7277bc609697a3248d220"
+    integrity sha512-kSB5iiUfZXLeyAJZLMZRqnlx7BPme4ub1UE0x/iRTqLRDZ/vG4JO41gyd0NnpXm+ZpB/6xwPix2Q+jtsZPzZmg==
+  
   "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
     version "2.0.4"
     resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.4.tgz#8467d4b3c087805d63580480890791277ce35c44"
@@ -2765,6 +2773,13 @@ Lockfile:
       "@types/react" "*"
       hoist-non-react-statics "^3.3.0"
       redux "^4.0.0"
+  
+  "@types/react-sound@^1.2.3":
+    version "1.2.3"
+    resolved "https://registry.yarnpkg.com/@types/react-sound/-/react-sound-1.2.3.tgz#9ce13ed6b553e0027d5657d8f1816f98e0e30ef5"
+    integrity sha512-PfeO57BIvocJe5Gwj/EicTu1XTYuliXBNzz8Uj9qm3LglnqP+X0zb2FUKZUIVISZ8L/e8PrCjciAix2ZsdKhzw==
+    dependencies:
+      "@types/react" "*"
   
   "@types/react-transition-group@^4.4.4":
     version "4.4.4"
@@ -5731,7 +5746,7 @@ Lockfile:
     dependencies:
       react-is "^16.7.0"
   
-  howler@^2.1.3:
+  howler@^2.1.3, howler@^2.2.3:
     version "2.2.3"
     resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.3.tgz#a2eff9b08b586798e7a2ee17a602a90df28715da"
     integrity sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==
