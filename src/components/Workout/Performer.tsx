@@ -11,6 +11,8 @@ import { useNoSleep } from "use-no-sleep";
 import { ProgressRing } from "../../atoms/ProgressRing/ProgressRing";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../store/userSlice";
+import countdown from "../../sounds/countdown_2.wav";
+import useSound from "use-sound";
 
 export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
   const [image, setImage] = useState(0);
@@ -20,6 +22,7 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
 
   const [started, setStarted] = useState(!user?.settings?.warmupTimer);
   const totalWarmupTime = user?.settings?.warmupTime;
+  const [play] = useSound(countdown);
 
   useNoSleep(true);
 
@@ -32,6 +35,12 @@ export const Performer: FC<Props> = ({ exercise, set, onClickDone }) => {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    if (warmupTime === 2) {
+      play();
+    }
+  }, [warmupTime]);
 
   const onWarmupTimeChange = (t: number) => {
     setWarmupTime(t);

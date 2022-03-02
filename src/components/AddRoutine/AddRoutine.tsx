@@ -84,6 +84,7 @@ export const AddRoutine = () => {
           ...routine,
           name: values.name,
           exercises,
+          archived: false,
         }).then((doc) => {
           discardForm();
         });

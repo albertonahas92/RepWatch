@@ -29,10 +29,10 @@ import {
   setRoutineModal,
   updateExercise,
   updateExercises,
+  updateSet,
 } from "../../store/routineSlice";
 import firebase from "../../config";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
-import { SetForm } from "./SetForm";
 import PauseIcon from "@mui/icons-material/Pause";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import shortid from "shortid";
@@ -55,6 +55,8 @@ import {
 import { WorkoutExercisesListItem } from "./Partials/WorkoutExercisesListItem";
 import { userSelector } from "../../store/userSlice";
 import { setFeedback } from "../../store/feedbackSlice";
+import success from "../../sounds/success.mp3";
+import useSound from "use-sound";
 
 export const Workout: FC<Props> = ({ onFinish }) => {
   const [openExerciseList, setOpenExerciseList] = useState(false);
@@ -62,6 +64,8 @@ export const Workout: FC<Props> = ({ onFinish }) => {
 
   const routine = useSelector(routineSelector);
   const user = useSelector(userSelector);
+
+  const [play] = useSound(success);
 
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -127,6 +131,21 @@ export const Workout: FC<Props> = ({ onFinish }) => {
     dispatch(updateExercise({ ...exercise, sets }));
   };
 
+  const onFinishSet = (exercise: RoutineExercise, index: number) => {
+    if (!user?.settings?.autostartSet || exercise.sets?.length === index - 1) {
+      return;
+    }
+    const nextIndex = index + 1;
+    const nextSet = exercise.sets?.at(nextIndex);
+    dispatch(
+      updateSet({
+        index: nextIndex,
+        set: { ...nextSet, active: true, weight: 100 },
+        name: exercise?.name || "",
+      })
+    );
+  };
+
   const onAddExercise = (exercise: Exercise) => {
     if (routine?.exercises?.filter((e) => e.name === exercise.name).length)
       return;
@@ -183,12 +202,14 @@ export const Workout: FC<Props> = ({ onFinish }) => {
           "Do you want to finish your workout and mark all sets as done?",
       })
         .then(() => {
+          play();
           onFinish();
         })
         .catch((e: any) => {
           console.log(e);
         });
     } else {
+      play();
       onFinish();
     }
   };
@@ -231,6 +252,7 @@ export const Workout: FC<Props> = ({ onFinish }) => {
                 addSet={addSet}
                 removeSet={removeSet}
                 duplicateSet={duplicateSet}
+                onFinishSet={onFinishSet}
                 screenSize={screenSize}
                 toggleActive={toggleActive}
                 key={exercise.name}

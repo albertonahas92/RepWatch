@@ -27,18 +27,11 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { setExercise, setExerciseModal } from "../../store/exerciseSlice";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import anime from "animejs";
 import { toMMSS } from "../../utils/utils";
 import { TimePicker } from "@mui/lab";
-import InputMask, { BeforeMaskedStateChangeStates } from "react-input-mask";
 import moment from "moment";
 import { noRepsCategory, nonWeightedEquipments } from "../../utils/constants";
 
@@ -47,6 +40,7 @@ export const SetFormComp: FC<Props> = ({
   exercise,
   removeSet,
   duplicateSet,
+  onFinishSet,
   standBy,
 }) => {
   const user = useSelector(userSelector);
@@ -61,6 +55,7 @@ export const SetFormComp: FC<Props> = ({
     : 0;
   const initialActive =
     exercise?.sets && exercise.sets[index].active ? true : false;
+
   const initialResting =
     exercise?.sets && exercise.sets[index].resting ? true : false;
   const set: ESet = exercise?.sets
@@ -122,6 +117,7 @@ export const SetFormComp: FC<Props> = ({
   const onRestFinish = (time: number) => {
     setResting(false);
     setRestElapsedTime(time);
+    onFinishSet?.(exercise, index);
   };
 
   const handleResetTimmer = () => {
@@ -136,6 +132,13 @@ export const SetFormComp: FC<Props> = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const currentSet = exercise.sets?.at(index);
+    if (currentSet?.active !== active) {
+      setActive(currentSet?.active || false);
+    }
+  }, [exercise]);
 
   useEffect(() => {
     if (elapsedTime !== initialElapsedTime) {
@@ -379,6 +382,7 @@ interface Props {
   index: number;
   removeSet: (exercise: RoutineExercise, index: number) => void;
   duplicateSet?: (exercise: RoutineExercise, index: number) => void;
+  onFinishSet?: (exercise: RoutineExercise, index: number) => void;
   standBy?: boolean;
 }
 

@@ -11,9 +11,11 @@ export const Timer: FC<Props> = ({
   const time = useRef(startingTime || 0);
   const [timeRef, setTimeRef] = useState(startingTime || 0);
 
+  const endTime = useRef(endtime || 0);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      if (!active || (countdown && time.current >= endtime)) {
+      if (!active || (countdown && time.current >= endTime.current)) {
         clearInterval(timer);
         // Finish
         onTimerStop?.(time.current);
@@ -36,9 +38,15 @@ export const Timer: FC<Props> = ({
     onTimeChange?.(time.current);
   }, [startingTime]);
 
+  useEffect(() => {
+    endTime.current = endtime || 0;
+  }, [endtime]);
+
   const displayTime = () =>
     countdown
-      ? new Date((endtime - timeRef) * 1000).toISOString().substr(14, 5)
+      ? new Date(Math.max(endtime - timeRef, 0) * 1000)
+          .toISOString()
+          .substr(14, 5)
       : new Date(timeRef * 1000).toISOString().substr(14, 5);
 
   return <span className="timer"> {displayTime()} </span>;

@@ -23,7 +23,7 @@ export interface RoutineExercise extends Exercise {
 
 export interface ESet {
     id?: string
-    index: number
+    index?: number
     reps?: number
     weight?: number
     active?: boolean

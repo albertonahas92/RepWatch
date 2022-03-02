@@ -2,6 +2,7 @@ import _ from "lodash";
 import { ExerciseHistory, RoutineExercise } from "../types/exercise";
 import { RoutineHistory } from "../types/routine";
 import { User } from "../types/user";
+import { oneWeightUnit } from "./utils";
 
 export const getExercisesHistory = (history?: RoutineHistory[], exerciseName?: string) => {
     return history
@@ -43,13 +44,15 @@ export const getNextWeight = (user?: User | null, exercise?: RoutineExercise, pr
     if (exercise?.equipment === 'body only' || ["cardio", "stretching"].includes(exercise?.category || '')) {
         return 0
     }
+    const rate = oneWeightUnit(user)
+
     switch (user?.goal) {
         case "general":
             return prevWeight
         case "strength":
-            return Number(prevWeight) + (exercise?.equipment === 'barbell' ? 10 : 4)
+            return Number(prevWeight) + (exercise?.equipment === 'barbell' ? 10 * rate : 5 * rate)
         case "muscle":
-            return Number(prevWeight) + (exercise?.equipment === 'barbell' ? 5 : 2)
+            return Number(prevWeight) + (exercise?.equipment === 'barbell' ? 5 * rate : 2.5 * rate)
         case "endurance":
             return prevWeight
         default:

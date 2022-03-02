@@ -4,6 +4,7 @@ import { RoutineExercise } from './exercise';
 export interface Routine {
     id?: string
     name?: string
+    archived?: boolean
     exercises?: RoutineExercise[]
     createdAt?: firebase.firestore.Timestamp
 }

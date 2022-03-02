@@ -18,7 +18,10 @@ export const useRoutine = () => {
     if (!routine) return;
 
     const startDate = routine.startedAt || new Date();
-    const duration = new Date().getTime() - startDate.getTime();
+    let duration = 0;
+    try {
+      duration = (moment().unix() - moment(startDate).unix()) * 1000;
+    } catch (error) {}
     const name =
       routine.name || `${moment(routine?.startedAt).format("ddd Do")} Workout`;
     const exercises = routine.exercises?.map(

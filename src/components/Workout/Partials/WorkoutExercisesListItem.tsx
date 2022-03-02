@@ -8,6 +8,7 @@ import {
   List,
   Divider,
   Button,
+  Typography,
 } from "@mui/material";
 import React, { FC, useCallback, useMemo } from "react";
 import shortid from "shortid";
@@ -24,25 +25,29 @@ import {
   sortExercisesHistory,
 } from "../../../utils/helpers";
 import { useExercises } from "../../../hooks/useExercises";
+import { weightInUserUnit } from "../../../utils/utils";
+import { userSelector } from "../../../store/userSlice";
 
 const WorkoutExercisesListItemComp: FC<Props> = ({
   exercise,
   toggleActive,
   screenSize,
   duplicateSet,
+  onFinishSet,
   removeSet,
   addSet,
 }) => {
   //   const history = useSelector(historySelector);
 
-  //   const exerciseHistory = useMemo(() => {
+  //   const exerciseRecentHistory = useMemo(() => {
   //     const temp = getExercisesHistory(history)
   //       ?.filter((e) => exercises?.find((ex) => ex?.name === e?.exercise?.name))
   //       ?.sort(sortExercisesHistory)
   //       ?.pop();
   //     return temp;
   //   }, [history, exercise.name]);
-
+  const user = useSelector(userSelector);
+  const unit = user?.unit === "imperial" ? "lb" : "kg";
   return (
     <React.Fragment>
       <ListItem
@@ -74,6 +79,26 @@ const WorkoutExercisesListItemComp: FC<Props> = ({
         <ListItemText primary={exercise.name} />
       </ListItem>
       <Collapse in={exercise.active} timeout="auto" unmountOnExit>
+        {exercise.equipment === "barbell" && !!exercise.sets?.length && (
+          <Typography sx={{ pl: { md: 7, xs: 0 }, pr: 0 }} variant="caption">
+            Type in the weight including the bar weight which is typically{" "}
+            {Math.round(weightInUserUnit(user, 20))}
+            {unit}
+          </Typography>
+        )}
+        {exercise.equipment === "e-z curl bar" && !!exercise.sets?.length && (
+          <Typography sx={{ pl: { md: 7, xs: 0 }, pr: 0 }} variant="caption">
+            Type in the weight including the bar weight which is typically{" "}
+            {Math.round(weightInUserUnit(user, 6.4))}-
+            {Math.round(weightInUserUnit(user, 14))}
+            {unit}s
+          </Typography>
+        )}
+        {exercise.equipment === "dumbbell" && !!exercise.sets?.length && (
+          <Typography sx={{ pl: { md: 7, xs: 0 }, pr: 0 }} variant="caption">
+            Type in the weight of both dumbbells combined
+          </Typography>
+        )}
         <List component="div" disablePadding>
           {exercise.sets?.map((set: ESet, index: number) => (
             <React.Fragment key={set.id || shortid.generate()}>
@@ -87,6 +112,7 @@ const WorkoutExercisesListItemComp: FC<Props> = ({
                       index={index}
                       removeSet={removeSet}
                       duplicateSet={duplicateSet}
+                      onFinishSet={onFinishSet}
                       exercise={exercise}
                     />
                   }
@@ -119,6 +145,7 @@ interface Props {
   screenSize: string;
   toggleActive: (exercise: RoutineExercise) => void;
   duplicateSet: (exercise: RoutineExercise, index: number) => void;
+  onFinishSet: (exercise: RoutineExercise, index: number) => void;
   removeSet: (exercise: RoutineExercise, index: number) => void;
   addSet: (exercise: RoutineExercise) => void;
 }

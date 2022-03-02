@@ -104,8 +104,16 @@ export const weightString = (user?: User, weight?: number) => {
 export const weightInKg = (user?: User) => {
     return user?.unit === 'imperial' ? converter.lbsToKg(user.weight) : user?.weight || 0
 }
+
+export const weightInUserUnit = (user?: User | null, kgWeight?: number) => {
+    return user?.unit === 'imperial' ? converter.lbsToKg(kgWeight) : kgWeight || 0
+}
+
 export const heightInCm = (user?: User) => {
     return user?.unit === 'imperial' ? converter.ftToCm(user.height, user.heightIn) : user?.height || 0
+}
+export const oneWeightUnit = (user?: User | null) => {
+    return user?.unit === 'imperial' ? 2.4 : 1
 }
 
 export const getSetRPM = (set?: _Set) => Math.round((set?.weight || 0) / (1.0278 - 0.0278 * (set?.reps || 1)))

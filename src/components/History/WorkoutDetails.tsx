@@ -130,10 +130,11 @@ export const WorkoutDetails: FC<Props> = ({
                         {exercise.sets?.map((s, i) => {
                           const rm = getSetRPM(s);
                           return (
-                            <Box key={i}>
+                            <span key={i}>
                               <span
                                 style={{
                                   whiteSpace: "nowrap",
+                                  display: "block",
                                 }}
                               >
                                 <Chip
@@ -173,7 +174,7 @@ export const WorkoutDetails: FC<Props> = ({
                                   sx={{ my: 0.4, mr: 1 }}
                                 />
                               )}
-                            </Box>
+                            </span>
                           );
                         })}
 

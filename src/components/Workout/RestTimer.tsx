@@ -1,6 +1,6 @@
 import { Button, IconButton, Stack, styled, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ProgressRing } from "../../atoms/ProgressRing/ProgressRing";
 import { Timer } from "../../atoms/Timer/Timer";
 import { Chill } from "../../icons/chill";
@@ -12,6 +12,8 @@ import { userSelector } from "../../store/userSlice";
 import { getRestTime } from "../../utils/helpers";
 import { RoutineExercise } from "../../types/exercise";
 import { useNoSleep } from "use-no-sleep";
+import countdown from "../../sounds/countdown_1.wav";
+import useSound from "use-sound";
 
 const pulse = keyframes`
   0% {
@@ -36,6 +38,8 @@ export const RestTimer: FC<Props> = ({ onRestFinish, exercise, setIndex }) => {
     getRestTime(user, exercise, setIndex)
   );
 
+  const [play] = useSound(countdown);
+
   const onTimeChange = (t: number) => {
     setTime(t);
   };
@@ -46,6 +50,12 @@ export const RestTimer: FC<Props> = ({ onRestFinish, exercise, setIndex }) => {
   const onClickAdd = () => {
     setRestTime((rt) => rt + 15);
   };
+
+  useEffect(() => {
+    if (time === restTime - 2) {
+      play();
+    }
+  }, [time, restTime]);
 
   return (
     <Box

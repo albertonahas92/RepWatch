@@ -43,4 +43,5 @@ export interface UserSettings {
     warmupTimer?: boolean
     warmupTime?: number
     restTimer?: boolean
+    progressiveOverload?: boolean
 }

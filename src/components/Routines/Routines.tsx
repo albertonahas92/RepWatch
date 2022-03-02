@@ -40,7 +40,8 @@ import { setAlert } from "../../store/alertSlice";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ModalDialog from "../../molecules/ModalDialog/ModalDialog";
 import { RoutineDetails } from "./RoutineDetails";
-import { RoutinesInfo } from "./Partials/RoutinesInfo";
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 
 export const Routines = () => {
   const user = useSelector(userSelector);
@@ -49,6 +50,7 @@ export const Routines = () => {
   const { deleteRoutine, addRoutine } = useRoutines();
 
   const [routines, setRoutines] = useState<any[]>([]);
+  const [showArchived, setShowArchived] = useState(false);
 
   const [loadingRoutines, setLoadingRoutines] = useState<boolean>(true);
   const [showRoutineDetails, setShowRoutineDetails] = useState<boolean>(false);
@@ -99,6 +101,13 @@ export const Routines = () => {
       return;
     }
     deleteRoutine(routine.id);
+  };
+
+  const onArchiveRoutine = () => {
+    if (!routine) {
+      return;
+    }
+    addRoutine({ ...routine, archived: !routine.archived });
   };
 
   const onDuplicateRoutine = () => {
@@ -219,9 +228,15 @@ export const Routines = () => {
     if (!user) {
       return;
     }
-    const unsubscribe = firebase
+
+    let query: any = firebase
       .firestore()
-      .collection(`users/${user.uid}/routines`)
+      .collection(`users/${user.uid}/routines`);
+    if (!showArchived) {
+      // query = query.where("archived", "!=", true).orderBy("archived", "desc");
+    }
+
+    const unsubscribe = query
       .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot: any) => {
         let routinesArr: any[] = [];
@@ -236,7 +251,7 @@ export const Routines = () => {
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, [user, showArchived]);
 
   return (
     <div className="HomeWrapper">
@@ -336,6 +351,15 @@ export const Routines = () => {
               <EditIcon />
               Edit
             </MenuItem>
+            {/* <MenuItem
+              onClick={() => {
+                handleRoutineMenuClose();
+                onArchiveRoutine();
+              }}
+            >
+              <ArchiveOutlinedIcon />
+              Archive
+            </MenuItem> */}
             <MenuItem
               onClick={() => {
                 handleRoutineMenuClose();
@@ -347,6 +371,17 @@ export const Routines = () => {
             </MenuItem>
           </StyledMenu>
         </Box>
+        {/* <Button
+          onClick={() => setShowArchived((sa) => !sa)}
+          variant="text"
+          color="secondary"
+          sx={{ mb: 1 }}
+          endIcon={
+            showArchived ? <ArchiveOutlinedIcon /> : <UnarchiveOutlinedIcon />
+          }
+        >
+          {showArchived ? "Hide" : "Show"} archived routines
+        </Button> */}
       </main>
     </div>
   );

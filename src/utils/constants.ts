@@ -89,4 +89,5 @@ export const defaultUserSettings: UserSettings = {
     warmupTimer: true,
     warmupTime: 5,
     restTimer: true,
+    progressiveOverload: true,
 }
