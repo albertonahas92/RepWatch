@@ -9,7 +9,7 @@ export var Privacy = function () {
         Privacy Policy
       </Typography>
       <Box sx={{ textAlign: "left" }}>
-        <p>1. What information do we collect?</p>
+        <Typography variant="h6" color="primary">Types of data collected</Typography>
 
         <p>
           When registering on our site, as appropriate, we collect information
@@ -18,8 +18,15 @@ export var Privacy = function () {
 
         <p>We also may collect your:</p>
 
+        <ul>
+          <li><p>First name</p></li>
+          <li><p>Email address</p></li>
+          <li><p>Birth date or birth year</p></li>
+          <li><p>Gender</p></li>
+        </ul>
+
         <p>
-          First name Email address Birth date or birth year Gender Additionally,
+          Additionally,
           if you register using Facebook or Google, you may be asked for further
           information specific to your Facebook or Google account. (Typically
           this will include your public profile information.) It is Facebook and
@@ -28,12 +35,12 @@ export var Privacy = function () {
           registration.
         </p>
 
-        <p>2. What do we use your information for?</p>
+        <Typography variant="h6" color="primary">Purposes of collecting data</Typography>
 
         <p>
           We collect your email address in order to send periodic emails, to
           contact you in regards to your RepWatch account, and to identify your
-          account. Do note that you may unsubcribe from our periodic emails at
+          account. Do note that you may unsubscribe from our periodic emails at
           any time, using the link at the bottom of any email you&apos;ve
           received from us.
         </p>
@@ -50,11 +57,11 @@ export var Privacy = function () {
           without identifying information in scientific research.
         </p>
 
-        <p>3. Deletion of personal data</p>
+        <Typography variant="h6" color="primary">Deletion of personal data</Typography>
 
         <p>
           Account deletion is as laid out in our Terms of Use. To have an
-          account registration deleted, use this form to contact customer
+          account registration deleted, use <a href="#">this form</a> to contact the customer
           service.
         </p>
 
@@ -64,8 +71,10 @@ export var Privacy = function () {
           historical purposes, and for use in scientific research.
         </p>
 
+        <Typography variant="h6" color="primary">Data sharing and third-parties</Typography>
+
         <p>
-          4. We do not disclose any information to outside parties except as per
+          We do not disclose any information to outside parties except as per
           your request.
         </p>
 
@@ -82,13 +91,13 @@ export var Privacy = function () {
           our website, conducting our business, or servicing you, so long as
           those parties agree to keep this information confidential. We may also
           release your information when we believe release is appropriate to
-          comply with the law, enforce our site policies, or protect ours or
-          others rights, property, or safety. However, non-personally
+          comply with the law, enforce our site policies, or protect our or
+          others' rights, property, or safety. However, non-personally
           identifiable visitor information may be provided to other parties for
           marketing, advertising, or other uses.
         </p>
 
-        <p>5. How we protect your information</p>
+        <Typography variant="h6" color="primary">Data protection security controls</Typography>
 
         <p>
           We implement a variety of security measures to maintain the safety of
@@ -106,7 +115,7 @@ export var Privacy = function () {
 
         <p>
           After a transaction, sensitive information (such as credit card
-          numbers) are never stored on our servers.
+          numbers) is never stored on our servers.
         </p>
       </Box>
     </>
