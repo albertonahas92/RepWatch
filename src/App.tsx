@@ -171,6 +171,9 @@ const App = function ({
     dispatch(setSnackbar({ open: false, message: "" }));
   };
 
+  const tabPagePaths = ['/exercises', '/history', '/profile', '/routine', '/workout'];
+  const isTabPage = tabPagePaths.includes(location.pathname);
+
   // const Nav: any = lazy(() => import('./components/Nav/Nav'));
 
   return currentUser === undefined ? (
@@ -244,7 +247,7 @@ const App = function ({
           {snackbar.message}
         </Alert>
       </Snackbar>
-      {routine && routine.active && (
+      {routine && routine.active && isTabPage && (
         <Zoom
           in={true}
           timeout={200}
