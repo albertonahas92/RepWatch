@@ -24,7 +24,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function ModalDialog(props: Props) {
-  const locaiton = useLocation();
+  const location = useLocation();
 
   const handleClose = () => {
     props.setOpen(false);
