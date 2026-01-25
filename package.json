@@ -40,7 +40,7 @@
     "firebase": "^8.10.1",
     "formik": "^2.2.9",
     "howler": "^2.2.3",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "material-ui-confirm": "^3.0.2",
     "moment": "^2.29.1",
     "moment-precise-range": "^0.2.0",
